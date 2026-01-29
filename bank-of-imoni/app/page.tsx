@@ -1,11 +1,10 @@
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Card } from "@/components/ui/card";
-import Accounts from "@/components/ui/accounts";
+import Accounts from "@/components/accounts";
 
 export default function Home() {
   return (
@@ -31,6 +30,7 @@ export default function Home() {
           <div className="w-full max-w-7xl px-8">
             <div className="h-full grid grid-cols-3 grid-rows-2 gap-6">
               <Card className="row-span-2 rounded-xl flex items-center justify-center">
+                <h3>Accounts</h3>
                 <Accounts />
               </Card>
 
@@ -42,10 +42,6 @@ export default function Home() {
             </div>
           </div>
         </main>
-
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-8">
-          <ThemeSwitcher />
-        </footer>
       </div>
     </main>
   );
