@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Card } from "@/components/ui/card";
 import Accounts from "@/components/accounts";
+import ChartPieDonutText from "@/components/dashboard-piechart";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center">
+    <main className="min-h-screen flex flex-col items-center bg-green-50">
       <div className="flex-1 w-full flex flex-col items-center">
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
@@ -38,7 +39,9 @@ export default function Home() {
 
               <Card className="rounded-xl flex items-center justify-center" />
 
-              <Card className="rounded-xl flex items-center justify-center" />
+              <Card className="rounded-xl flex items-center justify-center">
+              <ChartPieDonutText />
+              </Card>
             </div>
           </div>
         </main>

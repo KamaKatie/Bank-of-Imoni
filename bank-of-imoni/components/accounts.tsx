@@ -54,7 +54,7 @@ export default function Accounts() {
       {accounts.map((account) => (
         <li key={account.id || account.name} className="m-2">
           {" "}
-          <Item variant={"muted"}>
+          <Item className="p-3" variant={"muted"}>
             <ItemMedia variant="image">
               <img src={account.icon} alt={account.name} />
             </ItemMedia>
@@ -62,7 +62,9 @@ export default function Accounts() {
               <div className="flex items-center justify-between gap-2">
                 <ItemTitle>{account.name}</ItemTitle>
 
-                <Badge variant="outline" className="bg-white">{account.type}</Badge>
+                <Badge variant="outline" className="bg-white">
+                  {account.type}
+                </Badge>
               </div>
 
               <ItemDescription>¥{account.current_balance}</ItemDescription>
