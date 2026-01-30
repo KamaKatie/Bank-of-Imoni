@@ -29,8 +29,8 @@ export default function Home() {
         <main className="flex-1 flex items-center justify-center w-full">
           <div className="w-full max-w-7xl px-8">
             <div className="h-full grid grid-cols-3 grid-rows-2 gap-6">
-              <Card className="row-span-2 rounded-xl flex items-center justify-center">
-                <h3>Accounts</h3>
+              <Card className="row-span-2 rounded-xl flex-col items-center justify-center p-2">
+                <h3 className="text-center font-semibold p-2">Accounts</h3>
                 <Accounts />
               </Card>
 
