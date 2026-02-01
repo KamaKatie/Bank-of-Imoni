@@ -3,12 +3,11 @@
 import * as React from "react";
 import { Label, Pie, PieChart, Cell } from "recharts";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Spinner } from "@/components/ui/spinner";
@@ -49,12 +48,14 @@ export default function CurrentMonthExpensesChart() {
       const { data: transactions, error: txError } = await supabase
         .from("transactions")
         .select("amount, category")
-        .gte("date", `${monthInfo.year}-${monthInfo.monthNumber}-01`)
+        .gte("date", `${monthInfo!.year}-${monthInfo!.monthNumber}-01`)
         .lt(
           "date",
           `${
-            monthInfo.monthNumber === 12 ? monthInfo.year + 1 : monthInfo.year
-          }-${monthInfo.monthNumber === 12 ? 1 : monthInfo.monthNumber + 1}-01`,
+            monthInfo!.monthNumber === 12
+              ? monthInfo!.year + 1
+              : monthInfo!.year
+          }-${monthInfo!.monthNumber === 12 ? 1 : monthInfo!.monthNumber + 1}-01`,
         );
 
       if (txError) {
@@ -154,10 +155,11 @@ export default function CurrentMonthExpensesChart() {
               return (
                 <div className="flex items-center gap-2 bg-white p-2 rounded shadow">
                   {entry.icon && (
-                    <img
+                    <Image
                       src={entry.icon}
                       alt={entry.category}
-                      className="w-5 h-5 object-contain"
+                      width={20}
+                      height={20}
                     />
                   )}
                   <div>

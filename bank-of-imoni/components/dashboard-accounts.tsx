@@ -10,10 +10,11 @@ import {
   ItemTitle,
 } from "./ui/item";
 import { Badge } from "./ui/badge";
+import Image from "next/image";
 
 type Account = {
   id: string;
-  name: string | null;
+  name: string;
   current_balance: number | null;
   type: string | null;
   icon: string;
@@ -52,11 +53,16 @@ export default function Accounts() {
   return (
     <ul>
       {accounts.map((account) => (
-        <li key={account.id || account.name} className="m-2">
+        <li key={account.id || account.name} className="my-2">
           {" "}
           <Item className="p-3 rounded-xl" variant={"muted"}>
             <ItemMedia variant="image">
-              <img src={account.icon} alt={account.name} />
+              <Image
+                src={account.icon}
+                alt={account.name}
+                width={500}
+                height={500}
+              />
             </ItemMedia>
             <ItemContent>
               <div className="flex items-center justify-between gap-2">

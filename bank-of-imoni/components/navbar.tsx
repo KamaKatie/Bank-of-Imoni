@@ -3,6 +3,7 @@ import { AuthButton } from "@/components/auth-button";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
 import Link from "next/link";
+
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -15,11 +16,11 @@ export default function Navbar() {
     <nav className="bg-white drop-shadow-md flex justify-center">
       <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
         <div className="flex gap-5 items-center font-semibold">
-          <Link className="text-lg" href={"/dashboard"}>
+          <Link className="hidden lg:grid text-lg" href={"/dashboard"}>
             Bank of Imoni
           </Link>
           <div className="flex items-center gap-2">
-            <NavigationMenu>
+            <NavigationMenu className="hidden lg:grid">
               <NavigationMenuList>
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link href={"/transactions"}>Transactions</Link>
