@@ -14,7 +14,7 @@ export function LogoutButton() {
   };
 
   return (
-    <Button onClick={logout} className="rounded-full">
+    <Button onClick={logout}>
       Logout
     </Button>
   );

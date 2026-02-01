@@ -137,12 +137,9 @@ export default function CurrentMonthExpensesChart() {
 
   return (
     <div>
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Spending this month</CardTitle>
-        <CardDescription>
-          {monthInfo.monthName} - {monthInfo.year}
-        </CardDescription>
-      </CardHeader>
+      <p className="text-center">
+        {monthInfo.monthName} - {monthInfo.year}
+      </p>
 
       <ChartContainer
         config={chartConfig}

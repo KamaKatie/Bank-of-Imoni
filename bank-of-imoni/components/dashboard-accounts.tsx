@@ -54,7 +54,7 @@ export default function Accounts() {
       {accounts.map((account) => (
         <li key={account.id || account.name} className="m-2">
           {" "}
-          <Item className="p-3" variant={"muted"}>
+          <Item className="p-3 rounded-xl" variant={"muted"}>
             <ItemMedia variant="image">
               <img src={account.icon} alt={account.name} />
             </ItemMedia>

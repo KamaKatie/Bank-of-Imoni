@@ -6,13 +6,25 @@ import { LogoutButton } from "./logout-button";
 export async function AuthButton() {
   const supabase = await createClient();
 
-  const { data } = await supabase
-    .from('profiles')
-    .select()
+  // Get the current user's session
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return data && data.length > 0 ? (
+  // If user is logged in, you can optionally fetch their profile data
+  let profile = null;
+  if (user) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+    profile = data;
+  }
+
+  return user ? (
     <div className="flex items-center gap-4">
-      Hey, {data[0].first_name}!
+      Hey, {profile?.first_name || user.email?.split("@")[0] || "User"}!
       <LogoutButton />
     </div>
   ) : (
