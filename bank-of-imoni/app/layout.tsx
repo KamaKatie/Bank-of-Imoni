@@ -32,7 +32,7 @@ export default function RootLayout({
           <div className="row-start-2 md:row-start-1">
             <Navbar />
           </div>
-          <main className="bg-white rounded-2xl m-5 overflow-y-auto row-start-1 md:row-start-2">
+          <main className="bg-white md:rounded-2xl md:m-5 overflow-y-auto row-start-1 md:row-start-2">
             {children}
           </main>
         </div>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useAccounts } from "@/hooks/use-accounts";
 import {
   Item,
   ItemContent,
@@ -11,44 +10,17 @@ import {
 } from "./ui/item";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
-
-type Account = {
-  id: string;
-  name: string;
-  current_balance: number | null;
-  type: string | null;
-  icon: string;
-};
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Accounts() {
-  const supabase = createClient();
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const { accounts, workingBalance, loading } = useAccounts();
 
-  const workingBalance = accounts.reduce((total, account) => {
-    return total + (account.current_balance ?? 0);
-  }, 0);
-
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth?.user) return;
-
-      const { data, error } = await supabase
-        .from("accounts")
-        .select("id, name, current_balance, type, icon")
-        .order("name", { ascending: true })
-        .eq("user", auth.user.id);
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      setAccounts(data ?? []);
-    };
-
-    fetchAccounts();
-  }, [supabase]);
+  if (loading)
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <ul>
@@ -58,7 +30,7 @@ export default function Accounts() {
           <Item className="p-3 rounded-xl" variant={"muted"}>
             <ItemMedia variant="image">
               <Image
-                src={account.icon}
+                src={account.icon || account.placeholder_img}
                 alt={account.name}
                 width={500}
                 height={500}

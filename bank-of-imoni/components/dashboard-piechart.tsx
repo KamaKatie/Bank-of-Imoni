@@ -104,7 +104,7 @@ export default function CurrentMonthExpensesChart() {
 
   if (loading || !monthInfo)
     return (
-      <div>
+      <div className="flex justify-center">
         <Spinner />
       </div>
     );

@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 
+export type Profile = {
+  id: string;
+};
+
 export function useAuth() {
   const supabase = createClient();
 
