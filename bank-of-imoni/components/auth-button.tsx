@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "./ui/button";
-import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "./logout-button";
 import {
   DropdownMenu,
@@ -10,42 +12,46 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useAuth } from "@/hooks/use-auth";
 
-export async function AuthButton() {
-  const supabase = await createClient();
+export function AuthButton() {
+  const { user, profile, loading } = useAuth();
 
-  // Get the current user's session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (loading) return null;
 
-  // If user is logged in, you can optionally fetch their profile data
-  let profile = null;
-  if (user) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-    profile = data;
+  if (!user) {
+    return (
+      <div className="flex gap-2">
+        <Button asChild size="sm" variant="outline">
+          <Link href="/auth/login">Sign in</Link>
+        </Button>
+        <Button asChild size="sm" variant="default">
+          <Link href="/auth/sign-up">Sign up</Link>
+        </Button>
+      </div>
+    );
   }
 
-  return user ? (
+  const displayName = profile?.first_name || user.email?.split("@")[0];
+
+  return (
     <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex bg-emerald-50 items-center rounded-full border-2 px-2"> 
-            <Avatar>
-              <AvatarImage
-                src={profile?.image}
-                alt={profile?.first_name || user.email?.split("@")[0]}
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            {profile?.first_name || user.email?.split("@")[0]}
+          <button className="flex bg-emerald-50 items-center rounded-full border-2 lg:px-2 gap-2">
+            <Image
+              src={profile?.image || "/avatar-placeholder.png"}
+              alt={displayName}
+              width={30}
+              height={30}
+              className="rounded-full"
+            />
+            <span className="hidden lg:block truncate max-w-[120px]">
+              {displayName}
+            </span>
           </button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent>
           <DropdownMenuItem>
             <UserIcon />
@@ -62,15 +68,6 @@ export async function AuthButton() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
-  ) : (
-    <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/auth/login">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/auth/sign-up">Sign up</Link>
-      </Button>
     </div>
   );
 }

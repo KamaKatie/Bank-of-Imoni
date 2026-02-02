@@ -25,9 +25,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased bg-emerald-800`}>
-        <Navbar />
-        <main className="bg-white rounded-2xl m-10">{children}</main>
+      <body
+        className={`${geistSans.className} antialiased bg-emerald-800 h-screen overflow-hidden`}
+      >
+        <div className="h-full grid grid-rows-[1fr_auto] md:grid-rows-[auto_1fr]">
+          <div className="row-start-2 md:row-start-1">
+            <Navbar />
+          </div>
+          <main className="bg-white rounded-2xl m-5 overflow-y-auto row-start-1 md:row-start-2">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

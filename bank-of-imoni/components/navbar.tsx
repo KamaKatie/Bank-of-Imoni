@@ -2,6 +2,7 @@ import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -13,11 +14,17 @@ import {
 
 export default function Navbar() {
   return (
-    <nav className="bg-white drop-shadow-md flex justify-center">
+    <nav className="bg-white drop-shadow-md flex justify-center max-h-20">
       <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
         <div className="flex gap-5 items-center font-semibold">
-          <Link className="hidden lg:grid text-lg" href={"/dashboard"}>
-            Bank of Imoni
+          <Link href={"/dashboard"} className="flex gap-2">
+            <Image
+              src="/imoni_headshot.png"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+            <span className="hidden lg:grid text-lg">Bank of Imoni</span>
           </Link>
           <div className="flex items-center gap-2">
             <NavigationMenu className="hidden lg:grid">
