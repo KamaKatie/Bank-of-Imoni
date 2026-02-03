@@ -14,7 +14,7 @@ import {
 
 export default function Navbar() {
   return (
-    <nav className="bg-white drop-shadow-md flex justify-center max-h-20">
+    <nav className="flex justify-center max-h-20 text-white">
       <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
         <div className="flex gap-5 items-center font-semibold">
           <Link href={"/dashboard"} className="flex gap-2">
@@ -23,11 +23,12 @@ export default function Navbar() {
               alt="logo"
               width={20}
               height={20}
+              style={{ objectFit: "contain" }}
             />
-            <span className="hidden lg:grid text-lg">Bank of Imoni</span>
+            <span className="hidden md:grid text-lg">Bank of Imoni</span>
           </Link>
           <div className="flex items-center gap-2">
-            <NavigationMenu className="hidden lg:grid">
+            <NavigationMenu className="hidden md:grid">
               <NavigationMenuList>
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link href={"/transactions"}>Transactions</Link>

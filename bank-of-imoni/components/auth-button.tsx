@@ -38,7 +38,7 @@ export function AuthButton() {
     <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex bg-emerald-50 items-center rounded-full border-2 lg:px-2 gap-2">
+          <button className="flex bg-emerald-50 text-black items-center rounded-full border-2 lg:px-2 gap-2">
             <Image
               src={profile?.image || "/avatar-placeholder.png"}
               alt={displayName}
