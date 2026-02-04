@@ -2,33 +2,43 @@ import Accounts from "@/components/dashboard-accounts";
 import { Card } from "@/components/ui/card";
 import SpendingChart from "@/components/dashboard-spending-chart";
 import ChartPieDonutText from "@/components/dashboard-piechart";
+import { CurrencyTracker } from "@/components/currency-tracker";
 
-export default function page() {
+export default function Page() {
   return (
-    <>
-      <div className="h-full grid grid-cols-1 gap-5 last:p-5 lg:grid-cols-4">
-        <div className="lg:row-span-2 flex-col items-center justify-center">
-          <h3 className="text-center font-semibold p-2">Accounts</h3>
-          <Accounts />
-        </div>
-        <Card className="lg:col-span-3 rounded-xl flex-col items-center justify-center">
-          <h3 className="text-center font-semibold p-2">Cashflow</h3>
-          <SpendingChart />
-        </Card>
-
-        <Card className="rounded-xl flex items-center flex-col justify-center">
-          <h3 className="text-center font-semibold p-2">Recent transactions</h3>
-        </Card>
-
-        <Card className="rounded-xl flex items-center flex-col justify-center">
-          <h3 className="text-center font-semibold p-2">Upcoming bills</h3>
-        </Card>
-
-        <Card className="rounded-xl flex-col items-center justify-center">
-          <h3 className="text-center font-semibold p-2">Spending</h3>
-          <ChartPieDonutText />
-        </Card>
+    <div className="grid h-full grid-cols-1 gap-5 p-5 lg:grid-cols-4 lg:grid-rows-2">
+      {/* Row 1, Col 1 — Accounts */}
+      <div>
+        <h3 className="text-center font-semibold p-2">Accounts</h3>
+        <Accounts />
       </div>
-    </>
+
+      {/* Row 1, Cols 2–4 — Cashflow */}
+      <Card className="lg:col-span-3">
+        <h3 className="text-center font-semibold p-2">Cashflow</h3>
+        <SpendingChart />
+      </Card>
+
+      {/* Row 2, Col 1 — FX */}
+      <div className="h-full flex flex-col justify-end">
+        <CurrencyTracker />
+      </div>
+
+      {/* Row 2, Col 2 */}
+      <Card>
+        <h3 className="text-center font-semibold p-2">Recent transactions</h3>
+      </Card>
+
+      {/* Row 2, Col 3 */}
+      <Card>
+        <h3 className="text-center font-semibold p-2">Upcoming bills</h3>
+      </Card>
+
+      {/* Row 2, Col 4 */}
+      <Card>
+        <h3 className="text-center font-semibold p-2">Spending</h3>
+        <ChartPieDonutText />
+      </Card>
+    </div>
   );
 }

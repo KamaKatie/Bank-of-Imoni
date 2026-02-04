@@ -29,7 +29,11 @@ export default function Accounts() {
       {accounts.map((account) => (
         <li key={account.id || account.name} className="first:my-0 my-2">
           {" "}
-          <Item className="rounded-xl hover:bg-green-50" variant={"muted"} asChild>
+          <Item
+            className="rounded-xl hover:bg-green-50"
+            variant={"muted"}
+            asChild
+          >
             <Link href={`/accounts/${slugify(account.name)}-${account.id}`}>
               <ItemMedia variant="image">
                 <Image
@@ -48,7 +52,9 @@ export default function Accounts() {
                   </Badge>
                 </div>
 
-                <ItemDescription>¥{account.current_balance}</ItemDescription>
+                <ItemDescription>
+                  ¥{account.current_balance?.toLocaleString()}
+                </ItemDescription>
               </ItemContent>
             </Link>
           </Item>
