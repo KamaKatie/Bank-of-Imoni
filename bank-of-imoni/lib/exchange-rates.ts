@@ -12,7 +12,7 @@ export async function getExchangeRates(): Promise<ExchangeRates> {
       next: {
         revalidate: 60 * 60 * 12, // 12 hours
       },
-    },
+    }
   );
 
   if (!res.ok) {
@@ -21,13 +21,8 @@ export async function getExchangeRates(): Promise<ExchangeRates> {
 
   const data = await res.json();
 
-  const NZD = data.conversion_rates.NZD;
-  const USD = 1;
-  const JPY = data.conversion_rates.JPY;
-
   const updatedDate = new Date(data.time_last_update_utc);
 
-  // Date formatting
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
@@ -35,9 +30,9 @@ export async function getExchangeRates(): Promise<ExchangeRates> {
   }).format(updatedDate);
 
   return {
-    NZD,
-    USD,
-    JPY,
+    USD: 1,
+    JPY: data.conversion_rates.JPY,
+    NZD: data.conversion_rates.NZD,
     updated: formattedDate,
   };
 }

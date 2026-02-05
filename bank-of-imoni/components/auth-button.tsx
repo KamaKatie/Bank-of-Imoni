@@ -44,7 +44,7 @@ export function AuthButton() {
               alt={displayName}
               width={30}
               height={30}
-              className="rounded-full"
+              className="rounded-full contain-size p-1"
             />
             <span className="hidden lg:block truncate max-w-[120px]">
               {displayName}
