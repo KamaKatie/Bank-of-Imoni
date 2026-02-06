@@ -8,32 +8,49 @@ type SparklineProps = {
 };
 
 export function Sparkline({ data }: SparklineProps) {
-  if (!data || data.length < 2) return <div className="h-6 w-20" />;
+  if (!data || data.length < 2) return <div className="h-6 w-24" />;
 
-  // Determine if trend is up or down
-  const up = data[data.length - 1].v >= data[0].v;
+  const latest = data[data.length - 1].v;
+  const yesterday = data[data.length - 2].v;
+  const change = latest - yesterday;
+
+  const isDecrease = change < 0;
 
   return (
-    <ChartContainer
-      config={{
-        lineValue: {
-          label: "Rate",
-          color: up ? "rgb(34 197 94)" : "rgb(239 68 68)", // Simple green/red fallback
-        },
-      }}
-      className="h-6 w-24"
-    >
-      <LineChart data={data}>
-        <YAxis domain={["dataMin - 0.01", "dataMax + 0.01"]} hide />
-        <Line
-          type="monotone"
-          dataKey="v"
-          stroke="var(--color-lineValue)"
-          strokeWidth={2}
-          dot={false}
-          animationDuration={500}
-        />
-      </LineChart>
-    </ChartContainer>
+    <div className="flex items-center gap-2">
+      <ChartContainer
+        config={{
+          lineValue: {
+            label: "Rate",
+            color: "rgb(156 163 175)", // grey-400
+          },
+        }}
+        className="h-6 w-20"
+      >
+        <LineChart data={data}>
+          <YAxis domain={["dataMin - 0.01", "dataMax + 0.01"]} hide />
+          <Line
+            type="monotone"
+            dataKey="v"
+            stroke="var(--color-lineValue)"
+            strokeWidth={1}
+            dot={false}
+            animationDuration={500}
+          />
+        </LineChart>
+      </ChartContainer>
+
+      <span
+        className={`flex items-center gap-0.5 text-xs font-medium ${
+          isDecrease ? "text-emerald-500" : "text-red-500"
+        }`}
+      >
+        <span className="leading-none">{isDecrease ? "▼" : "▲"}</span>
+        <span>
+          {change > 0 ? "+" : ""}
+          {change.toFixed(2)}
+        </span>
+      </span>
+    </div>
   );
 }

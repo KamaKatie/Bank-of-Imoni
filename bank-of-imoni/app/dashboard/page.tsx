@@ -10,8 +10,8 @@ export default function Page() {
     <div className="h-full grid grid-cols-1 gap-5 p-5 lg:grid-cols-4">
       <div className="lg:row-span-2 place-content-evenly">
         <h3 className="text-center font-semibold p-2">Accounts</h3>
-        <Accounts />
         <Suspense>
+          <Accounts />
           <CurrencyTracker />
         </Suspense>
       </div>
