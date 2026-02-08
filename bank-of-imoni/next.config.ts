@@ -9,11 +9,6 @@ const nextConfig: NextConfig = {
         hostname: "isrbfrqaeaamglizvgqd.supabase.co",
         pathname: "/storage/v1/object/**",
       },
-      {
-        protocol: "https",
-        hostname: "cdn.brandfetch.io",
-        pathname: "/**",
-      },
     ],
   },
 };

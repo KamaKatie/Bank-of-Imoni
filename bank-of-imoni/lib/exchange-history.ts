@@ -20,10 +20,8 @@ export async function persistExchangeRates(rates: ExchangeRates) {
   ];
 
   const { error } = await supabase.from("exchange_rates").upsert(rows, {
-    onConflict: "currency",
-    ignoreDuplicates: true,
+    onConflict: "currency,recorded_date",
   });
-
   if (error) {
     console.error("Failed to persist exchange rates", error);
   }

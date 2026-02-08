@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 export type Account = {
   id: string;
   name: string;
-  current_balance: number | null;
+  current_balance: number;
   type: string | null;
   icon: string;
   placeholder_img: string;

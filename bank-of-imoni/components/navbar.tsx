@@ -1,6 +1,4 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
-import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,13 +41,9 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
         </div>
-        {!hasEnvVars ? (
-          <EnvVarWarning />
-        ) : (
-          <Suspense>
-            <AuthButton />
-          </Suspense>
-        )}
+        <Suspense>
+          <AuthButton />
+        </Suspense>
       </div>
     </nav>
   );

@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { Database } from "@/types/database.types";
 
-export type Profile = {
-  id: string;
-};
+type Tables = Database["public"]["Tables"];
+type ProfilesTable = Tables["profiles"];
+
+export type Profile = ProfilesTable["Row"];
 
 export function useAuth() {
   const supabase = createClient();

@@ -47,7 +47,8 @@ export default function CurrentMonthExpensesChart() {
       // Fetch transactions with category id
       const { data: transactions, error: txError } = await supabase
         .from("transactions")
-        .select("amount, category")
+        .select("amount, category, type")
+        .neq("type", "income")
         .gte("date", `${monthInfo!.year}-${monthInfo!.monthNumber}-01`)
         .lt(
           "date",
@@ -144,7 +145,7 @@ export default function CurrentMonthExpensesChart() {
 
       <ChartContainer
         config={chartConfig}
-        className="mx-auto aspect-square max-h-[250px] mb-2"
+        className="mx-auto aspect-square w-60"
       >
         <PieChart>
           <ChartTooltip
@@ -164,7 +165,7 @@ export default function CurrentMonthExpensesChart() {
                   )}
                   <div>
                     <div className="font-semibold">{entry.category}</div>
-                    <div>¥{entry.amount}</div>
+                    <div>¥{entry.amount.toLocaleString()}</div>
                   </div>
                 </div>
               );
@@ -175,7 +176,7 @@ export default function CurrentMonthExpensesChart() {
             dataKey="amount"
             nameKey="category"
             innerRadius={70}
-            outerRadius={90}
+            outerRadius={100}
             strokeWidth={1}
           >
             {coloredExpenses.map((entry, index) => (
@@ -194,9 +195,9 @@ export default function CurrentMonthExpensesChart() {
                       <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-2xl font-bold"
+                        className="fill-foreground text-xl font-bold"
                       >
-                        ¥{totalAmount}
+                        ¥{totalAmount.toLocaleString()}
                       </tspan>
                     </text>
                   );
