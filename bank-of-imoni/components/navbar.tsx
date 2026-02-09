@@ -2,6 +2,7 @@ import { AuthButton } from "@/components/auth-button";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ReceiptJapaneseYen, Wallet, PiggyBank } from "lucide-react";
 
 import {
   NavigationMenu,
@@ -25,21 +26,33 @@ export default function Navbar() {
             />
             <span className="hidden md:grid text-lg">Bank of Imoni</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <NavigationMenu className="hidden md:grid">
-              <NavigationMenuList>
-                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                  <Link href={"/transactions"}>Transactions</Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                  <Link href={"/accounts"}>Accounts</Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                  <Link href={"/goals"}>Goals</Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <NavigationMenu className="md:grid">
+            <NavigationMenuList>
+              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                <Link
+                  className="flex items-center gap-2"
+                  href={"/transactions"}
+                >
+                  <ReceiptJapaneseYen />
+                  <p className="hidden md:grid">Transactions</p>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                <Link className="flex items-center gap-2" href={"/accounts"}>
+                  <Wallet />
+                  <p className="hidden md:grid">Accounts</p>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                <Link className="flex items-center gap-2" href={"/goals"}>
+                  <PiggyBank />
+                  <p className="hidden md:grid">Goals</p>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
         <Suspense>
           <AuthButton />

@@ -21,7 +21,7 @@ export default function RootLayout({
             link={`/accounts/${slugify(account.name)}-${account.id}`}
             balance={account.current_balance}
             logoSrc={account.icon || account.placeholder_img}
-            className="from-green-100 to-white text-black min-w-[200px]"
+            className="from-green-100 to-white text-black"
             showDate
           />
         ))}

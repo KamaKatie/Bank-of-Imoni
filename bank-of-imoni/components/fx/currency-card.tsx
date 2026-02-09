@@ -1,4 +1,4 @@
-import { JP, US, NZ } from "country-flag-icons/react/3x2";
+import { JP, NZ } from "country-flag-icons/react/3x2";
 import { Sparkline } from "@/components/fx/sparkline";
 
 type Props = {
@@ -16,13 +16,8 @@ type Props = {
 
 export default function CurrencyCard({ rates, history, updated }: Props) {
   return (
-    <div className="">
+    <div className="hidden lg:grid">
       <div className="grid grid-rows-2 p-3 gap-2 items-center justify-center">
-        {/*<div className="flex gap-2 items-center">
-          <US className="w-4" />
-          <p className="text-xs text-muted-foreground">USD</p>
-          <p className="text-sm font-semibold">$1.00</p>
-        </div>*/}
 
         <div className="flex gap-2 items-center">
           <JP className="w-4" />

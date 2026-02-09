@@ -10,7 +10,6 @@ export default function Page() {
 
   return (
     <div className="container mx-auto">
-      <h3 className="p-3 font-semibold text-lg text-center">Transactions</h3>
       <Suspense>
         <DataTable columns={columns} data={data.transactions} />
       </Suspense>

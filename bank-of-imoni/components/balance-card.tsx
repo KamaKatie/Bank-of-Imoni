@@ -35,7 +35,7 @@ export function BalanceCard({
   return (
     <Link href={link || ""}>
       <div
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br p-5 shadow-md ${className}`}
+        className={`min-w-[200px] relative overflow-hidden rounded-2xl bg-gradient-to-br p-5 shadow-md ${className}`}
       >
         <div className="flex items-start justify-between">
           <p className="text-sm opacity-80">{label}</p>

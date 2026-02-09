@@ -15,31 +15,37 @@ import {
 import { Badge } from "./ui/badge";
 import { BalanceCard } from "./balance-card";
 
-export default function Accounts() {
+export default function DashboardAccounts() {
   const { accounts, workingBalance } = useAccounts();
 
   return (
-    <div className="space-y-4 flex flex-col items-center">
-      {/*Balance Card */}
-      <BalanceCard
-        link="/accounts"
-        label="Working Balance"
-        balance={workingBalance}
-        className="from-green-100 to-white text-black min-w-[240px] hover:scale-105 duration-150"
-        showDate
-      />
+    <div className="gap-10 w-full md:bg-white bg-emerald-700 md:gap-0 md:space-y-4 flex md:flex-col items-center justify-center">
+      <div className="flex flex-col">
+        <h1 className="text-white md:text-black text-center pb-4 font-semibold text-md">
+          Accounts
+        </h1>
+
+        {/*Balance Card */}
+        <BalanceCard
+          link="/accounts"
+          label="Working Balance"
+          balance={workingBalance}
+          className="from-green-100 to-white hover:scale-105 duration-150"
+          showDate
+        />
+      </div>
 
       {/*Accounts */}
       <ul>
         {accounts.map((account) => (
-          <li key={account.id || account.name} className="first:my-0 my-2">
+          <li key={account.id || account.name} className="my-2">
             <Item
-              className="rounded-xl hover:bg-green-50 min-w-full"
+              className="rounded-xl hover:border-emerald-700 min-w-full"
               variant="muted"
               asChild
             >
               <Link href={`/accounts/${slugify(account.name)}-${account.id}`}>
-                <ItemMedia variant="image">
+                <ItemMedia variant="image" className="hidden md:flex">
                   <Image
                     src={account.icon || account.placeholder_img}
                     alt={account.name}
@@ -50,14 +56,19 @@ export default function Accounts() {
 
                 <ItemContent>
                   <div className="flex items-center justify-between gap-5">
-                    <ItemTitle>{account.name}</ItemTitle>
+                    <ItemTitle className="md:text-inherit text-emerald-900">
+                      {account.name}
+                    </ItemTitle>
 
-                    <Badge variant="outline" className="bg-white">
+                    <Badge
+                      variant="outline"
+                      className="bg-white hidden md:flex"
+                    >
                       {account.type}
                     </Badge>
                   </div>
 
-                  <ItemDescription>
+                  <ItemDescription className="text-emerald-50 md:text-inherit">
                     ¥{account.current_balance?.toLocaleString()}
                   </ItemDescription>
                 </ItemContent>

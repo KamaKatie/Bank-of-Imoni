@@ -7,37 +7,37 @@ import { Suspense } from "react";
 
 export default function Page() {
   return (
-    <div className="h-full grid grid-cols-1 gap-5 p-5 lg:grid-cols-4 place-items-stretch">
+    <div className="h-full grid grid-cols-1 lg:grid-cols-4 place-items-stretch">
       {/* Accounts */}
       <div className="lg:row-span-2 flex flex-col items-center justify-center">
-        <h3 className="text-center font-semibold p-2">Accounts</h3>
         <Suspense>
           <Accounts />
           <CurrencyTracker />
         </Suspense>
       </div>
+      <div className="">
+        {/* Cashflow */}
+        <Card className="lg:col-span-3 rounded-xl flex flex-col">
+          <h3 className="text-center font-semibold p-2">Cashflow</h3>
+          <SpendingChart />
+        </Card>
 
-      {/* Cashflow */}
-      <Card className="lg:col-span-3 rounded-xl flex flex-col">
-        <h3 className="text-center font-semibold p-2">Cashflow</h3>
-        <SpendingChart />
-      </Card>
+        {/* Recent transactions */}
+        <Card className="rounded-xl flex flex-col items-center justify-center">
+          <h3 className="text-center font-semibold p-2">Recent transactions</h3>
+        </Card>
 
-      {/* Recent transactions */}
-      <Card className="rounded-xl flex flex-col items-center justify-center">
-        <h3 className="text-center font-semibold p-2">Recent transactions</h3>
-      </Card>
+        {/* Upcoming bills */}
+        <Card className="rounded-xl flex flex-col items-center justify-center">
+          <h3 className="text-center font-semibold p-2">Upcoming bills</h3>
+        </Card>
 
-      {/* Upcoming bills */}
-      <Card className="rounded-xl flex flex-col items-center justify-center">
-        <h3 className="text-center font-semibold p-2">Upcoming bills</h3>
-      </Card>
-
-      {/* Spending */}
-      <Card className="rounded-xl flex flex-col items-center justify-center">
-        <h3 className="text-center font-semibold p-2">Spending</h3>
-        <ChartPieDonutText />
-      </Card>
+        {/* Spending */}
+        <Card className="rounded-xl flex flex-col items-center justify-center">
+          <h3 className="text-center font-semibold p-2">Spending</h3>
+          <ChartPieDonutText />
+        </Card>
+      </div>
     </div>
   );
 }
