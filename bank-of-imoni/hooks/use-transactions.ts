@@ -32,7 +32,7 @@ export default function useTransactions() {
       try {
         const { data, error } = await supabase
           .from("transactions")
-          .select(`*, categories(*), accounts(*)`);
+          .select(`*, categories(*), accounts(*, profiles(*))`);
 
         if (error) throw error;
 

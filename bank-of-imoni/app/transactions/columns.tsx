@@ -1,34 +1,60 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { Database } from "@/types/database.types";
+import { DynamicIcon } from "lucide-react/dynamic";
 import Image from "next/image";
-
-import { Button } from "@/components/ui/button";
 
 type Tables = Database["public"]["Tables"];
 type TransactionsTable = Tables["transactions"];
 type CategoriesTable = Tables["categories"];
 type AccountTable = Tables["accounts"];
+type ProfilesTable = Tables["profiles"];
 
 export type TransactionsWithCategoriesandAccounts = TransactionsTable["Row"] & {
   categories: CategoriesTable["Row"] | null;
-  accounts: AccountTable["Row"] | null;
+  accounts:
+    | (AccountTable["Row"] & {
+        profiles: ProfilesTable["Row"] | null;
+      })
+    | null;
 };
 
 export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
   {
+    accessorKey: "date",
+    header: ({ column }) => {
+      return (
+        <button
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          When
+        </button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = row.getValue("date");
+      const formattedDate = new Intl.DateTimeFormat("en-US", {
+        day: "numeric",
+        month: "short",
+      }).format(new Date(date));
+
+      return (
+        <div className="flex items-center justify-center gap-2">
+          {formattedDate}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "amount",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
+        <button
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Amount
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </button>
       );
     },
     cell: ({ row }) => {
@@ -42,43 +68,21 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
 
       const colorClass =
         type === "income"
-          ? "text-green-600 font-medium"
+          ? "text-emerald-700 font-medium"
           : type === "expense"
-            ? "text-red-600 font-light"
+            ? "text-red-700 font-light"
             : "text-foreground";
 
       return (
-        <div>
+        <div className="flex items-center justify-center gap-2">
           <span className={`${colorClass}`}>{formattedAmount}</span>
         </div>
       );
     },
   },
   {
-    accessorKey: "date",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const date = row.getValue("date");
-      const formattedDate = new Intl.DateTimeFormat("en-US", {
-        dateStyle: "medium",
-      }).format(new Date(date));
-
-      return <div className="flex items-center">{formattedDate}</div>;
-    },
-  },
-  {
     accessorKey: "description",
-    header: "Description",
+    header: "What",
     cell: ({ row }) => {
       const description = row.getValue("description");
 
@@ -87,7 +91,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       }
 
       return (
-        <div>
+        <div className="flex items-center justify-center gap-2">
           {description
             .split(" ")
             .map((word, index) => {
@@ -113,7 +117,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     cell: ({ getValue }) => {
       const category = getValue<{
         name: string;
-        data_url: string | null;
+        icon: string | null;
       } | null>();
 
       if (!category) {
@@ -121,16 +125,32 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       }
 
       return (
-        <div className="flex items-center gap-2">
-          {category.data_url && (
+        <div className="flex items-center justify-center gap-2">
+          {category.icon && (
+            <DynamicIcon name={category.icon} width={15} height={15} />
+          )}
+          <span className="hidden md:grid">{category.name}</span>
+        </div>
+      );
+    },
+  },
+  {
+    id: "By",
+    header: "By",
+    cell: ({ row }) => {
+      const profile = row.original.accounts?.profiles;
+      return (
+        <div className="flex items-center justify-center gap-2">
+          {profile?.image && (
             <Image
-              src={category.data_url}
-              alt={category.name}
+              src={profile.image}
+              alt={profile.first_name}
               width={20}
               height={20}
+              className="rounded-full"
             />
           )}
-          <span>{category.name}</span>
+          {profile?.first_name}
         </div>
       );
     },

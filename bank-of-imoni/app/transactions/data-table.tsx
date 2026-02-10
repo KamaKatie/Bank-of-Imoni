@@ -34,6 +34,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SlidersHorizontal } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,8 +70,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex flex-col items-center justify-between">
-      <div className="flex items-center justify-end py-4 gap-4">
+    <div className="flex flex-col items-center">
+      <div className="flex p-5 w-11/12 justify-end gap-2">
         <Input
           placeholder="Search transactions"
           value={
@@ -79,15 +80,16 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("description")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-xs"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
+            <Button variant="outline">
+              <SlidersHorizontal className="h-4 w-4" />
+              Filter
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="center">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -108,14 +110,17 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="overflow-hidden rounded-md border w-10/12">
+      <div className="overflow-hidden rounded-md border w-11/12 shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow className="bg-gray-50" key={headerGroup.id}>
+              <TableRow
+                className="bg-slate-100 hover:bg-slate-100"
+                key={headerGroup.id}
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -138,7 +143,7 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="cursor-pointer hover:bg-gray-100"
+                    className="cursor-pointer hover:bg-emerald-50 even:bg-slate-50"
                     onClick={() => router.push(`/transactions/${slug}`)}
                   >
                     {row.getVisibleCells().map((cell) => (

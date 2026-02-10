@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Label, Pie, PieChart, Cell } from "recharts";
 import { createClient } from "@/lib/supabase/client";
-import Image from "next/image";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 import {
   ChartContainer,
@@ -68,7 +68,7 @@ export default function CurrentMonthExpensesChart() {
       // Fetch all categories
       const { data: categories, error: catError } = await supabase
         .from("categories")
-        .select("id, name, data_url");
+        .select("id, name, icon");
 
       if (catError) {
         console.error("Error fetching categories:", catError);
@@ -82,7 +82,7 @@ export default function CurrentMonthExpensesChart() {
         const cat = categories?.find((c) => c.id === tx.category);
         const categoryName = cat?.name || "Uncategorized";
         if (!aggregated[categoryName]) {
-          aggregated[categoryName] = { amount: 0, icon: cat?.data_url };
+          aggregated[categoryName] = { amount: 0, icon: cat?.icon };
         }
         aggregated[categoryName].amount += Number(tx.amount);
       });
@@ -155,14 +155,7 @@ export default function CurrentMonthExpensesChart() {
               const entry = payload[0].payload;
               return (
                 <div className="flex items-center gap-2 bg-white p-2 rounded shadow">
-                  {entry.icon && (
-                    <Image
-                      src={entry.icon}
-                      alt={entry.category}
-                      width={20}
-                      height={20}
-                    />
-                  )}
+                  <DynamicIcon name={entry.icon} />
                   <div>
                     <div className="font-semibold">{entry.category}</div>
                     <div>¥{entry.amount.toLocaleString()}</div>

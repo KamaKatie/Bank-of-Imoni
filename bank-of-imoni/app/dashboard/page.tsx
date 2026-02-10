@@ -3,17 +3,14 @@ import { Card } from "@/components/ui/card";
 import SpendingChart from "@/components/dashboard-spending-chart";
 import ChartPieDonutText from "@/components/dashboard-piechart";
 import { CurrencyTracker } from "@/components/fx/currency-tracker";
-import { Suspense } from "react";
 
 export default function Page() {
   return (
     <div className="h-full grid grid-cols-1 lg:grid-cols-4 place-items-stretch">
       {/* Accounts */}
       <div className="lg:row-span-2 flex flex-col items-center justify-center">
-        <Suspense>
           <Accounts />
           <CurrencyTracker />
-        </Suspense>
       </div>
       <div className="">
         {/* Cashflow */}
