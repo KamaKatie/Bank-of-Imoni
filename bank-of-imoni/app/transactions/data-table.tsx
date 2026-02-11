@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { slugify } from "@/lib/slugify";
 
 import {
   ColumnDef,
@@ -25,6 +24,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+} from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,9 +78,29 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const categories = React.useMemo(() => {
+    const categorySet = new Set<string>();
+
+    data.forEach((item) => {
+      const categoryName = (item as { categories?: { name?: string } | null })
+        .categories?.name;
+      if (categoryName) {
+        categorySet.add(categoryName);
+      } else {
+        categorySet.add("Uncategorised");
+      }
+    });
+
+    return Array.from(categorySet).sort();
+  }, [data]);
+
+  const categoryColumn = table.getColumn("category");
+  const currentFilter = (categoryColumn?.getFilterValue() as string) || "All";
+  const allCategories = ["All", ...categories];
+
   return (
     <div className="flex flex-col items-center">
-      <div className="flex p-5 w-11/12 justify-end gap-2">
+      <div className="flex p-3 w-11/12 justify-end gap-2">
         <Input
           placeholder="Search transactions"
           value={
@@ -80,38 +109,70 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("description")?.setFilterValue(event.target.value)
           }
-          className="max-w-xs"
+          className="w-80"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <SlidersHorizontal className="h-4 w-4" />
-              Filter
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+        {categories.length > 0 && (
+          <Select
+            value={currentFilter}
+            onValueChange={(value) => {
+              if (value === "All") {
+                categoryColumn?.setFilterValue(undefined);
+              } else {
+                categoryColumn?.setFilterValue(value);
+              }
+            }}
+          >
+            <SelectTrigger className="md:min-w-[200px]">
+              <SelectValue placeholder="Filter by category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Categories</SelectLabel>
+                {allCategories.map((category) => (
+                  <SelectItem
+                    key={category}
+                    value={category}
+                    className="cursor-pointer"
                   >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
+        <div className="hidden md:grid">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <SlidersHorizontal className="h-4 w-4" />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="overflow-hidden rounded-md border w-11/12 shadow-sm">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -136,15 +197,14 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => {
-                const uuid = row.original.id;
-                const slug = slugify(uuid);
+                const uuid = (row.original as { id: string }).id;
 
                 return (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="cursor-pointer hover:bg-emerald-50 even:bg-slate-50"
-                    onClick={() => router.push(`/transactions/${slug}`)}
+                    className="cursor-pointer hover:bg-blue-50 even:bg-slate-50"
+                    onClick={() => router.push(`/transactions/${uuid}`)}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

@@ -21,9 +21,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// -----------------------------
-// Types
-// -----------------------------
 interface ChartDataItem {
   date: string; // YYYY-MM
   income: number;
@@ -32,18 +29,12 @@ interface ChartDataItem {
 
 type TimeRange = "1y" | "2y" | "5y";
 
-// -----------------------------
-// Component
-// -----------------------------
 export default function SpendingChart() {
   const [timeRange, setTimeRange] = useState<TimeRange>("1y");
   const [filteredData, setFilteredData] = useState<ChartDataItem[]>([]);
 
-  const { transactions, loading, error } = useTransactions();
+  const { transactions } = useTransactions();
 
-  // -----------------------------
-  // Chart config
-  // -----------------------------
   const chartConfig = {
     income: {
       label: "Income",
@@ -55,9 +46,6 @@ export default function SpendingChart() {
     },
   } satisfies ChartConfig;
 
-  // -----------------------------
-  // Aggregate transactions → monthly income/spending
-  // -----------------------------
   const chartData: ChartDataItem[] = useMemo(() => {
     if (!transactions.length) return [];
 
@@ -92,9 +80,6 @@ export default function SpendingChart() {
     );
   }, [transactions]);
 
-  // -----------------------------
-  // Filter by selected year range
-  // -----------------------------
   useEffect(() => {
     if (!chartData.length) {
       setFilteredData([]);
@@ -119,26 +104,6 @@ export default function SpendingChart() {
     setFilteredData(filtered);
   }, [timeRange, chartData]);
 
-  // -----------------------------
-  // Loading / error states
-  // -----------------------------
-  if (loading) {
-    return (
-      <div className="p-5 text-sm text-muted-foreground">Loading chart…</div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-5 text-sm text-red-500">
-        Failed to load transactions
-      </div>
-    );
-  }
-
-  // -----------------------------
-  // Render
-  // -----------------------------
   return (
     <div className="grid flex-1 gap-2 p-5">
       <Select

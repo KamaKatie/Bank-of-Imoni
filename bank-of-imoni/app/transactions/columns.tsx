@@ -33,7 +33,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = row.getValue("date");
+      const date = row.getValue("date") as string | number | Date;
       const formattedDate = new Intl.DateTimeFormat("en-US", {
         day: "numeric",
         month: "short",
@@ -68,9 +68,9 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
 
       const colorClass =
         type === "income"
-          ? "text-emerald-700 font-medium"
+          ? "text-green-600 font-semibold"
           : type === "expense"
-            ? "text-red-700 font-light"
+            ? "text-red-600"
             : "text-foreground";
 
       return (
@@ -84,7 +84,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     accessorKey: "description",
     header: "What",
     cell: ({ row }) => {
-      const description = row.getValue("description");
+      const description: React.ReactNode = row.getValue("description");
 
       if (typeof description !== "string") {
         return <div>{description}</div>;
@@ -114,6 +114,25 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     id: "category",
     header: "Category",
     accessorFn: (row) => row.categories,
+    filterFn: (row, columnId, filterValue) => {
+      const category = row.getValue<{
+        name: string;
+        icon: string | null;
+      } | null>(columnId);
+
+      // Show everything
+      if (!filterValue || filterValue === "All") {
+        return true;
+      }
+
+      // Uncategorised rows
+      if (filterValue === "Uncategorised") {
+        return !category;
+      }
+
+      // Match by category name
+      return category?.name === filterValue;
+    },
     cell: ({ getValue }) => {
       const category = getValue<{
         name: string;
@@ -127,9 +146,13 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       return (
         <div className="flex items-center justify-center gap-2">
           {category.icon && (
-            <DynamicIcon name={category.icon} width={15} height={15} />
+            <DynamicIcon
+              name={category.icon as "type"}
+              size={15}
+              strokeWidth={1}
+            />
           )}
-          <span className="hidden md:grid">{category.name}</span>
+          <span className="hidden md:grid font-light">{category.name}</span>
         </div>
       );
     },

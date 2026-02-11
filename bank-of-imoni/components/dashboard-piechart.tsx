@@ -1,16 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Label, Pie, PieChart, Cell } from "recharts";
-import { createClient } from "@/lib/supabase/client";
+import { Pie, PieChart, Cell, Label } from "recharts";
 import { DynamicIcon } from "lucide-react/dynamic";
 
+import useTransactions from "@/hooks/use-transactions";
 import {
   ChartContainer,
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { Spinner } from "@/components/ui/spinner";
 
 interface Expense {
   category: string;
@@ -20,110 +19,51 @@ interface Expense {
 }
 
 export default function CurrentMonthExpensesChart() {
-  const [expenses, setExpenses] = React.useState<Expense[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const { transactions } = useTransactions();
 
-  const [monthInfo, setMonthInfo] = React.useState<{
-    monthName: string;
-    monthNumber: number;
-    year: number;
-  } | null>(null);
+  const now = React.useMemo(() => new Date(), []);
+  const monthName = now.toLocaleString("default", { month: "long" });
+  const month = now.getMonth();
+  const year = now.getFullYear();
 
-  React.useEffect(() => {
-    const now = new Date();
-    setMonthInfo({
-      monthName: now.toLocaleString("default", { month: "long" }),
-      monthNumber: now.getMonth() + 1,
-      year: now.getFullYear(),
-    });
-  }, []);
+  const expenses = React.useMemo<Expense[]>(() => {
+    if (!transactions.length) return [];
 
-  React.useEffect(() => {
-    if (!monthInfo) return;
+    const aggregated: Record<string, { amount: number; icon?: string }> = {};
 
-    async function fetchExpenses() {
-      const supabase = createClient();
+    transactions
+      .filter(
+        (tx) =>
+          tx.type !== "income" &&
+          new Date(tx.date).getMonth() === month &&
+          new Date(tx.date).getFullYear() === year,
+      )
+      .forEach((tx) => {
+        const categoryName = tx.categories?.name ?? "Uncategorized";
+        const icon = tx.categories?.icon;
 
-      // Fetch transactions with category id
-      const { data: transactions, error: txError } = await supabase
-        .from("transactions")
-        .select("amount, category, type")
-        .neq("type", "income")
-        .gte("date", `${monthInfo!.year}-${monthInfo!.monthNumber}-01`)
-        .lt(
-          "date",
-          `${
-            monthInfo!.monthNumber === 12
-              ? monthInfo!.year + 1
-              : monthInfo!.year
-          }-${monthInfo!.monthNumber === 12 ? 1 : monthInfo!.monthNumber + 1}-01`,
-        );
-
-      if (txError) {
-        console.error("Error fetching transactions:", txError);
-        setLoading(false);
-        return;
-      }
-
-      // Fetch all categories
-      const { data: categories, error: catError } = await supabase
-        .from("categories")
-        .select("id, name, icon");
-
-      if (catError) {
-        console.error("Error fetching categories:", catError);
-        setLoading(false);
-        return;
-      }
-
-      // Aggregate transactions by category
-      const aggregated: Record<string, { amount: number; icon?: string }> = {};
-      transactions?.forEach((tx) => {
-        const cat = categories?.find((c) => c.id === tx.category);
-        const categoryName = cat?.name || "Uncategorized";
         if (!aggregated[categoryName]) {
-          aggregated[categoryName] = { amount: 0, icon: cat?.icon };
+          aggregated[categoryName] = { amount: 0, icon };
         }
+
         aggregated[categoryName].amount += Number(tx.amount);
       });
 
-      const chartData: Expense[] = Object.entries(aggregated).map(
-        ([category, { amount, icon }]) => ({
-          category,
-          amount,
-          icon,
-          fill: "#00FFA3", // placeholder, will generate gradient later
-        }),
-      );
+    return Object.entries(aggregated).map(([category, { amount, icon }]) => ({
+      category,
+      amount,
+      icon,
+      fill: "#00FFA3", // placeholder
+    }));
+  }, [transactions, month, year]);
 
-      setExpenses(chartData);
-      setLoading(false);
-    }
-
-    fetchExpenses();
-  }, [monthInfo]);
-
-  if (loading || !monthInfo)
-    return (
-      <div className="flex justify-center">
-        <Spinner />
-      </div>
-    );
-
-  const totalAmount = expenses.reduce((sum, item) => sum + item.amount, 0);
-
-  // Generate gradient colors dynamically
-  const minGreen = 120;
-  const maxGreen = 200;
-  const minBlue = 180;
-  const maxBlue = 255;
+  const totalAmount = expenses.reduce((sum, e) => sum + e.amount, 0);
 
   const coloredExpenses = expenses.map((exp) => {
     const ratio = exp.amount / totalAmount;
-    const green = Math.round(minGreen + (maxGreen - minGreen) * ratio);
-    const blue = Math.round(minBlue + (maxBlue - minBlue) * ratio);
-    const fill = `rgb(0, ${green}, ${blue})`;
-    return { ...exp, fill };
+    const green = Math.round(120 + (200 - 120) * ratio);
+    const blue = Math.round(180 + (255 - 180) * ratio);
+    return { ...exp, fill: `rgb(0, ${green}, ${blue})` };
   });
 
   const chartConfig = {
@@ -140,7 +80,7 @@ export default function CurrentMonthExpensesChart() {
   return (
     <div>
       <p className="text-center">
-        {monthInfo.monthName} - {monthInfo.year}
+        {monthName} – {year}
       </p>
 
       <ChartContainer
@@ -151,11 +91,11 @@ export default function CurrentMonthExpensesChart() {
           <ChartTooltip
             cursor={false}
             content={({ payload }) => {
-              if (!payload || payload.length === 0) return null;
+              if (!payload?.length) return null;
               const entry = payload[0].payload;
               return (
                 <div className="flex items-center gap-2 bg-white p-2 rounded shadow">
-                  <DynamicIcon name={entry.icon} />
+                  {entry.icon && <DynamicIcon name={entry.icon} />}
                   <div>
                     <div className="font-semibold">{entry.category}</div>
                     <div>¥{entry.amount.toLocaleString()}</div>
@@ -164,39 +104,32 @@ export default function CurrentMonthExpensesChart() {
               );
             }}
           />
+
           <Pie
             data={coloredExpenses}
             dataKey="amount"
             nameKey="category"
             innerRadius={70}
             outerRadius={100}
-            strokeWidth={1}
           >
-            {coloredExpenses.map((entry, index) => (
-              <Cell key={index} fill={entry.fill} />
+            {coloredExpenses.map((e, i) => (
+              <Cell key={i} fill={e.fill} />
             ))}
+
             <Label
-              content={({ viewBox }) => {
-                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                  return (
-                    <text
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                    >
-                      <tspan
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        className="fill-foreground text-xl font-bold"
-                      >
-                        ¥{totalAmount.toLocaleString()}
-                      </tspan>
-                    </text>
-                  );
-                }
-                return null;
-              }}
+              content={({ viewBox }) =>
+                viewBox && "cx" in viewBox ? (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="fill-foreground text-xl font-bold"
+                  >
+                    ¥{totalAmount.toLocaleString()}
+                  </text>
+                ) : null
+              }
             />
           </Pie>
         </PieChart>

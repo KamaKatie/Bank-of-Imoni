@@ -11,35 +11,28 @@ type TransactionsTable = Tables["transactions"];
 export type Transaction = TransactionsTable["Row"] &
   TransactionsWithCategoriesandAccounts;
 
-let cachedTransactions: Transaction[] | null = null;
-
+// Remove global cache or make it a module-level variable with better management
 export default function useTransactions() {
   const supabase = createClient();
-
-  const [transactions, setTransactions] = useState<Transaction[]>(
-    cachedTransactions ?? [],
-  );
-  const [loading, setLoading] = useState(!cachedTransactions);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (cachedTransactions) {
-      setLoading(false);
-      return;
-    }
-
     const fetchTransactions = async () => {
       try {
+        setLoading(true);
         const { data, error } = await supabase
           .from("transactions")
-          .select(`*, categories(*), accounts(*, profiles(*))`);
+          .select(`*, categories(*), accounts(*, profiles(*))`)
+          .order("date", { ascending: false }); // Optional: add ordering
 
         if (error) throw error;
 
-        cachedTransactions = data ?? [];
-        setTransactions(cachedTransactions);
+        setTransactions(data ?? []);
       } catch (err) {
         setError(err as Error);
+        console.error("Error fetching transactions:", err);
       } finally {
         setLoading(false);
       }

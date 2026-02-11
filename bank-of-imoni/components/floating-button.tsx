@@ -3,7 +3,7 @@ import { PlusIcon } from "lucide-react";
 
 export function FloatingButton() {
   return (
-    <div className="lg:hidden fixed bottom-16 end-2 z-50">
+    <div className="md:hidden fixed bottom-16 end-2 z-50">
       <Button
         variant="outline"
         size="icon"

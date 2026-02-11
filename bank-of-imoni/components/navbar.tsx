@@ -14,7 +14,7 @@ import {
 export default function Navbar() {
   return (
     <nav className="flex justify-center max-h-20 text-white">
-      <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+      <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5 text-sm">
         <div className="flex gap-5 items-center font-semibold">
           <Link href={"/dashboard"} className="flex gap-2">
             <Image
@@ -26,8 +26,6 @@ export default function Navbar() {
             />
             <span className="hidden md:grid text-lg">Bank of Imoni</span>
           </Link>
-        </div>
-        <div className="flex items-center gap-2">
           <NavigationMenu className="md:grid">
             <NavigationMenuList>
               <NavigationMenuItem className={navigationMenuTriggerStyle()}>

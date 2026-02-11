@@ -20,7 +20,7 @@ export type Database = {
           group_id: string | null;
           icon: string | null;
           id: string;
-          name: string | null;
+          name: string;
           placeholder_img: string;
           type: string | null;
           updated_at: string | null;
@@ -266,7 +266,7 @@ export type Database = {
       };
       profiles: {
         Row: {
-          first_name: string | null;
+          first_name: string;
           id: string;
           image: string | null;
           last_name: string | null;
