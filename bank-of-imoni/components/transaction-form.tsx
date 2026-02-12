@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { date, z } from "zod";
 import { createTransaction } from "@/app/transactions/actions/create-transaction";
 
 import {
@@ -28,6 +28,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 const formSchema = z.object({
   amount: z.coerce.number().positive(),
   description: z.string().min(1),
+  category: z.string().min(1),
+  date: z.date(),
   paidByAccountId: z.string(),
   participantUserIds: z.array(z.string()).min(1),
 });
@@ -35,17 +37,19 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 type Props = {
-  groupId: string;
   accounts: { id: string; name: string }[];
   users: { id: string; first_name: string }[];
+  categories: { id: string; name: string }[];
 };
 
-export function TransactionForm({ groupId, accounts, users }: Props) {
+export function TransactionForm({ accounts, users, categories }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: 0,
       description: "",
+      category: "",
+      date: new Date(),
       paidByAccountId: "",
       participantUserIds: [],
     },
@@ -54,7 +58,6 @@ export function TransactionForm({ groupId, accounts, users }: Props) {
   async function onSubmit(values: FormValues) {
     await createTransaction({
       ...values,
-      groupId,
     });
 
     form.reset();
@@ -87,6 +90,51 @@ export function TransactionForm({ groupId, accounts, users }: Props) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Category */}
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Date */}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  value={field.value.toISOString().slice(0, 10)}
+                  onChange={(e) => field.onChange(new Date(e.target.value))}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

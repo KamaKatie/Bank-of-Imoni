@@ -3,43 +3,78 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Database } from "@/types/database.types";
-import { TransactionsWithCategoriesandAccounts } from "@/app/transactions/columns";
+import { QueryData, SupabaseClient } from "@supabase/supabase-js";
 
-type Tables = Database["public"]["Tables"];
-type TransactionsTable = Tables["transactions"];
+type DB = Database["public"]["Tables"];
 
-export type Transaction = TransactionsTable["Row"] &
-  TransactionsWithCategoriesandAccounts;
+type Account = DB["accounts"]["Row"] & {
+  profiles: DB["profiles"]["Row"] | null;
+};
 
-// Remove global cache or make it a module-level variable with better management
+type User = DB["profiles"]["Row"];
+
+type Category = DB["categories"]["Row"];
+
+function getTransactionsQuery(client: SupabaseClient<Database>) {
+  return client
+    .from("transactions")
+    .select(
+      `
+      *,
+      categories(*),
+      accounts:paid_by_account(
+        *,
+        profiles(*)
+      )
+    `,
+    )
+    .order("date", { ascending: false });
+}
+
+type Transaction = QueryData<ReturnType<typeof getTransactionsQuery>>[number];
+
 export default function useTransactions() {
-  const supabase = createClient();
+  const supabase = createClient<Database>();
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
-          .from("transactions")
-          .select(`*, categories(*), accounts(*, profiles(*))`)
-          .order("date", { ascending: false }); // Optional: add ordering
 
-        if (error) throw error;
+        const [transactionsRes, accountsRes, usersRes, categoriesRes] =
+          await Promise.all([
+            getTransactionsQuery(supabase),
+            supabase.from("accounts").select(`*, profiles(*)`),
+            supabase.from("profiles").select(`*`),
+            supabase.from("categories").select(`*`),
+          ]);
 
-        setTransactions(data ?? []);
+        if (transactionsRes.error) throw transactionsRes.error;
+        if (accountsRes.error) throw accountsRes.error;
+        if (usersRes.error) throw usersRes.error;
+        if (categoriesRes.error) throw categoriesRes.error;
+
+        setTransactions(transactionsRes.data ?? []);
+        setAccounts(accountsRes.data ?? []);
+        setUsers(usersRes.data ?? []);
+        setCategories(categoriesRes.data ?? []);
       } catch (err) {
+        console.error(err);
         setError(err as Error);
-        console.error("Error fetching transactions:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTransactions();
+    fetchData();
   }, [supabase]);
 
-  return { transactions, loading, error };
+  return { transactions, accounts, users, categories, loading, error };
 }

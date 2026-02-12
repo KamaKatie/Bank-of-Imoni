@@ -12,12 +12,12 @@ import { Button } from "@/components/ui/button";
 import { TransactionForm } from "./transaction-form";
 
 type Props = {
-  groupId: string;
   accounts: { id: string; name: string }[];
   users: { id: string; first_name: string }[];
+  categories: { id: string; name: string }[];
 };
 
-export function TransactionDialog({ groupId, accounts, users }: Props) {
+export function TransactionDialog({ accounts, users, categories }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,7 +29,11 @@ export function TransactionDialog({ groupId, accounts, users }: Props) {
           <DialogTitle>Add Transaction</DialogTitle>
         </DialogHeader>
 
-        <TransactionForm groupId={groupId} accounts={accounts} users={users} />
+        <TransactionForm
+          accounts={accounts}
+          users={users}
+          categories={categories}
+        />
       </DialogContent>
     </Dialog>
   );

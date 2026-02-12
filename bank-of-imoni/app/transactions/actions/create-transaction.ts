@@ -1,27 +1,29 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { z } from "zod";
+import { date, z } from "zod";
 
 const schema = z.object({
-  groupId: z.string(),
   amount: z.number(),
   description: z.string(),
+  category: z.string(),
+  date: date(),
   paidByAccountId: z.string(),
   participantUserIds: z.array(z.string()),
 });
 
 export async function createTransaction(formData: unknown) {
   const parsed = schema.parse(formData);
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 1. Insert transaction
   const { data: transaction, error } = await supabase
     .from("transactions")
     .insert({
-      group_id: parsed.groupId,
       amount: parsed.amount,
       description: parsed.description,
+      category: parsed.category,
+      date: parsed.date,
       paid_by_account: parsed.paidByAccountId,
       type: "expense",
     })
