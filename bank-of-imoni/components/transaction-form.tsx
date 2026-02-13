@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { date, z } from "zod";
+import { z } from "zod";
 import { createTransaction } from "@/app/transactions/actions/create-transaction";
-
+import Image from "next/image";
 import {
   Form,
   FormField,
@@ -23,7 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 const formSchema = z.object({
   amount: z.coerce.number().positive(),
@@ -37,12 +39,23 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 type Props = {
-  accounts: { id: string; name: string }[];
-  users: { id: string; first_name: string }[];
-  categories: { id: string; name: string }[];
+  accounts: {
+    id: string;
+    name: string;
+    icon: string;
+    placeholder_img: string;
+  }[];
+  users: { id: string; first_name: string; icon: string }[];
+  categories: { id: string; name: string; icon: string }[];
+  onSuccess?: () => void;
 };
 
-export function TransactionForm({ accounts, users, categories }: Props) {
+export function TransactionForm({
+  accounts,
+  users,
+  categories,
+  onSuccess,
+}: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,11 +69,16 @@ export function TransactionForm({ accounts, users, categories }: Props) {
   });
 
   async function onSubmit(values: FormValues) {
-    await createTransaction({
-      ...values,
-    });
+    try {
+      await createTransaction(values);
 
-    form.reset();
+      toast.success("Transaction created", { position: "top-center" });
+
+      form.reset();
+      onSuccess?.();
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   }
 
   return (
@@ -74,7 +92,7 @@ export function TransactionForm({ accounts, users, categories }: Props) {
             <FormItem>
               <FormLabel>Amount</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" {...field} />
+                <Input type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -103,7 +121,7 @@ export function TransactionForm({ accounts, users, categories }: Props) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
@@ -112,7 +130,10 @@ export function TransactionForm({ accounts, users, categories }: Props) {
                 <SelectContent>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
-                      {category.name}
+                      <span className="flex gap-2 items-center">
+                        <DynamicIcon name={category.icon} />
+                        {category.name}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -132,7 +153,7 @@ export function TransactionForm({ accounts, users, categories }: Props) {
               <FormControl>
                 <Input
                   type="date"
-                  value={field.value.toISOString().slice(0, 10)}
+                  value={field.value.toISOString().split("T")[0]}
                   onChange={(e) => field.onChange(new Date(e.target.value))}
                 />
               </FormControl>
@@ -148,7 +169,7 @@ export function TransactionForm({ accounts, users, categories }: Props) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Paid With</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select account" />
@@ -157,7 +178,16 @@ export function TransactionForm({ accounts, users, categories }: Props) {
                 <SelectContent>
                   {accounts.map((account) => (
                     <SelectItem key={account.id} value={account.id}>
-                      {account.name}
+                      <span className="flex gap-2">
+                        <Image
+                          src={account.icon || account.placeholder_img}
+                          alt="logo"
+                          width={20}
+                          height={20}
+                          className="rounded-full"
+                        />
+                        {account.name}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -167,51 +197,47 @@ export function TransactionForm({ accounts, users, categories }: Props) {
           )}
         />
 
-        {/* Participants Multi Select */}
+        {/* Participants */}
         <FormField
           control={form.control}
           name="participantUserIds"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>Split Between</FormLabel>
-              {users.map((user) => (
-                <FormField
-                  key={user.id}
-                  control={form.control}
-                  name="participantUserIds"
-                  render={({ field }) => (
-                    <FormItem
-                      key={user.id}
-                      className="flex items-center space-x-2"
-                    >
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(user.id)}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, user.id])
-                              : field.onChange(
-                                  field.value?.filter(
-                                    (value) => value !== user.id,
-                                  ),
-                                );
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        {user.first_name}
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              ))}
+              <FormLabel>Paid for</FormLabel>
+              {users.map((user) => {
+                const isChecked = field.value.includes(user.id);
+
+                return (
+                  <div key={user.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={isChecked}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          field.onChange([...field.value, user.id]);
+                        } else {
+                          field.onChange(
+                            field.value.filter((id) => id !== user.id),
+                          );
+                        }
+                      }}
+                    />
+                    <FormLabel className="font-normal">
+                      {user.first_name}
+                    </FormLabel>
+                  </div>
+                );
+              })}
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full">
-          Create Transaction
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Creating..." : "Create transaction"}
         </Button>
       </form>
     </Form>
