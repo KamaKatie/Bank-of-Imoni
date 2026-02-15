@@ -1,6 +1,5 @@
 export type ExchangeRates = {
   NZD: number;
-  USD: number;
   JPY: number;
   updated: string;
 };
@@ -12,7 +11,7 @@ export async function getExchangeRates(): Promise<ExchangeRates> {
       next: {
         revalidate: 60 * 60 * 12, // 12 hours
       },
-    }
+    },
   );
 
   if (!res.ok) {
@@ -30,7 +29,6 @@ export async function getExchangeRates(): Promise<ExchangeRates> {
   }).format(updatedDate);
 
   return {
-    USD: 1,
     JPY: data.conversion_rates.JPY,
     NZD: data.conversion_rates.NZD,
     updated: formattedDate,

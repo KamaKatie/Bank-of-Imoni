@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAccounts } from "@/hooks/use-accounts";
 import { slugify } from "@/lib/slugify";
+import { useWorkingBalance } from "@/hooks/use-working-balance";
 
 import {
   Item,
@@ -38,45 +39,51 @@ export default function DashboardAccounts() {
       {/*Accounts */}
       <ul>
         {accounts.map((account) => (
-          <li key={account.id || account.name} className="my-2">
-            <Item
-              className="rounded-xl hover:border-emerald-700 min-w-full"
-              variant="muted"
-              asChild
-            >
-              <Link href={`/accounts/${slugify(account.name)}-${account.id}`}>
-                <ItemMedia variant="image" className="hidden md:flex">
-                  <Image
-                    src={account.icon || account.placeholder_img}
-                    alt={account.name}
-                    width={500}
-                    height={500}
-                  />
-                </ItemMedia>
-
-                <ItemContent>
-                  <div className="flex items-center justify-between gap-5">
-                    <ItemTitle className="md:text-inherit text-emerald-900">
-                      {account.name}
-                    </ItemTitle>
-
-                    <Badge
-                      variant="outline"
-                      className="bg-white hidden md:flex"
-                    >
-                      {account.type}
-                    </Badge>
-                  </div>
-
-                  <ItemDescription className="text-emerald-50 md:text-inherit">
-                    ¥{account.current_balance?.toLocaleString()}
-                  </ItemDescription>
-                </ItemContent>
-              </Link>
-            </Item>
-          </li>
+          <AccountItem key={account.id || account.name} account={account} />
         ))}
       </ul>
     </div>
+  );
+}
+
+// Create a separate component for each account to use the hook
+function AccountItem({ account }: { account: any }) {
+  const { balance, isLoading } = useWorkingBalance(account.id);
+
+  return (
+    <li className="my-2">
+      <Item
+        className="rounded-xl hover:border-emerald-700 min-w-full"
+        variant="muted"
+        asChild
+      >
+        <Link href={`/accounts/${slugify(account.name)}-${account.id}`}>
+          <ItemMedia variant="image" className="hidden md:flex">
+            <Image
+              src={account.icon || account.placeholder_img}
+              alt={account.name}
+              width={500}
+              height={500}
+            />
+          </ItemMedia>
+
+          <ItemContent>
+            <div className="flex items-center justify-between gap-5">
+              <ItemTitle className="md:text-inherit text-emerald-900">
+                {account.name}
+              </ItemTitle>
+
+              <Badge variant="outline" className="bg-white hidden md:flex">
+                {account.type}
+              </Badge>
+            </div>
+
+            <ItemDescription className="text-emerald-50 md:text-inherit">
+              {isLoading ? "Loading..." : `¥${balance?.toLocaleString() ?? 0}`}
+            </ItemDescription>
+          </ItemContent>
+        </Link>
+      </Item>
+    </li>
   );
 }

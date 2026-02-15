@@ -21,10 +21,21 @@ type Props = {
   }[];
   users: { id: string; first_name: string; icon: string }[];
   categories: { id: string; name: string; icon: string }[];
+  onTransactionCreated?: () => void;
 };
 
-export function TransactionDialog({ accounts, users, categories }: Props) {
+export function TransactionDialog({
+  accounts,
+  users,
+  categories,
+  onTransactionCreated,
+}: Props) {
   const [open, setOpen] = useState(false);
+
+  const handleSuccess = () => {
+    setOpen(false);
+    onTransactionCreated?.();
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -41,7 +52,7 @@ export function TransactionDialog({ accounts, users, categories }: Props) {
           accounts={accounts}
           users={users}
           categories={categories}
-          onSuccess={() => setOpen(false)}
+          onSuccess={handleSuccess}
         />
       </DialogContent>
     </Dialog>

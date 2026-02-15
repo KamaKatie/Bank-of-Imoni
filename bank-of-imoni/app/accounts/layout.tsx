@@ -12,11 +12,12 @@ export default function RootLayout({
   const { accounts } = useAccounts();
 
   return (
-    <div>
+    <div className="flex flex-col w-full h-full">
       <div className="flex w-full justify-center gap-4 overflow-x-auto p-4">
         {accounts.map((account) => (
           <BalanceCard
             key={account.id}
+            accountId={account.id}
             label={account.name}
             link={`/accounts/${slugify(account.name)}-${account.id}`}
             balance={account.current_balance}

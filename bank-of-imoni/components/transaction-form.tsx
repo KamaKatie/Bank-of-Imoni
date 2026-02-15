@@ -72,7 +72,10 @@ export function TransactionForm({
     try {
       await createTransaction(values);
 
-      toast.success("Transaction created", { position: "top-center" });
+      toast.success("Transaction created", {
+        position: "top-center",
+        className: "z-50 bg-white",
+      });
 
       form.reset();
       onSuccess?.();

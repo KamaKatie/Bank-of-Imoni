@@ -5,10 +5,12 @@ import { useParams } from "next/navigation";
 import { slugify } from "@/lib/slugify";
 import Barcode from "react-barcode";
 import Image from "next/image";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 export default function Page() {
   const params = useParams();
-  const { transactions, loading, error } = useTransactions();
+  const { transactions, transactionParticipants, loading, error } =
+    useTransactions();
 
   if (loading) {
     return (
@@ -79,7 +81,14 @@ export default function Page() {
 
             <div className="flex justify-between">
               <span className="font-medium text-left">Category:</span>
-              <span className="text-right">{transaction.categories?.name}</span>
+              <span className="text-right flex gap-2 items-center">
+                {transaction.categories?.name}
+                <DynamicIcon
+                  name={transaction.categories?.icon}
+                  size={15}
+                  strokeWidth={1}
+                />
+              </span>
             </div>
 
             <div className="flex justify-between">
@@ -96,6 +105,16 @@ export default function Page() {
                   height={100}
                   className="rounded-full w-5 h-5"
                 />
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium text-left">Shared:</span>
+              <span className="text-right">
+                {transactionParticipants?.length > 1 ? (
+                  <span className="text-green-600">Yes ✓</span>
+                ) : (
+                  <span className="text-gray-500">No</span>
+                )}
               </span>
             </div>
           </div>
@@ -117,7 +136,10 @@ export default function Page() {
             className="w-full py-3"
             renderer="img"
           />
-          <p>Paid: {transaction.accounts?.profiles?.first_name}</p>
+          <p>
+            Paid: {transaction.accounts?.profiles?.first_name} -{" "}
+            {transaction.accounts.type}
+          </p>
         </div>
       </div>
     </div>

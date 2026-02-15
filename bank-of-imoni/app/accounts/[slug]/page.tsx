@@ -3,9 +3,12 @@
 import { useParams } from "next/navigation";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
+import { useWorkingBalance } from "@/hooks/use-working-balance";
 import { slugify } from "@/lib/slugify";
 import AccountsLineChart from "@/components/accounts-chart";
 import Image from "next/image";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { AccountTransactionsTable } from "@/components/recent-transactions";
 
 export default function AccountPage() {
   const { accounts, loading } = useAccounts();
@@ -18,13 +21,16 @@ export default function AccountPage() {
 
   const { data: cashflow, loading: cashflowLoading } = useCashflow(account?.id);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  const { balance: workingBalance, isLoading: balanceLoading } =
+    useWorkingBalance(account?.id);
+
+  if (loading || balanceLoading) return <div className="p-4">Loading...</div>;
   if (!account) return <div className="p-4">Account not found</div>;
 
   return (
-    <div className="p-5 grid grid-cols-3">
+    <div className="p-5 grid grid-cols-3 gap-4 justify-center items-center">
       <div>
-        <div className="p-3 items-center justify-between flex">
+        <div className="p-4 items-center justify-between flex">
           <span className="flex items-center gap-2">
             <Image
               src={account.icon || account.placeholder_img}
@@ -35,7 +41,9 @@ export default function AccountPage() {
             />
             <h1 className="text-xl font-semibold">{account.name}</h1>
           </span>
-          <p className="text-lg">¥{account.current_balance.toLocaleString()}</p>
+          <p className="text-lg font-bold">
+            ¥{workingBalance.toLocaleString()}
+          </p>
         </div>
 
         {!cashflowLoading && (
@@ -43,7 +51,14 @@ export default function AccountPage() {
         )}
       </div>
 
-      <div className="col-span-2">{/* transactions table goes here */}</div>
+      <div className="col-span-2">
+        <Card className="p-4">
+          <CardHeader>
+            <CardTitle>Recent transactions</CardTitle>
+            <AccountTransactionsTable accountId={account.id} />
+          </CardHeader>
+        </Card>
+      </div>
     </div>
   );
 }

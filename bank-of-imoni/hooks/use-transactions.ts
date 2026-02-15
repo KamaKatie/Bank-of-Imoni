@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Database } from "@/types/database.types";
 import { QueryData, SupabaseClient } from "@supabase/supabase-js";
@@ -14,6 +14,8 @@ type Account = DB["accounts"]["Row"] & {
 type User = DB["profiles"]["Row"];
 
 type Category = DB["categories"]["Row"];
+
+type TransactionParticipants = DB["transaction_participants"]["Row"];
 
 function getTransactionsQuery(client: SupabaseClient<Database>) {
   return client
@@ -40,8 +42,16 @@ export default function useTransactions() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [transactionParticipants, setTransactionParticipants] = useState<
+    TransactionParticipants[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const refresh = useCallback(() => {
+    setRefreshTrigger((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +63,11 @@ export default function useTransactions() {
             getTransactionsQuery(supabase),
             supabase.from("accounts").select(`*, profiles(*)`),
             supabase.from("profiles").select(`*`),
-            supabase.from("categories").select(`*`),
+            supabase
+              .from("categories")
+              .select(`*`)
+              .order("name", { ascending: true }),
+            supabase.from("transaction_participants").select(`*`),
           ]);
 
         if (transactionsRes.error) throw transactionsRes.error;
@@ -65,6 +79,7 @@ export default function useTransactions() {
         setAccounts(accountsRes.data ?? []);
         setUsers(usersRes.data ?? []);
         setCategories(categoriesRes.data ?? []);
+        setTransactionParticipants(transactionParticipants ?? []);
       } catch (err) {
         console.error(err);
         setError(err as Error);
@@ -74,7 +89,16 @@ export default function useTransactions() {
     };
 
     fetchData();
-  }, [supabase]);
+  }, [refreshTrigger]);
 
-  return { transactions, accounts, users, categories, loading, error };
+  return {
+    transactions,
+    transactionParticipants,
+    accounts,
+    users,
+    categories,
+    loading,
+    error,
+    refresh,
+  };
 }

@@ -8,10 +8,12 @@ import { TransactionDialog } from "@/components/transaction-dialog";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function Page() {
-  const { transactions, accounts, users, categories } = useTransactions();
+  const { transactions, accounts, users, categories, refresh } =
+    useTransactions();
 
   return (
     <>
+      <Toaster />
       <div className="md:p-5 pt-5">
         <Tabs defaultValue="transactions" className="flex items-center">
           <div className="flex gap-10">
@@ -19,6 +21,7 @@ export default function Page() {
               accounts={accounts}
               users={users}
               categories={categories}
+              onTransactionCreated={refresh}
             />
             <TabsList>
               <TabsTrigger value="transactions">All Items</TabsTrigger>
@@ -33,8 +36,6 @@ export default function Page() {
           </TabsContent>
         </Tabs>
       </div>
-
-      <Toaster />
     </>
   );
 }
