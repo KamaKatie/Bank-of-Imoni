@@ -12,8 +12,8 @@ export default function RootLayout({
   const { accounts } = useAccounts();
 
   return (
-    <div className="flex flex-col w-full h-full">
-      <div className="flex w-full justify-center gap-4 overflow-x-auto p-4">
+    <div>
+      <div className="md:flex grid grid-cols-2 w-full justify-center gap-4 overflow-x-auto p-2">
         {accounts.map((account) => (
           <BalanceCard
             key={account.id}
@@ -28,7 +28,7 @@ export default function RootLayout({
         ))}
       </div>
 
-      <main className="p-4">{children}</main>
+      <main className="p-2">{children}</main>
     </div>
   );
 }

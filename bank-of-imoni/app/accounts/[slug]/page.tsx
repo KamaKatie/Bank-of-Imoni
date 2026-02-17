@@ -28,9 +28,9 @@ export default function AccountPage() {
   if (!account) return <div className="p-4">Account not found</div>;
 
   return (
-    <div className="p-5 grid grid-cols-3 gap-4 justify-center items-center">
+    <div className="p-2 md:flex justify-center items-center">
       <div>
-        <div className="p-4 items-center justify-between flex">
+        <div className="p-2 items-center justify-between flex">
           <span className="flex items-center gap-2">
             <Image
               src={account.icon || account.placeholder_img}
@@ -52,7 +52,7 @@ export default function AccountPage() {
       </div>
 
       <div className="col-span-2">
-        <Card className="p-4">
+        <Card>
           <CardHeader>
             <CardTitle>Recent transactions</CardTitle>
             <AccountTransactionsTable accountId={account.id} />
