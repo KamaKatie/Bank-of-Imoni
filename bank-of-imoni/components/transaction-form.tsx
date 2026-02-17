@@ -149,7 +149,7 @@ export function TransactionForm({
         {/* Date */}
         <FormField
           control={form.control}
-          name="date"
+          name="dsate"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>

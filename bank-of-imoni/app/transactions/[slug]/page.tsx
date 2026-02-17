@@ -84,7 +84,7 @@ export default function Page() {
               <span className="text-right flex gap-2 items-center">
                 {transaction.categories?.name}
                 <DynamicIcon
-                  name={transaction.categories?.icon}
+                  name={(transaction.categories?.icon || "help-circle") as any}
                   size={15}
                   strokeWidth={1}
                 />
@@ -100,7 +100,7 @@ export default function Page() {
                     transaction.accounts!.icon ||
                     transaction.accounts!.placeholder_img
                   }
-                  alt={transaction.accounts!.name}
+                  alt={transaction.accounts!.name || "Account"}
                   width={100}
                   height={100}
                   className="rounded-full w-5 h-5"

@@ -7,7 +7,6 @@ import { useWorkingBalance } from "@/hooks/use-working-balance";
 import { slugify } from "@/lib/slugify";
 import AccountsLineChart from "@/components/accounts-chart";
 import Image from "next/image";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { AccountTransactionsTable } from "@/components/recent-transactions";
 
 export default function AccountPage() {
@@ -28,36 +27,47 @@ export default function AccountPage() {
   if (!account) return <div className="p-4">Account not found</div>;
 
   return (
-    <div className="p-2 md:flex justify-center items-center">
-      <div>
-        <div className="p-2 items-center justify-between flex">
-          <span className="flex items-center gap-2">
-            <Image
-              src={account.icon || account.placeholder_img}
-              alt={account.name}
-              width={30}
-              height={30}
-              className="rounded-full"
-            />
-            <h1 className="text-xl font-semibold">{account.name}</h1>
-          </span>
-          <p className="text-lg font-bold">
-            ¥{workingBalance.toLocaleString()}
-          </p>
-        </div>
+    <div className="flex flex-col">
+      {/* Header */}
+      <div className="border-b px-8 py-6 flex items-center justify-between">
+        <span className="flex items-center gap-3">
+          <Image
+            src={account.icon || account.placeholder_img}
+            alt={account.name}
+            width={36}
+            height={36}
+            className="rounded-full"
+          />
+          <h1 className="text-2xl tracking-tight">{account.name}</h1>
+        </span>
 
-        {!cashflowLoading && (
-          <AccountsLineChart data={cashflow} accountName={account.name} />
-        )}
+        <p className="text-2xl font-bold">¥{workingBalance.toLocaleString()}</p>
       </div>
 
-      <div className="col-span-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent transactions</CardTitle>
-            <AccountTransactionsTable accountId={account.id} />
-          </CardHeader>
-        </Card>
+      {/* Content */}
+      <div className="flex-1 p-4 grid grid-cols-1 xl:grid-cols-3 gap-4">
+        {/* Chart */}
+        <div className="xl:col-span-2 flex flex-col">
+          {!cashflowLoading && (
+            <div className="flex-1 min-h-[300px]">
+              <AccountsLineChart data={cashflow} accountName={account.name} />
+            </div>
+          )}
+        </div>
+
+        {/* Transactions */}
+        <div className="bg-card rounded-xl border shadow-sm flex flex-col">
+          <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+            Recent Transactions
+          </div>
+
+          <div className="flex-1">
+            <AccountTransactionsTable
+              accountId={account.id}
+              showImage={false}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

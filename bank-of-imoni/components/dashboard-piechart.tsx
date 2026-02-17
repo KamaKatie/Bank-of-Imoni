@@ -15,7 +15,7 @@ interface Expense {
   category: string;
   amount: number;
   fill: string;
-  icon?: string;
+  icon?: string | null; // or just keep it as optional with null allowed
 }
 
 export default function CurrentMonthExpensesChart() {
@@ -29,7 +29,8 @@ export default function CurrentMonthExpensesChart() {
   const expenses = React.useMemo<Expense[]>(() => {
     if (!transactions.length) return [];
 
-    const aggregated: Record<string, { amount: number; icon?: string }> = {};
+    const aggregated: Record<string, { amount: number; icon?: string | null }> =
+      {};
 
     transactions
       .filter(
@@ -40,7 +41,7 @@ export default function CurrentMonthExpensesChart() {
       )
       .forEach((tx) => {
         const categoryName = tx.categories?.name ?? "Uncategorized";
-        const icon = tx.categories?.icon;
+        const icon = tx.categories?.icon; // This could be string | null | undefined
 
         if (!aggregated[categoryName]) {
           aggregated[categoryName] = { amount: 0, icon };
@@ -52,7 +53,7 @@ export default function CurrentMonthExpensesChart() {
     return Object.entries(aggregated).map(([category, { amount, icon }]) => ({
       category,
       amount,
-      icon,
+      icon: icon ?? undefined, // Convert null to undefined
       fill: "#00FFA3", // placeholder
     }));
   }, [transactions, month, year]);

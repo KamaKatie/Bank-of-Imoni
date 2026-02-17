@@ -4,7 +4,6 @@ import { Sparkline } from "@/components/fx/sparkline";
 type Props = {
   rates: {
     NZD: number;
-    USD: number;
     JPY: number;
   };
   history: {
@@ -18,7 +17,6 @@ export default function CurrencyCard({ rates, history, updated }: Props) {
   return (
     <div className="hidden lg:grid">
       <div className="grid grid-rows-2 p-3 gap-2 items-center justify-center">
-
         <div className="flex gap-2 items-center">
           <JP className="w-4" />
           <p className="text-xs text-muted-foreground">JPY</p>
