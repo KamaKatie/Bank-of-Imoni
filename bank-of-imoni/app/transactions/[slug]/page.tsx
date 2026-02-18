@@ -2,39 +2,19 @@
 
 import useTransactions from "@/hooks/use-transactions";
 import { useParams } from "next/navigation";
-import { slugify } from "@/lib/slugify";
+import { slugify } from "@/lib/utils";
+import AsciiCat from "@/components/ascii-cat-generator";
 import Barcode from "react-barcode";
 import Image from "next/image";
 import { DynamicIcon } from "lucide-react/dynamic";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { ArrowLeftIcon } from "lucide-react";
 
 export default function Page() {
   const params = useParams();
-  const { transactions, transactionParticipants, loading, error } =
-    useTransactions();
-
-  if (loading) {
-    return (
-      <div className="flex h-full items-center justify-center p-3">
-        <div className="border-2 max-w-[500px] w-full text-center p-5">
-          <h1 className="border-dashed border-y-2 border-slate-500 p-2 m-2">
-            Loading...
-          </h1>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-full items-center justify-center p-3">
-        <div className="border-2 max-w-[500px] w-full text-center p-5">
-          <h1 className="border-dashed border-y-2 border-slate-500 p-2 m-2 text-red-500">
-            Error: {error.message}
-          </h1>
-        </div>
-      </div>
-    );
-  }
+  const { transactions, transactionParticipants } = useTransactions();
 
   const transaction = transactions.find(
     (transaction) => params.slug === transaction.id,
@@ -42,27 +22,24 @@ export default function Page() {
 
   if (!transaction) {
     return (
-      <div className="flex h-full items-center justify-center p-3">
-        <div className="border-2 max-w-[500px] w-full text-center p-5">
-          <h1 className="border-dashed border-y-2 border-slate-500 p-2 m-2">
-            Transaction Not Found
-          </h1>
-          <p>No transaction found for ID: {params.slug}</p>
-        </div>
+      <div className="flex flex-col h-full items-center justify-center bg-muted">
+        <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full items-center justify-center p-3">
-      <div className="border-2 max-w-[500px] w-full text-center p-5">
-        <h1 className="py-3">ID: {slugify(transaction.id)}</h1>
+    <div className="flex flex-col h-full items-center justify-center bg-muted">
+      <div className="drop-shadow-lg max-w-[400px] w-full text-center p-5 bg-white">
+        <h1 className="pb-3 font-bold">BANK OF IMONI</h1>
+        <AsciiCat />
+        <h1 className="p-3 text-xs">ID: {slugify(transaction.id)}</h1>
         <h2 className="border-dashed border-y-2 border-slate-400 py-3 text-sm uppercase">
           {transaction.type} reciept
         </h2>
 
         <div className="flex flex-col justify-center max-w-[400px] mx-auto font-light">
-          <div className="my-3">
+          <div className="my-8 p-2">
             <div className="flex justify-between">
               <span className="font-medium text-left">Vendor:</span>
               <span className="text-right">{transaction.description}</span>
@@ -113,7 +90,7 @@ export default function Page() {
                 {transactionParticipants?.length > 1 ? (
                   <span className="text-green-600">Yes ✓</span>
                 ) : (
-                  <span className="text-gray-500">No</span>
+                  <span>No</span>
                 )}
               </span>
             </div>
@@ -141,6 +118,22 @@ export default function Page() {
             {transaction.accounts.type}
           </p>
         </div>
+      </div>
+      <div className="bottom-0 fixed w-full flex justify-center m-5 gap-2">
+        <ButtonGroup>
+          <Button variant="outline">
+            <ArrowLeftIcon />
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button variant="outline">Edit</Button>
+          <Button
+            variant="outline"
+            className="text-red-600 hover:bg-red-100 hover:text-red-600"
+          >
+            Delete
+          </Button>
+        </ButtonGroup>
       </div>
     </div>
   );

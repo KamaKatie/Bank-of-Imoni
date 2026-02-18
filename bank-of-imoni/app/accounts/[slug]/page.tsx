@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
-import { slugify } from "@/lib/slugify";
+import { slugify } from "@/lib/utils";
 import AccountsLineChart from "@/components/accounts-chart";
 import Image from "next/image";
 import { AccountTransactionsTable } from "@/components/recent-transactions";

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAccounts } from "@/hooks/use-accounts";
-import { slugify } from "@/lib/slugify";
+import { slugify } from "@/lib/utils";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
 
 import {
@@ -31,7 +31,7 @@ export default function DashboardAccounts() {
           link="/accounts"
           label="Working Balance"
           balance={workingBalance}
-          className="from-green-100 to-white hover:scale-105 duration-150"
+          className="from-green-100 to-yellow-100 hover:scale-105 duration-150"
           showDate
         />
       </div>

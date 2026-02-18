@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { BalanceCard } from "@/components/balance-card";
 import { useAccounts } from "@/hooks/use-accounts";
-import { slugify } from "@/lib/slugify";
+import { slugify } from "@/lib/utils";
 
 export default function RootLayout({
   children,
@@ -28,12 +28,9 @@ export default function RootLayout({
                 label={account.name}
                 link={link}
                 balance={account.current_balance}
-                logoSrc={account.icon || account.placeholder_img}
-                showDate
-                className={`
-                from-green-100 to-white text-black
-                hover:scale-105 duration-150
-                ${isActive ? "from-emerald-700 to-green-100 text-white" : ""}
+                showDate={false}
+                className={` bg-muted px-4 py-2
+                ${isActive ? "from-green-100 to-yellow-100 " : ""}
               `}
               />
             );
