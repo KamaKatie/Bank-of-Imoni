@@ -1,7 +1,7 @@
-import Accounts from "@/components/dashboard-accounts";
+import Accounts from "@/components/dashboard/dashboard-accounts";
 import { Card } from "@/components/ui/card";
-import SpendingChart from "@/components/dashboard-spending-chart";
-import ChartPieDonutText from "@/components/dashboard-piechart";
+import SpendingChart from "@/components/dashboard/dashboard-spending-chart";
+import ChartPieDonutText from "@/components/dashboard/dashboard-piechart";
 import { CurrencyTracker } from "@/components/fx/currency-tracker";
 import { UserRecentTransactions } from "@/components/recent-user-transactions";
 export default function Page() {

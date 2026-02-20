@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { updateTransaction } from "@/app/transactions/actions/update-transaction";
 import { createTransaction } from "@/app/transactions/actions/create-transaction";
 import Image from "next/image";
 import {
@@ -27,6 +28,8 @@ import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DynamicIcon } from "lucide-react/dynamic";
 
+import { useEffect } from "react";
+
 const formSchema = z.object({
   amount: z.coerce.number().positive(),
   description: z.string().min(1),
@@ -47,6 +50,8 @@ type Props = {
   }[];
   users: { id: string; first_name: string; icon: string }[];
   categories: { id: string; name: string; icon: string }[];
+  initialValues?: Partial<FormValues>;
+  mode?: "create" | "edit";
   onSuccess?: () => void;
 };
 
@@ -54,11 +59,13 @@ export function TransactionForm({
   accounts,
   users,
   categories,
+  initialValues,
+  mode,
   onSuccess,
 }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues ?? {
       amount: 0,
       description: "",
       category: "",
@@ -68,18 +75,32 @@ export function TransactionForm({
     },
   });
 
+  useEffect(() => {
+    form.setValue("paidByAccountId", initialValues?.paidByAccountId ?? "");
+    form.setValue(
+      "participantUserIds",
+      initialValues?.participantUserIds ?? [],
+    );
+    if (initialValues) form.reset(initialValues);
+  }, [form, initialValues]);
+
   async function onSubmit(values: FormValues) {
     try {
-      await createTransaction(values);
+      if (mode === "edit") {
+        await updateTransaction({
+          ...values,
+          id: initialValues?.id,
+        });
 
-      toast.success("Transaction created", {
-        position: "top-center",
-        className: "z-50 bg-white",
-      });
+        toast.success("Transaction updated");
+      } else {
+        await createTransaction(values);
+        toast.success("Transaction created");
+        form.reset();
+      }
 
-      form.reset();
       onSuccess?.();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     }
   }
@@ -131,14 +152,15 @@ export function TransactionForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      <span className="flex gap-2 items-center">
-                        <DynamicIcon name={category.icon} />
-                        {category.name}
-                      </span>
-                    </SelectItem>
-                  ))}
+                  {Array.isArray(categories) &&
+                    categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        <span className="flex gap-2 items-center">
+                          <DynamicIcon name={category.icon} />
+                          {category.name}
+                        </span>
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -149,7 +171,7 @@ export function TransactionForm({
         {/* Date */}
         <FormField
           control={form.control}
-          name="dsate"
+          name="date"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
@@ -240,7 +262,13 @@ export function TransactionForm({
           className="w-full"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? "Creating..." : "Create transaction"}
+          {form.formState.isSubmitting
+            ? mode === "edit"
+              ? "Updating..."
+              : "Creating..."
+            : mode === "edit"
+              ? "Update transaction"
+              : "Create transaction"}
         </Button>
       </form>
     </Form>

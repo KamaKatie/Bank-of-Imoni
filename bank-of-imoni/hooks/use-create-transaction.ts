@@ -24,7 +24,6 @@ export function useCreateExpense() {
       paidByAccount: string;
       participants: Participant[];
     }) => {
-      // 1️⃣ Insert the transaction
       const { data: transaction, error } = await supabase
         .from("transactions")
         .insert({
@@ -38,7 +37,6 @@ export function useCreateExpense() {
 
       if (error) throw error;
 
-      // 2️⃣ Insert transaction participants
       if (participants.length > 0) {
         const { error: participantsError } = await supabase
           .from("transaction_participants")
@@ -57,7 +55,6 @@ export function useCreateExpense() {
     },
 
     onSuccess: () => {
-      // ✅ Invalidate global transactions query
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });

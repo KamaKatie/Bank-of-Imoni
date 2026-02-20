@@ -3,18 +3,18 @@
 import useTransactions from "@/hooks/use-transactions";
 import { useParams } from "next/navigation";
 import { slugify } from "@/lib/utils";
-import AsciiCat from "@/components/ascii-cat-generator";
+import AsciiCat from "@/components/transactions/ascii-cat-generator";
 import Barcode from "react-barcode";
 import Image from "next/image";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { Spinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { ArrowLeftIcon } from "lucide-react";
+import EditTransactionDialog from "@/components/transactions/edit-transaction-dialog";
+import DeleteTransactionDialog from "@/components/transactions/delete-transaction-dialog";
 
 export default function Page() {
   const params = useParams();
-  const { transactions, transactionParticipants } = useTransactions();
+  const { transactions, transactionParticipants, accounts, users, categories } =
+    useTransactions();
 
   const transaction = transactions.find(
     (transaction) => params.slug === transaction.id,
@@ -27,6 +27,10 @@ export default function Page() {
       </div>
     );
   }
+
+  const refresh = () => {
+    window.location.reload();
+  };
 
   return (
     <div className="flex flex-col h-full items-center justify-center bg-muted">
@@ -120,20 +124,16 @@ export default function Page() {
         </div>
       </div>
       <div className="bottom-0 fixed w-full flex justify-center m-5 gap-2">
-        <ButtonGroup>
-          <Button variant="outline">
-            <ArrowLeftIcon />
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline">Edit</Button>
-          <Button
-            variant="outline"
-            className="text-red-600 hover:bg-red-100 hover:text-red-600"
-          >
-            Delete
-          </Button>
-        </ButtonGroup>
+        <EditTransactionDialog
+          key={transaction.id}
+          transaction={transaction}
+          accounts={accounts}
+          users={users}
+          categories={categories}
+          onUpdated={refresh}
+        />
+
+        <DeleteTransactionDialog id={transaction.id} onDeleted={refresh} />
       </div>
     </div>
   );

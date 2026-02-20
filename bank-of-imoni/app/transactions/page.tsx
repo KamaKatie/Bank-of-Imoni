@@ -4,7 +4,7 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import useTransactions from "@/hooks/use-transactions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TransactionDialog } from "@/components/transaction-dialog";
+import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function Page() {

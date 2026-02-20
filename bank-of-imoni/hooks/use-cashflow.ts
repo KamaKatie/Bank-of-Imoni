@@ -18,41 +18,42 @@ export function useCashflow(accountId?: string) {
     if (!accountId) return;
 
     const fetchCashflow = async () => {
+      setLoading(true);
       const { data: rows, error } = await supabase
         .from("transactions")
         .select("amount, date")
-        .eq("account_id", accountId);
+        .eq("account_id", accountId)
+        .order("date", { ascending: true }); 
 
       if (error || !rows) {
+        setData([]);
         setLoading(false);
         return;
       }
 
-      // group by month
       const grouped: Record<string, CashflowPoint> = {};
 
-      for (const tx of rows) {
-        const month = new Date(tx.date).toLocaleString("default", {
-          month: "long",
-        });
+      rows.forEach((tx) => {
+        const date = new Date(tx.date);
+        const monthLabel = date.toLocaleString("default", { month: "long" });
 
-        if (!grouped[month]) {
-          grouped[month] = { month, inflow: 0, outflow: 0 };
+        if (!grouped[monthLabel]) {
+          grouped[monthLabel] = { month: monthLabel, inflow: 0, outflow: 0 };
         }
 
         if (tx.amount >= 0) {
-          grouped[month].inflow += tx.amount;
+          grouped[monthLabel].inflow += tx.amount;
         } else {
-          grouped[month].outflow += Math.abs(tx.amount);
+          grouped[monthLabel].outflow += Math.abs(tx.amount);
         }
-      }
+      });
 
       setData(Object.values(grouped));
       setLoading(false);
     };
 
     fetchCashflow();
-  }, [accountId, supabase]);
+  }, [accountId]); 
 
   return { data, loading };
 }

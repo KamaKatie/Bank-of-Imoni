@@ -1,12 +1,14 @@
 "use client";
 
+import Image from "next/image";
+
 import { useParams } from "next/navigation";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
+
 import { slugify } from "@/lib/utils";
-import AccountsLineChart from "@/components/accounts-chart";
-import Image from "next/image";
+import AccountsLineChart from "@/components/accounts/accounts-spending-chart";
 import { AccountTransactionsTable } from "@/components/recent-transactions";
 
 export default function AccountPage() {
@@ -29,7 +31,7 @@ export default function AccountPage() {
   return (
     <div className="flex flex-col">
       {/* Header */}
-      <div className="border-b px-8 py-6 flex items-center justify-between">
+      <div className=" border-b px-8 py-4 flex items-center justify-between">
         <span className="flex items-center gap-3">
           <Image
             src={account.icon || account.placeholder_img}
@@ -38,16 +40,19 @@ export default function AccountPage() {
             height={36}
             className="rounded-full"
           />
-          <h1 className="text-2xl tracking-tight">{account.name}</h1>
+          <h1 className="text-xl tracking-tight">{account.name}</h1>
         </span>
 
-        <p className="text-2xl font-bold">¥{workingBalance.toLocaleString()}</p>
+        <p className="text-xl font-bold">¥{workingBalance.toLocaleString()}</p>
       </div>
 
       {/* Content */}
       <div className="flex-1 p-4 grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Chart */}
-        <div className="xl:col-span-2 flex flex-col">
+        <div className="xl:col-span-2 bg-card rounded-xl border shadow-sm flex flex-col">
+          <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+            Cashflow
+          </div>
           {!cashflowLoading && (
             <div className="flex-1 min-h-[300px]">
               <AccountsLineChart data={cashflow} accountName={account.name} />

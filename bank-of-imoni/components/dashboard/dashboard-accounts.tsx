@@ -12,9 +12,9 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "./ui/item";
-import { Badge } from "./ui/badge";
-import { BalanceCard } from "./balance-card";
+} from "../ui/item";
+import { Badge } from "../ui/badge";
+import { BalanceCard } from "../balance-card";
 
 export default function DashboardAccounts() {
   const { accounts, workingBalance } = useAccounts();

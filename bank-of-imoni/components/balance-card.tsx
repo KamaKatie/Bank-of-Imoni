@@ -64,7 +64,7 @@ export function BalanceCard({
         </div>
 
         <p
-          className={`mt-2 text-xl font-semibold tracking-wide ${isLoading ? "animate-pulse" : ""}`}
+          className={`mt-2 text-lg font-semibold tracking-wide ${isLoading ? "animate-pulse" : ""}`}
         >
           {displayBalance}
         </p>
