@@ -22,7 +22,7 @@ export default function Page() {
 
   if (!transaction) {
     return (
-      <div className="flex flex-col h-full items-center justify-center bg-muted">
+      <div className="flex flex-col h-full items-center justify-center">
         <Spinner />
       </div>
     );
@@ -33,8 +33,8 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col h-full items-center justify-center bg-muted">
-      <div className="drop-shadow-lg max-w-[400px] w-full text-center p-5 bg-white">
+    <div className="flex flex-col h-full items-center justify-center">
+      <div className="drop-shadow-xl max-w-[400px] w-full text-center p-5 bg-white border-2 border-muted">
         <h1 className="pb-3 font-bold">BANK OF IMONI</h1>
         <AsciiCat />
         <h1 className="p-3 text-xs">ID: {slugify(transaction.id)}</h1>

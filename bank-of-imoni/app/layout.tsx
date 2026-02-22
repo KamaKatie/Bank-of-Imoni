@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
 import { FloatingButton } from "@/components/floating-button";
 import Providers from "@/components/providers";
+import Sidebar from "@/components/sidebar";
+import Navbar from "@/components/navbar";
+import { Suspense } from "react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -29,15 +31,23 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <Providers>
         <body
-          className={`${geistSans.className} antialiased bg-emerald-700 h-screen overflow-hidden`}
+          className={`${geistSans.className} antialiased md:bg-muted h-screen overflow-hidden`}
         >
-          <div className="h-full grid grid-rows-[1fr_auto] md:grid-rows-[auto_1fr]">
-            <div className="row-start-2 md:row-start-1">
-              <Navbar />
+          {/* Change: Use flex-col-reverse for mobile, flex-row for md+ */}
+          <div className="h-full flex flex-col-reverse md:flex-row">
+            {/* Sidebar container */}
+            <aside className="w-full md:w-auto">
+              <Sidebar />
+            </aside>
+
+            {/* Main Content Area */}
+            <div className="bg-white md:drop-shadow-xl md:rounded-2xl md:my-3 md:ml-6 md:mr-3 flex-1 flex flex-col overflow-hidden">
+              <Suspense>
+                <Navbar />
+              </Suspense>
+              <main className="flex-1 overflow-y-auto">{children}</main>
             </div>
-            <main className="bg-white drop-shadow-2xl md:rounded-2xl md:mx-3 md:mb-3 overflow-y-auto row-start-1 md:row-start-2">
-              {children}
-            </main>
+
             <FloatingButton />
           </div>
         </body>

@@ -1,61 +1,62 @@
-import { AuthButton } from "@/components/auth-button";
-import { Suspense } from "react";
-import Image from "next/image";
+"use client";
+
+import { useSelectedLayoutSegments } from "next/navigation";
 import Link from "next/link";
-import { ReceiptJapaneseYen, Wallet, PiggyBank } from "lucide-react";
+import React, { useMemo } from "react";
+import { useBreadcrumbLabels } from "@/hooks/use-breadcrumb-labels";
 
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "./ui/navigation-menu";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
 
 export default function Navbar() {
+  const segments = useSelectedLayoutSegments();
+
+  const cleanSegments = useMemo(() => {
+    return segments.filter(
+      (segment) => !segment.startsWith("(") && !segment.startsWith("@"),
+    );
+  }, [segments]);
+
+  const { getLabel } = useBreadcrumbLabels(cleanSegments);
+
   return (
-    <nav className="flex justify-center max-h-20 text-white">
-      <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5 text-sm">
-        <div className="flex gap-5 items-center font-semibold">
-          <Link href={"/dashboard"} className="flex gap-2">
-            <Image
-              src="/imoni_headshot.png"
-              alt="logo"
-              width={20}
-              height={20}
-              style={{ objectFit: "contain" }}
-            />
-            <span className="hidden md:grid text-lg">Bank of Imoni</span>
-          </Link>
-          <NavigationMenu className="md:grid">
-            <NavigationMenuList>
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link
-                  className="flex items-center gap-2"
-                  href={"/transactions"}
-                >
-                  <ReceiptJapaneseYen />
-                  <p className="hidden md:grid">Transactions</p>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link className="flex items-center gap-2" href={"/accounts"}>
-                  <Wallet />
-                  <p className="hidden md:grid">Accounts</p>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link className="flex items-center gap-2" href={"/goals"}>
-                  <PiggyBank />
-                  <p className="hidden md:grid">Goals</p>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        <Suspense>
-          <AuthButton />
-        </Suspense>
-      </div>
+    <nav className="px-6 py-3 hidden md:flex border-b-2 border-muted from-green-50 to-teal-50 bg-gradient-to-r">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+
+          {cleanSegments.map((segment, index) => {
+            const isLast = index === cleanSegments.length - 1;
+            const href = `/${cleanSegments.slice(0, index + 1).join("/")}`;
+            const label = getLabel(segment);
+
+            return (
+              <React.Fragment key={href}>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  {isLast ? (
+                    <BreadcrumbPage>{label}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink asChild>
+                      <Link href={href}>{label}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </React.Fragment>
+            );
+          })}
+        </BreadcrumbList>
+      </Breadcrumb>
     </nav>
   );
 }

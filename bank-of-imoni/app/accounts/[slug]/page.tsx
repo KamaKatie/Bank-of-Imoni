@@ -29,7 +29,7 @@ export default function AccountPage() {
   if (!account) return <div className="p-4">Account not found</div>;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       {/* Header */}
       <div className=" border-b px-8 py-4 flex items-center justify-between">
         <span className="flex items-center gap-3">

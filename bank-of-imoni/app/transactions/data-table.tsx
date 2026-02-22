@@ -99,8 +99,8 @@ export function DataTable<TData, TValue>({
   const allCategories = ["All", ...categories];
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex p-3 w-11/12 justify-end gap-2">
+    <div className="flex flex-col items-center w-full">
+      <div className="flex p-3 w-full justify-end gap-2">
         <Input
           placeholder="Search transactions"
           value={
@@ -171,7 +171,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenu>
         </div>
       </div>
-      <div className="overflow-hidden rounded-md border w-11/12 shadow-sm">
+      <div className="overflow-hidden rounded-md border shadow-sm">
         <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -31,7 +31,7 @@ export default function DashboardAccounts() {
           link="/accounts"
           label="Working Balance"
           balance={workingBalance}
-          className="from-green-100 to-yellow-100 hover:scale-105 duration-150"
+          className="from-green-200 to-emerald-700 text-white hover:scale-105 duration-200"
           showDate
         />
       </div>
