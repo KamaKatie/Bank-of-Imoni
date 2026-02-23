@@ -13,8 +13,8 @@ export default function Page() {
   return (
     <>
       <Toaster />
-      <div className="p-5 h-full">
-        <div className="hidden md:block md:absolute">
+      <div className="flex p-5 h-full w-full">
+        <div className="hidden">
           <TransactionDialog
             accounts={accounts}
             users={users}

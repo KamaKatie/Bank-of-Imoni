@@ -41,7 +41,7 @@ export default function RootLayout({
             </aside>
 
             {/* Main Content Area */}
-            <div className="bg-white md:drop-shadow-xl md:rounded-2xl md:my-3 md:ml-6 md:mr-3 flex-1 flex flex-col overflow-hidden">
+            <div className="md:bg-white bg-emerald-700 md:drop-shadow-xl md:rounded-2xl md:m-3 flex-1 flex flex-col overflow-hidden">
               <Suspense>
                 <Navbar />
               </Suspense>

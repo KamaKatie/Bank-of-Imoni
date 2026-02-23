@@ -1,3 +1,4 @@
+// app/transactions/columns.tsx
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -18,6 +19,11 @@ export type TransactionsWithCategoriesandAccounts = TransactionsTable["Row"] & {
         profiles: ProfilesTable["Row"] | null;
       })
     | null;
+  brandData?: {
+    logo: string | null;
+    name?: string;
+    domain?: string;
+  } | null;
 };
 
 export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
@@ -40,7 +46,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       }).format(new Date(date));
 
       return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           {formattedDate}
         </div>
       );
@@ -74,7 +80,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
             : "text-foreground";
 
       return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           <span className={`${colorClass}`}>{formattedAmount}</span>
         </div>
       );
@@ -84,28 +90,43 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     accessorKey: "description",
     header: "What",
     cell: ({ row }) => {
-      const description: React.ReactNode = row.getValue("description");
+      const description = row.getValue("description") as string;
+      const brandData = row.original.brandData;
 
       if (typeof description !== "string") {
         return <div>{description}</div>;
       }
 
       return (
-        <div className="flex items-center justify-center gap-2">
-          {description
-            .split(" ")
-            .map((word, index) => {
-              if (word.length === 0) return word;
-
-              // If first word and it's already all uppercase, keep it as-is
-              if (index === 0 && word === word.toUpperCase()) {
-                return word;
-              }
-
-              // Otherwise capitalize first letter, lowercase the rest
-              return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-            })
-            .join(" ")}
+        <div className="flex items-center gap-2">
+          {brandData?.logo ? (
+            <Image
+              src={brandData.logo}
+              alt={description}
+              width={20}
+              height={20}
+              className="object-contain rounded-full"
+              unoptimized
+            />
+          ) : (
+            <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
+              {description?.charAt(0).toUpperCase() || "?"}
+            </div>
+          )}
+          <span>
+            {description
+              .split(" ")
+              .map((word, index) => {
+                if (word.length === 0) return word;
+                if (index === 0 && word === word.toUpperCase()) {
+                  return word;
+                }
+                return (
+                  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                );
+              })
+              .join(" ")}
+          </span>
         </div>
       );
     },
@@ -120,17 +141,14 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
         icon: string | null;
       } | null>(columnId);
 
-      // Show everything
       if (!filterValue || filterValue === "All") {
         return true;
       }
 
-      // Uncategorised rows
       if (filterValue === "Uncategorised") {
         return !category;
       }
 
-      // Match by category name
       return category?.name === filterValue;
     },
     cell: ({ getValue }) => {
@@ -144,7 +162,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
       }
 
       return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           {category.icon && (
             <DynamicIcon
               name={category.icon as "type"}
@@ -163,7 +181,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     cell: ({ row }) => {
       const profile = row.original.accounts?.profiles;
       return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center gap-2">
           {profile?.image && (
             <Image
               src={profile.image}

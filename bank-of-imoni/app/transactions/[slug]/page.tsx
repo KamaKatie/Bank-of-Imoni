@@ -46,7 +46,9 @@ export default function Page() {
           <div className="my-8 p-2">
             <div className="flex justify-between">
               <span className="font-medium text-left">Vendor:</span>
-              <span className="text-right">{transaction.description}</span>
+              <span className="text-right text-blue-600 font-bold">
+                {transaction.description}
+              </span>
             </div>
 
             <div className="flex justify-between">

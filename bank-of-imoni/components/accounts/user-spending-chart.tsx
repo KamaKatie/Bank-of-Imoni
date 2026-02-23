@@ -93,8 +93,8 @@ export default function UserSpendingChartByCategory() {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-center font-medium mb-4">
-        Monthly Spending by Category
+      <p className="text-center font-medium">
+        Spending by Category
       </p>
 
       <ChartContainer
@@ -125,7 +125,7 @@ export default function UserSpendingChartByCategory() {
                   </div>
                   <div className="flex justify-between gap-4 text-sm">
                     <span className="text-slate-500">Share:</span>
-                    <span className="font-semibold text-emerald-600">
+                    <span className="font-semibold text-blue-600">
                       {entry.percentage.toFixed(1)}%
                     </span>
                   </div>
