@@ -125,7 +125,7 @@ export default function Page() {
           </p>
         </div>
       </div>
-      <div className="bottom-0 fixed w-full flex justify-center m-5 gap-2">
+      <div className="w-full flex justify-center m-5 gap-2">
         <EditTransactionDialog
           key={transaction.id}
           transaction={transaction}

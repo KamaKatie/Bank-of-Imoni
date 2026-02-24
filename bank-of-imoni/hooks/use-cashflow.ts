@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useSupabaseFetch } from "./use-supabase-fetch";
 
 type CashflowPoint = {
   month: string;
@@ -10,50 +9,42 @@ type CashflowPoint = {
 };
 
 export function useCashflow(accountId?: string) {
-  const supabase = createClient();
-  const [data, setData] = useState<CashflowPoint[]>([]);
-  const [loading, setLoading] = useState(true);
+  const fetcher = async (supabase: any) => {
+    if (!accountId) return [] as CashflowPoint[];
 
-  useEffect(() => {
-    if (!accountId) return;
+    const { data: rows, error } = await supabase
+      .from("transactions")
+      .select("amount, date")
+      .eq("account_id", accountId)
+      .order("date", { ascending: true });
 
-    const fetchCashflow = async () => {
-      setLoading(true);
-      const { data: rows, error } = await supabase
-        .from("transactions")
-        .select("amount, date")
-        .eq("account_id", accountId)
-        .order("date", { ascending: true }); 
+    if (error || !rows) return [] as CashflowPoint[];
 
-      if (error || !rows) {
-        setData([]);
-        setLoading(false);
-        return;
+    const grouped: Record<string, CashflowPoint> = {};
+
+    rows.forEach((tx: any) => {
+      const date = new Date(tx.date);
+      const monthLabel = date.toLocaleString("default", { month: "long" });
+
+      if (!grouped[monthLabel]) {
+        grouped[monthLabel] = { month: monthLabel, inflow: 0, outflow: 0 };
       }
 
-      const grouped: Record<string, CashflowPoint> = {};
+      if (tx.amount >= 0) {
+        grouped[monthLabel].inflow += tx.amount;
+      } else {
+        grouped[monthLabel].outflow += Math.abs(tx.amount);
+      }
+    });
 
-      rows.forEach((tx) => {
-        const date = new Date(tx.date);
-        const monthLabel = date.toLocaleString("default", { month: "long" });
+    return Object.values(grouped);
+  };
 
-        if (!grouped[monthLabel]) {
-          grouped[monthLabel] = { month: monthLabel, inflow: 0, outflow: 0 };
-        }
+  const { data, loading } = useSupabaseFetch<CashflowPoint[]>(
+    fetcher,
+    [accountId],
+    { enabled: !!accountId, initialData: [] },
+  );
 
-        if (tx.amount >= 0) {
-          grouped[monthLabel].inflow += tx.amount;
-        } else {
-          grouped[monthLabel].outflow += Math.abs(tx.amount);
-        }
-      });
-
-      setData(Object.values(grouped));
-      setLoading(false);
-    };
-
-    fetchCashflow();
-  }, [accountId]); 
-
-  return { data, loading };
+  return { data: data ?? [], loading };
 }

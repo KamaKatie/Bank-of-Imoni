@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Database } from "@/types/database.types";
+import { useSupabaseFetch } from "./use-supabase-fetch";
 
 type Tables = Database["public"]["Tables"];
 type ProfilesTable = Tables["profiles"];
@@ -14,7 +15,6 @@ export function useAuth() {
   const supabase = createClient();
 
   const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,19 +32,19 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  useEffect(() => {
-    if (!user) {
-      setProfile(null);
-      return;
-    }
+  const { data: profile } = useSupabaseFetch<Profile | null>(
+    async (client) => {
+      if (!user) return null;
+      const { data } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      return data ?? null;
+    },
+    [user],
+    { enabled: !!user, initialData: null },
+  );
 
-    supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single()
-      .then(({ data }) => setProfile(data));
-  }, [user, supabase]);
-
-  return { user, profile, loading };
+  return { user, profile: profile ?? null, loading };
 }

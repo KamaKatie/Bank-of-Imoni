@@ -22,13 +22,11 @@ import {
 export default function Sidebar() {
   return (
     <nav className="md:bg-muted w-full md:h-full">
-      {/* Mobile: horizontal row, small padding 
-         Desktop: vertical column, full height
-      */}
-      <div className="flex flex-row md:flex-col justify-between items-center p-3 md:h-full md:w-full">
-        <div className="flex flex-row md:flex-col gap-2 md:gap-5 items-center font-semibold w-full">
-          {/* Logo - often hidden or simplified on mobile bottom bars */}
-          <Link
+
+      <div className="flex flex-row md:flex-col md:justify-between items-center md:p-3 p-2 md:h-full md:w-full">
+        <div className="flex flex-row md:flex-col gap-2 md:gap-5 justify-center items-start font-semibold w-full">
+
+        <Link
             href={"/dashboard"}
             className="hidden md:flex gap-2 md:px-4 md:py-2"
           >
@@ -43,9 +41,6 @@ export default function Sidebar() {
           </Link>
 
           <NavigationMenu className="w-full">
-            {/* Mobile: Row of icons 
-               Desktop: Column of links 
-            */}
             <NavigationMenuList className="flex flex-row md:flex-col items-center justify-center md:items-start md:justify-start w-full gap-1">
               <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                 <Link
@@ -80,40 +75,41 @@ export default function Sidebar() {
               <div className="hidden md:block w-full">
                 <Separator className="my-2" />
               </div>
+              <div className="hidden md:flex flex-col">
+                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                  <Link
+                    className="flex flex-col md:flex-row items-center gap-2"
+                    href={"/goals"}
+                  >
+                    <PiggyBank size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Goals</p>
+                  </Link>
+                </NavigationMenuItem>
 
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link
-                  className="flex flex-col md:flex-row items-center gap-2"
-                  href={"/goals"}
-                >
-                  <PiggyBank size={20} strokeWidth={1} />
-                  <p className="hidden md:grid font-light">Goals</p>
-                </Link>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link
-                  className="flex flex-col md:flex-row items-center gap-2"
-                  href={"/categories"}
-                >
-                  <Archive size={20} strokeWidth={1} />
-                  <p className="hidden md:grid font-light">Categories</p>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className={navigationMenuTriggerStyle()}>
-                <Link
-                  className="flex flex-col md:flex-row items-center gap-2"
-                  href={"/budgets"}
-                >
-                  <BadgeJapaneseYen size={20} strokeWidth={1} />
-                  <p className="hidden md:grid font-light">Budgets</p>
-                </Link>
-              </NavigationMenuItem>
+                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                  <Link
+                    className="flex flex-col md:flex-row items-center gap-2"
+                    href={"/categories"}
+                  >
+                    <Archive size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Categories</p>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                  <Link
+                    className="flex flex-col md:flex-row items-center gap-2"
+                    href={"/budgets"}
+                  >
+                    <BadgeJapaneseYen size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Budgets</p>
+                  </Link>
+                </NavigationMenuItem>
+              </div>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
 
-        <div>
+        <div className="absolute md:relative b-0 flex items-center w-full pr-5 md:pr-0">
           <Suspense>
             <AuthButton />
           </Suspense>

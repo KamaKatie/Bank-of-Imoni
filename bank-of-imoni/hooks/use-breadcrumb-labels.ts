@@ -5,11 +5,9 @@ export function useBreadcrumbLabels(segments: string[]) {
     {},
   );
 
-  // 1. Detect if a segment is a UUID or Numeric ID (Non-human readable)
   const isTechnicalId = (segment: string) =>
     /^[0-9]+$/.test(segment) || /^[0-9a-fA-F-]{36}$/.test(segment);
 
-  // 2. Turn "my-awesome-post" into "My Awesome Post"
   const formatSlug = (slug: string) =>
     slug
       .split("-")

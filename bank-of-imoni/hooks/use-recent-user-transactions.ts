@@ -1,29 +1,27 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { createClient } from "@/lib/supabase/client";
+import { useSupabaseQuery } from "./use-supabase-query";
 import { useEffect, useState } from "react";
 
 export function useRecentUserTransactions({ limit = 10 } = {}) {
-  const supabase = createClient();
   const [userId, setUserId] = useState<string | null>(null);
 
   // 1️⃣ Get the current logged-in user
   useEffect(() => {
     const fetchUser = async () => {
-      const { data } = await supabase.auth.getUser();
+      const { data } = await (await import("@/lib/supabase/client"))
+        .createClient()
+        .auth.getUser();
       if (data.user) setUserId(data.user.id);
     };
     fetchUser();
-  }, [supabase]);
+  }, []);
 
-  // 2️⃣ Fetch accounts and transactions for the user
-  const query = useQuery({
-    queryKey: ["current-user-transactions-and-accounts", userId, limit],
-    queryFn: async () => {
+  const query = useSupabaseQuery(
+    ["current-user-transactions-and-accounts", userId, limit],
+    async (supabase) => {
       if (!userId) return { accounts: [], transactions: [] };
 
-      // Get all accounts for the user
       const { data: accounts, error: accountsError } = await supabase
         .from("accounts")
         .select("*")
@@ -33,9 +31,8 @@ export function useRecentUserTransactions({ limit = 10 } = {}) {
 
       if (!accounts?.length) return { accounts: [], transactions: [] };
 
-      const accountIds = accounts.map((a) => a.id);
+      const accountIds = accounts.map((a: any) => a.id);
 
-      // Fetch transactions for all accounts
       const { data: transactions, error: transactionsError } = await supabase
         .from("transactions")
         .select("*")
@@ -47,9 +44,8 @@ export function useRecentUserTransactions({ limit = 10 } = {}) {
 
       return { accounts, transactions: transactions ?? [] };
     },
-    enabled: !!userId,
-    initialData: { accounts: [], transactions: [] },
-  });
+    { enabled: !!userId, initialData: { accounts: [], transactions: [] } },
+  );
 
   return {
     accounts: query.data?.accounts ?? [],

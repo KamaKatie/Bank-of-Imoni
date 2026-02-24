@@ -1,4 +1,3 @@
-// app/transactions/columns.tsx
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -19,11 +18,6 @@ export type TransactionsWithCategoriesandAccounts = TransactionsTable["Row"] & {
         profiles: ProfilesTable["Row"] | null;
       })
     | null;
-  brandData?: {
-    logo: string | null;
-    name?: string;
-    domain?: string;
-  } | null;
 };
 
 export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
@@ -45,11 +39,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
         month: "short",
       }).format(new Date(date));
 
-      return (
-        <div className="flex items-center gap-2">
-          {formattedDate}
-        </div>
-      );
+      return <div className="flex items-center gap-2">{formattedDate}</div>;
     },
   },
   {
@@ -91,28 +81,13 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     header: "What",
     cell: ({ row }) => {
       const description = row.getValue("description") as string;
-      const brandData = row.original.brandData;
 
       if (typeof description !== "string") {
         return <div>{description}</div>;
       }
 
       return (
-        <div className="flex items-center gap-2">
-          {brandData?.logo ? (
-            <Image
-              src={brandData.logo}
-              alt={description}
-              width={20}
-              height={20}
-              className="object-contain rounded-full"
-              unoptimized
-            />
-          ) : (
-            <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-600">
-              {description?.charAt(0).toUpperCase() || "?"}
-            </div>
-          )}
+        <div className="flex items-center gap-2 overflow-hidden">
           <span>
             {description
               .split(" ")
@@ -191,7 +166,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
               className="rounded-full"
             />
           )}
-          {profile?.first_name}
+          <span className="hidden md:block">{profile?.first_name}</span>
         </div>
       );
     },

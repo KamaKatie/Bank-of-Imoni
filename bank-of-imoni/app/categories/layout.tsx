@@ -51,7 +51,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
                           : "bg-muted",
                       )}
                     />
-                    <div className="truncate text-sm">{category.name}</div>
+                    <div className="truncate text-sm hidden md:block">
+                      {category.name}
+                    </div>
                   </div>
                 </Link>
               );

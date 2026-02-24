@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col w-full h-full min-h-[500px]">
-      <div className="flex flex-row items-center justify-between p-3">
+      <div className="gap-2 flex flex-row items-center justify-between p-3">
         <ButtonGroup>
           <Button
             variant={"outline"}
@@ -165,14 +165,14 @@ export function DataTable<TData, TValue>({
         </ButtonGroup>
         <div className="flex gap-2">
           <Input
-            placeholder="Search transactions"
+            placeholder="Search"
             value={
               (table.getColumn("description")?.getFilterValue() as string) ?? ""
             }
             onChange={(event) =>
               table.getColumn("description")?.setFilterValue(event.target.value)
             }
-            className="w-80"
+            className="md:w-80 w-min bg-muted"
           />
           {categories.length > 0 && (
             <Select
@@ -183,7 +183,7 @@ export function DataTable<TData, TValue>({
                 );
               }}
             >
-              <SelectTrigger className="md:min-w-[200px]">
+              <SelectTrigger className="md:min-w-[200px] bg-muted">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
@@ -235,9 +235,9 @@ export function DataTable<TData, TValue>({
       {/* 5. The containerRef and flex-1 allow this div to fill the space */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-hidden rounded-md border shadow-sm mx-3"
+        className="bg-white flex-1 overflow-hidden rounded-md border shadow-sm md:mx-3"
       >
-        <Table className="table-fixed">
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
@@ -292,9 +292,8 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-3 px-3 shrink-0">
+      <div className="flex items-center md:justify-end justify-center space-x-2 py-3 px-3 shrink-0">
         <Button
-          variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -302,7 +301,6 @@ export function DataTable<TData, TValue>({
           Previous
         </Button>
         <Button
-          variant="outline"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
