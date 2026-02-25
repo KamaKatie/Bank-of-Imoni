@@ -37,6 +37,7 @@ const formSchema = z.object({
   date: z.date(),
   paidByAccountId: z.string(),
   participantUserIds: z.array(z.string()).min(1),
+  type: z.string().min(1),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -52,6 +53,7 @@ type Props = {
   categories: { id: string; name: string; icon: string }[];
   initialValues?: Partial<FormValues>;
   mode?: "create" | "edit";
+  type?: "expense" | "income" | "transfer";
   onSuccess?: () => void;
 };
 
@@ -61,6 +63,7 @@ export function TransactionForm({
   categories,
   initialValues,
   mode,
+  type,
   onSuccess,
 }: Props) {
   const form = useForm<FormValues>({
@@ -72,6 +75,7 @@ export function TransactionForm({
       date: new Date(),
       paidByAccountId: "",
       participantUserIds: [],
+      type: type ?? "expense",
     },
   });
 

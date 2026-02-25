@@ -48,7 +48,12 @@ import {
   BanknoteArrowUp,
   BanknoteArrowDown,
 } from "lucide-react";
-import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
+import { TransactionDialog } from "@/components/transactions/transaction-dialog";
+import useTransactions from "@/hooks/use-transactions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -122,7 +127,7 @@ export function DataTable<TData, TValue>({
     return () => window.removeEventListener("resize", calculatePageSize);
   }, [pagination.pageSize]);
 
-  const categories = React.useMemo(() => {
+  const category = React.useMemo(() => {
     const categorySet = new Set<string>();
     data.forEach((item) => {
       const categoryName = (item as { categories?: { name?: string } | null })
@@ -134,34 +139,31 @@ export function DataTable<TData, TValue>({
 
   const categoryColumn = table.getColumn("category");
   const currentFilter = (categoryColumn?.getFilterValue() as string) || "All";
-  const allCategories = ["All", ...categories];
+  const allCategories = ["All", ...category];
+  const { accounts, users, categories, refresh } = useTransactions();
 
   return (
     <div className="flex flex-col w-full h-full min-h-[500px]">
       <div className="gap-2 flex flex-row items-center justify-between p-3">
         <ButtonGroup>
-          <Button
-            variant={"outline"}
-            onClick={() => {
-              router.push("/transactions/add-expense");
-            }}
-          >
-            <span className="flex items-center gap-2">
-              <BanknoteArrowUp />
-              <p className="hidden md:block">Add expense</p>
-            </span>
-          </Button>
-          <Button
-            variant={"outline"}
-            onClick={() => {
-              router.push("/transactions/add-income");
-            }}
-          >
-            <span className="flex items-center gap-2">
-              <BanknoteArrowDown />
-              <p className="hidden md:block">Add income</p>
-            </span>
-          </Button>
+          <TransactionDialog
+            type="expense"
+            title="Add expense"
+            icon={<BanknoteArrowUp />}
+            accounts={accounts}
+            users={users}
+            categories={categories}
+            onTransactionCreated={refresh}
+          />
+          <TransactionDialog
+            type="income"
+            title="Add income"
+            icon={<BanknoteArrowDown />}
+            accounts={accounts}
+            users={users}
+            categories={categories}
+            onTransactionCreated={refresh}
+          />
         </ButtonGroup>
         <div className="flex gap-2">
           <Input

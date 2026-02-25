@@ -36,7 +36,7 @@ export default function EditTransactionDialog({
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Edit transaction</DialogTitle>
+          <DialogTitle className="text-center">Edit transaction</DialogTitle>
         </DialogHeader>
 
         <TransactionForm

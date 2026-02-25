@@ -22,6 +22,9 @@ type Props = {
   users: { id: string; first_name: string; icon: string }[];
   categories: { id: string; name: string; icon: string }[];
   onTransactionCreated?: () => void;
+  type?: "expense" | "income" | "transfer";
+  title?: string;
+  icon?: React.ReactNode;
 };
 
 export function TransactionDialog({
@@ -29,6 +32,9 @@ export function TransactionDialog({
   users,
   categories,
   onTransactionCreated,
+  type,
+  title,
+  icon,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -40,15 +46,20 @@ export function TransactionDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Transaction</Button>
+        <Button variant={"outline"}>
+          <span className="flex items-center gap-2">
+            {icon} <p className="hidden md:block"> {title} </p>
+          </span>
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-center">Add transaction</DialogTitle>
+          <DialogTitle className="text-center">Add {type}</DialogTitle>
         </DialogHeader>
 
         <TransactionForm
+          type={type}
           accounts={accounts}
           users={users}
           categories={categories}

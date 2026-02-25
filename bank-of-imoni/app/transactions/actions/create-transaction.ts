@@ -10,6 +10,7 @@ const schema = z.object({
   date: date(),
   paidByAccountId: z.string(),
   participantUserIds: z.array(z.string()),
+  type: z.string(),
 });
 
 export async function createTransaction(formData: unknown) {
@@ -25,7 +26,7 @@ export async function createTransaction(formData: unknown) {
       category: parsed.category,
       date: parsed.date,
       paid_by_account: parsed.paidByAccountId,
-      type: "expense",
+      type: parsed.type,
     })
     .select()
     .single();
