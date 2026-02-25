@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, memo } from "react";
 import useTransactions from "@/hooks/use-transactions";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -28,6 +28,35 @@ interface ChartDataItem {
 }
 
 type TimeRange = "1y" | "2y" | "5y";
+
+// Memoized time range selector to prevent update loop
+const TimeRangeSelector = memo(function TimeRangeSelector({
+  timeRange,
+  onTimeRangeChange,
+}: {
+  timeRange: TimeRange;
+  onTimeRangeChange: (v: TimeRange) => void;
+}) {
+  return (
+    <Select
+      value={timeRange}
+      onValueChange={(v) => onTimeRangeChange(v as TimeRange)}
+    >
+      <SelectTrigger
+        className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
+        aria-label="Select time range"
+      >
+        <SelectValue placeholder="Last year" />
+      </SelectTrigger>
+
+      <SelectContent className="rounded-xl">
+        <SelectItem value="1y">Last year</SelectItem>
+        <SelectItem value="2y">Last 2 years</SelectItem>
+        <SelectItem value="5y">Last 5 years</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+});
 
 export default function SpendingChart() {
   const [timeRange, setTimeRange] = useState<TimeRange>("1y");
@@ -106,23 +135,10 @@ export default function SpendingChart() {
 
   return (
     <div className="grid flex-1 gap-2 p-5">
-      <Select
-        value={timeRange}
-        onValueChange={(v) => setTimeRange(v as TimeRange)}
-      >
-        <SelectTrigger
-          className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-          aria-label="Select time range"
-        >
-          <SelectValue placeholder="Last year" />
-        </SelectTrigger>
-
-        <SelectContent className="rounded-xl">
-          <SelectItem value="1y">Last year</SelectItem>
-          <SelectItem value="2y">Last 2 years</SelectItem>
-          <SelectItem value="5y">Last 5 years</SelectItem>
-        </SelectContent>
-      </Select>
+      <TimeRangeSelector
+        timeRange={timeRange}
+        onTimeRangeChange={setTimeRange}
+      />
 
       <ChartContainer
         config={chartConfig}
@@ -172,7 +188,6 @@ export default function SpendingChart() {
                 Number(month) - 1,
               ).toLocaleDateString("en-US", {
                 month: "short",
-                year: "2-digit",
               });
             }}
           />

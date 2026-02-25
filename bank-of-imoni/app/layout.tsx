@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { FloatingButton } from "@/components/floating-button";
 import Providers from "@/components/providers";
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
@@ -41,14 +40,12 @@ export default function RootLayout({
             </aside>
 
             {/* Main Content Area */}
-            <div className="md:bg-white bg-emerald-700 md:drop-shadow-xl md:rounded-2xl md:m-3 flex-1 flex flex-col overflow-hidden">
+            <div className="bg-muted md:bg-white md:drop-shadow-xl md:rounded-2xl md:m-3 flex-1 flex flex-col overflow-hidden">
               <Suspense>
                 <Navbar />
               </Suspense>
               <main className="flex-1 overflow-y-auto">{children}</main>
             </div>
-
-            <FloatingButton />
           </div>
         </body>
       </Providers>

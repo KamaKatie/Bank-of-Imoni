@@ -10,6 +10,7 @@ import {
   House,
   Archive,
   BadgeJapaneseYen,
+  Landmark,
 } from "lucide-react";
 
 import {
@@ -21,12 +22,10 @@ import {
 
 export default function Sidebar() {
   return (
-    <nav className="md:bg-muted w-full md:h-full">
-
+    <nav className="bg-gradient-to-r from-green-50 to-teal-50 md:bg-none md:bg-muted w-full md:h-full">
       <div className="flex flex-row md:flex-col md:justify-between items-center md:p-3 p-2 md:h-full md:w-full">
         <div className="flex flex-row md:flex-col gap-2 md:gap-5 justify-center items-start font-semibold w-full">
-
-        <Link
+          <Link
             href={"/dashboard"}
             className="hidden md:flex gap-2 md:px-4 md:py-2"
           >
@@ -79,10 +78,20 @@ export default function Sidebar() {
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/goals"}
+                    href={"/bills"}
                   >
-                    <PiggyBank size={20} strokeWidth={1} />
-                    <p className="hidden md:grid font-light">Goals</p>
+                    <Landmark size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Bills</p>
+                  </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem className={navigationMenuTriggerStyle()}>
+                  <Link
+                    className="flex flex-col md:flex-row items-center gap-2"
+                    href={"/budgets"}
+                  >
+                    <BadgeJapaneseYen size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Budgets</p>
                   </Link>
                 </NavigationMenuItem>
 
@@ -95,13 +104,14 @@ export default function Sidebar() {
                     <p className="hidden md:grid font-light">Categories</p>
                   </Link>
                 </NavigationMenuItem>
+
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/budgets"}
+                    href={"/goals"}
                   >
-                    <BadgeJapaneseYen size={20} strokeWidth={1} />
-                    <p className="hidden md:grid font-light">Budgets</p>
+                    <PiggyBank size={20} strokeWidth={1} />
+                    <p className="hidden md:grid font-light">Goals</p>
                   </Link>
                 </NavigationMenuItem>
               </div>

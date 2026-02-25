@@ -20,11 +20,9 @@ export default function DashboardAccounts() {
   const { accounts, workingBalance } = useAccounts();
 
   return (
-    <div className="gap-10 w-full md:bg-white bg-emerald-700 md:gap-0 md:space-y-4 flex md:flex-col items-center justify-center">
+    <div className="gap-10 w-full md:gap-0 md:space-y-4 flex md:flex-col items-center justify-center">
       <div className="flex flex-col">
-        <h1 className="text-white md:text-black text-center pb-4 font-semibold text-md">
-          Accounts
-        </h1>
+        <h1 className="text-center pb-4 font-semibold text-md">Accounts</h1>
 
         {/*Balance Card */}
         <BalanceCard
@@ -53,7 +51,7 @@ function AccountItem({ account }: { account: any }) {
   return (
     <li className="my-2">
       <Item
-        className="rounded-xl hover:border-emerald-700 min-w-full"
+        className="rounded-xl drop-shadow-md md:drop-shadow-none hover:border-emerald-700 min-w-full"
         variant="muted"
         asChild
       >
@@ -69,7 +67,7 @@ function AccountItem({ account }: { account: any }) {
 
           <ItemContent>
             <div className="flex items-center justify-between gap-5">
-              <ItemTitle className="md:text-inherit text-emerald-900">
+              <ItemTitle className="md:text-inherit text-emerald-700">
                 {account.name}
               </ItemTitle>
 
@@ -78,7 +76,7 @@ function AccountItem({ account }: { account: any }) {
               </Badge>
             </div>
 
-            <ItemDescription className="text-emerald-50 md:text-inherit">
+            <ItemDescription className="text-inherit">
               {isLoading ? "Loading..." : `¥${balance?.toLocaleString() ?? 0}`}
             </ItemDescription>
           </ItemContent>
