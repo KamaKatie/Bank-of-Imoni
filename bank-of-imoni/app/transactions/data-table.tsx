@@ -165,6 +165,7 @@ export function DataTable<TData, TValue>({
             onTransactionCreated={refresh}
           />
         </ButtonGroup>
+
         <div className="flex gap-2">
           <Input
             placeholder="Search"
@@ -174,7 +175,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("description")?.setFilterValue(event.target.value)
             }
-            className="md:w-80 w-min bg-muted"
+            className="lg:w-80 w-min bg-muted"
           />
           {categories.length > 0 && (
             <Select
@@ -208,8 +209,8 @@ export function DataTable<TData, TValue>({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                  <SlidersHorizontal className="h-4 w-4 mr-2" />
-                  Filter
+                  <SlidersHorizontal className="h-4 w-4" />
+                  <p className="hidden lg:inline ml-2">Filter</p>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

@@ -15,8 +15,6 @@ type User = DB["profiles"]["Row"];
 
 type Category = DB["categories"]["Row"];
 
-type TransactionParticipants = DB["transaction_participants"]["Row"];
-
 function getTransactionsQuery(client: any) {
   return client
     .from("transactions")
@@ -27,7 +25,8 @@ function getTransactionsQuery(client: any) {
       accounts:paid_by_account(
         *,
         profiles(*)
-      )
+      ),
+      payer:profiles!transactions_user_id_fkey(*)
     `,
     )
     .order("date", { ascending: false });
@@ -36,6 +35,7 @@ function getTransactionsQuery(client: any) {
 type Transaction = DB["transactions"]["Row"] & {
   categories: DB["categories"]["Row"] | null;
   accounts: Account | null;
+  payer: DB["profiles"]["Row"] | null; // joined via user_id fkey
 };
 
 export default function useTransactions() {
@@ -45,7 +45,6 @@ export default function useTransactions() {
       accountsRes,
       usersRes,
       categoriesRes,
-      participantsRes,
     ] = await Promise.all([
       getTransactionsQuery(supabase),
       supabase.from("accounts").select(`*, profiles(*)`),
@@ -54,21 +53,18 @@ export default function useTransactions() {
         .from("categories")
         .select(`*`)
         .order("name", { ascending: true }),
-      supabase.from("transaction_participants").select(`*`),
     ]);
 
     if (transactionsRes.error) throw transactionsRes.error;
     if (accountsRes.error) throw accountsRes.error;
     if (usersRes.error) throw usersRes.error;
     if (categoriesRes.error) throw categoriesRes.error;
-    if (participantsRes.error) throw participantsRes.error;
 
     return {
       transactions: transactionsRes.data ?? [],
       accounts: accountsRes.data ?? [],
       users: usersRes.data ?? [],
       categories: categoriesRes.data ?? [],
-      transactionParticipants: participantsRes.data ?? [],
     };
   };
 
@@ -76,7 +72,6 @@ export default function useTransactions() {
 
   return {
     transactions: data?.transactions ?? [],
-    transactionParticipants: data?.transactionParticipants ?? [],
     accounts: data?.accounts ?? [],
     users: data?.users ?? [],
     categories: data?.categories ?? [],

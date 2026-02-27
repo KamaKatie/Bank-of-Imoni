@@ -20,6 +20,8 @@ import {
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 
+import { SettlementCard } from "@/components/transactions/settlement-card";
+
 export default function Sidebar() {
   return (
     <nav className="bg-gradient-to-r from-green-50 to-teal-50 md:bg-none md:bg-muted w-full md:h-full">
@@ -117,6 +119,7 @@ export default function Sidebar() {
               </div>
             </NavigationMenuList>
           </NavigationMenu>
+          <SettlementCard />
         </div>
 
         <div className="absolute md:relative b-0 flex items-center w-full pr-5 md:pr-0">

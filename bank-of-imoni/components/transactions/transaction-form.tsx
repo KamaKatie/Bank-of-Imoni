@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DynamicIcon } from "lucide-react/dynamic";
 
 import { useEffect } from "react";
@@ -35,8 +34,8 @@ const formSchema = z.object({
   description: z.string().min(1),
   category: z.string().min(1),
   date: z.date(),
-  paidByAccountId: z.string(),
-  participantUserIds: z.array(z.string()).min(1),
+  paidByAccountId: z.string().min(1),
+  splitType: z.enum(["equal", "full", "none"]),
   type: z.string().min(1),
 });
 
@@ -74,17 +73,13 @@ export function TransactionForm({
       category: "",
       date: new Date(),
       paidByAccountId: "",
-      participantUserIds: [],
+      splitType: "equal",
       type: type ?? "expense",
     },
   });
 
   useEffect(() => {
     form.setValue("paidByAccountId", initialValues?.paidByAccountId ?? "");
-    form.setValue(
-      "participantUserIds",
-      initialValues?.participantUserIds ?? [],
-    );
     if (initialValues) form.reset(initialValues);
   }, [form, initialValues]);
 
@@ -229,33 +224,43 @@ export function TransactionForm({
         {/* Participants */}
         <FormField
           control={form.control}
-          name="participantUserIds"
+          name="splitType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Paid for</FormLabel>
-              {users.map((user) => {
-                const isChecked = field.value.includes(user.id);
-
-                return (
-                  <div key={user.id} className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={isChecked}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          field.onChange([...field.value, user.id]);
-                        } else {
-                          field.onChange(
-                            field.value.filter((id) => id !== user.id),
-                          );
-                        }
-                      }}
-                    />
-                    <FormLabel className="font-normal">
-                      {user.first_name}
-                    </FormLabel>
-                  </div>
-                );
-              })}
+              <FormLabel>Split Strategy</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="How to split?" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="equal">
+                    <div className="flex flex-col items-start">
+                      <span>Shared (50/50)</span>
+                      <span className="text-xs text-muted-foreground">
+                        Other person owes half
+                      </span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="full">
+                    <div className="flex flex-col items-start">
+                      <span>Full Debt (100%)</span>
+                      <span className="text-xs text-muted-foreground">
+                        Other person owes full amount
+                      </span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="none">
+                    <div className="flex flex-col items-start">
+                      <span>Personal (0%)</span>
+                      <span className="text-xs text-muted-foreground">
+                        Just for me, no debt created
+                      </span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

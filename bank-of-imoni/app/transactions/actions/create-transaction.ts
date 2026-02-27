@@ -1,15 +1,15 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { date, z } from "zod";
+import { z } from "zod";
 
 const schema = z.object({
   amount: z.number(),
   description: z.string(),
   category: z.string(),
-  date: date(),
+  date: z.coerce.date(),
   paidByAccountId: z.string(),
-  participantUserIds: z.array(z.string()),
+  splitType: z.enum(["equal", "full", "none"]),
   type: z.string(),
 });
 
@@ -17,7 +17,6 @@ export async function createTransaction(formData: unknown) {
   const parsed = schema.parse(formData);
   const supabase = await createClient();
 
-  // 1. Insert transaction
   const { data: transaction, error } = await supabase
     .from("transactions")
     .insert({
@@ -26,6 +25,7 @@ export async function createTransaction(formData: unknown) {
       category: parsed.category,
       date: parsed.date,
       paid_by_account: parsed.paidByAccountId,
+      split_type: parsed.splitType,
       type: parsed.type,
     })
     .select()
@@ -33,18 +33,5 @@ export async function createTransaction(formData: unknown) {
 
   if (error) throw error;
 
-  // 2. Equal split
-  const share = parsed.amount / parsed.participantUserIds.length;
-
-  const participants = parsed.participantUserIds.map((id) => ({
-    transaction_id: transaction.id,
-    user_id: id,
-    share_amount: share,
-  }));
-
-  const { error: pError } = await supabase
-    .from("transaction_participants")
-    .insert(participants);
-
-  if (pError) throw pError;
+  return transaction;
 }

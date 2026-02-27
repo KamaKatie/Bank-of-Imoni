@@ -22,6 +22,7 @@ type Props = {
   users: { id: string; first_name: string; icon: string }[];
   categories: { id: string; name: string; icon: string }[];
   onTransactionCreated?: () => void;
+  splitType?: "equal" | "full" | "none";
   type?: "expense" | "income" | "transfer";
   title?: string;
   icon?: React.ReactNode;
@@ -48,7 +49,7 @@ export function TransactionDialog({
       <DialogTrigger asChild>
         <Button variant={"outline"}>
           <span className="flex items-center gap-2">
-            {icon} <p className="hidden md:block"> {title} </p>
+            {icon} <p className="hidden lg:block"> {title} </p>
           </span>
         </Button>
       </DialogTrigger>

@@ -151,13 +151,32 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
     },
   },
   {
-    id: "By",
+    id: "by",
     header: "By",
-    cell: ({ row }) => {
-      const profile = row.original.accounts?.profiles;
+    accessorFn: (row) => row.accounts?.profiles ?? null,
+    filterFn: (row, columnId, filterValue) => {
+      const profile = row.getValue<{
+        first_name: string;
+        image: string | null;
+      } | null>(columnId);
+
+      if (!filterValue) {
+        return true;
+      }
+
+      return profile?.first_name === filterValue;
+    },
+    cell: ({ getValue }) => {
+      const profile = getValue<{
+        first_name: string;
+        image: string | null;
+      } | null>();
+
+      if (!profile) return <span>-</span>;
+
       return (
         <div className="flex items-center gap-2">
-          {profile?.image && (
+          {profile.image && (
             <Image
               src={profile.image}
               alt={profile.first_name}
@@ -166,7 +185,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
               className="rounded-full"
             />
           )}
-          <span className="hidden md:block">{profile?.first_name}</span>
+          <span className="hidden md:block">{profile.first_name}</span>
         </div>
       );
     },
