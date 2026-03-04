@@ -32,14 +32,11 @@ export default function RootLayout({
         <body
           className={`${geistSans.className} antialiased md:bg-muted h-screen overflow-hidden`}
         >
-          {/* Change: Use flex-col-reverse for mobile, flex-row for md+ */}
           <div className="h-full flex flex-col-reverse md:flex-row">
-            {/* Sidebar container */}
             <aside className="w-full md:w-auto">
               <Sidebar />
             </aside>
 
-            {/* Main Content Area */}
             <div className="bg-muted md:bg-white md:drop-shadow-xl md:rounded-2xl md:m-3 flex-1 flex flex-col overflow-hidden">
               <Suspense>
                 <Navbar />

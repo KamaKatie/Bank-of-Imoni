@@ -10,7 +10,7 @@ export default function Page() {
 
   return (
     <>
-      <Toaster />
+      <Toaster position="top-center"/>
       <div className="flex flex-col p-5 h-full w-full">
         <DataTable columns={columns} data={transactions} />
       </div>

@@ -22,14 +22,13 @@ import {
 } from "@/components/ui/select";
 
 interface ChartDataItem {
-  date: string; // YYYY-MM
+  date: string; 
   income: number;
   spending: number;
 }
 
 type TimeRange = "1y" | "2y" | "5y";
 
-// Memoized time range selector to prevent update loop
 const TimeRangeSelector = memo(function TimeRangeSelector({
   timeRange,
   onTimeRangeChange,

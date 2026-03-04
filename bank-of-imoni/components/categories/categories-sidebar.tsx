@@ -41,7 +41,7 @@ export function CategoriesSidebar() {
                     className={cn(
                       "w-8 h-8 rounded-full p-2 transition-colors",
                       isActive
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-muted-foreground text-primary-foreground"
                         : "bg-muted",
                     )}
                   />
