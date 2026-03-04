@@ -48,10 +48,7 @@ import {
   BanknoteArrowUp,
   BanknoteArrowDown,
 } from "lucide-react";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import useTransactions from "@/hooks/use-transactions";
 
@@ -71,10 +68,9 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
 
-  // 1. Initialize pagination state
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10, // Initial fallback
+    pageSize: 17,
   });
 
   const router = useRouter();
@@ -90,42 +86,14 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination, // 2. Add handler
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      pagination, // 3. Connect state
+      pagination,
     },
   });
-
-  // 4. Dynamic Page Size Logic
-  React.useLayoutEffect(() => {
-    const calculatePageSize = () => {
-      if (containerRef.current) {
-        const containerHeight = containerRef.current.clientHeight;
-        const headerHeight = 50; // Standard Shadcn TableHeader height
-        const rowHeight = 40; // Standard row height (adjust if your rows are taller)
-
-        const availableHeight = containerHeight - headerHeight;
-        const calculatedPageSize = Math.floor(availableHeight / rowHeight);
-
-        if (
-          calculatedPageSize > 0 &&
-          calculatedPageSize !== pagination.pageSize
-        ) {
-          setPagination((prev) => ({
-            ...prev,
-            pageSize: calculatedPageSize,
-          }));
-        }
-      }
-    };
-
-    calculatePageSize();
-    window.addEventListener("resize", calculatePageSize);
-    return () => window.removeEventListener("resize", calculatePageSize);
-  }, [pagination.pageSize]);
 
   const category = React.useMemo(() => {
     const categorySet = new Set<string>();
@@ -143,7 +111,7 @@ export function DataTable<TData, TValue>({
   const { accounts, users, categories, refresh } = useTransactions();
 
   return (
-    <div className="flex flex-col w-full h-full min-h-[500px]">
+    <div className="flex flex-col w-full">
       <div className="gap-2 flex flex-row items-center justify-between p-3">
         <ButtonGroup>
           <TransactionDialog
@@ -267,7 +235,7 @@ export function DataTable<TData, TValue>({
                 return (
                   <TableRow
                     key={row.id}
-                    className="cursor-pointer hover:bg-blue-50 even:bg-slate-50 h-[40px]" // Fixed height for calculation accuracy
+                    className="cursor-pointer hover:bg-blue-50 even:bg-slate-50"
                     onClick={() => router.push(`/transactions/${uuid}`)}
                   >
                     {row.getVisibleCells().map((cell) => (

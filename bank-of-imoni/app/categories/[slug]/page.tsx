@@ -5,6 +5,8 @@ import { useCategories } from "@/hooks/use-categories";
 import { slugify } from "@/lib/utils";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
+import CategorySpendingChart from "@/components/categories/category-spending-chart";
+import { CategoryTransactionsTable } from "@/components/categories/category-recent-transactions";
 
 export default function Page() {
   const { categories } = useCategories();
@@ -22,10 +24,17 @@ export default function Page() {
           </span>
         </p>
         <ButtonGroup>
-          <Button variant={"outline"}>Edit</Button>
-          <Button variant={"outline"}>Delete</Button>
+          <Button variant={"outline"}>Edit Category</Button>
         </ButtonGroup>
       </div>
+      <main className="p-6 w-full h-full overflow-auto">
+        <div className="w-full">
+          <CategorySpendingChart categoryId={category?.id} />
+        </div>
+        <div className="w-full">
+          <CategoryTransactionsTable categoryId={category?.id} />
+        </div>
+      </main>
     </div>
   );
 }
