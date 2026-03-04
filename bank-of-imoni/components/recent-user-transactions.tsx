@@ -28,8 +28,11 @@ export const UserRecentTransactions: React.FC<UserRecentTransactionsProps> = ({
   });
 
   // Map account IDs to account objects for easy lookup
-  const accountMap: Record<string, { id: string; name: string }> = {};
-  accounts.forEach((acc) => {
+  const accountMap: Record<
+    string,
+    { id: string; name: string; icon?: string }
+  > = {};
+  accounts.forEach((acc: any) => {
     accountMap[acc.id] = acc;
   });
 
@@ -45,7 +48,7 @@ export const UserRecentTransactions: React.FC<UserRecentTransactionsProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map((tx) => {
+          {transactions.map((tx: any) => {
             const account = accountMap[tx.paid_by_account]; // lookup full account
             return (
               <TableRow key={tx.id}>

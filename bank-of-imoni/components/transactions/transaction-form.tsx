@@ -30,7 +30,8 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { useEffect } from "react";
 
 const formSchema = z.object({
-  amount: z.coerce.number().positive(),
+  id: z.string().optional(),
+  amount: z.number().positive(),
   description: z.string().min(1),
   category: z.string().min(1),
   date: z.date(),
@@ -155,7 +156,7 @@ export function TransactionForm({
                     categories.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
                         <span className="flex gap-2 items-center">
-                          <DynamicIcon name={category.icon} />
+                          <DynamicIcon name={category.icon as any} />
                           {category.name}
                         </span>
                       </SelectItem>

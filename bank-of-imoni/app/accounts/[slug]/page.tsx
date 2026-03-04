@@ -43,7 +43,7 @@ export default function AccountPage() {
           <h1 className="text-xl tracking-tight">{account.name}</h1>
         </span>
 
-        <p className="text-xl font-bold">¥{workingBalance.toLocaleString()}</p>
+        <p className="text-xl font-bold">¥{workingBalance?.toLocaleString()}</p>
       </div>
 
       {/* Content */}

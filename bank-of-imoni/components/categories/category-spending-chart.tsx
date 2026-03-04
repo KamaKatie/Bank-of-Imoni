@@ -44,7 +44,7 @@ export default function CategorySpendingChart({
     if (!categoryId || !transactions.length) return [];
 
     const filtered = transactions.filter(
-      (t) => t.category === categoryId && !t.deleted_at,
+      (t: any) => t.category === categoryId && !t.deleted_at,
     );
 
     const monthlyGroups: Record<
@@ -52,7 +52,7 @@ export default function CategorySpendingChart({
       { month: string; amount: number; count: number; rawDate: Date }
     > = {};
 
-    filtered.forEach((t) => {
+    filtered.forEach((t: any) => {
       const date = new Date(t.date);
       const monthLabel = date.toLocaleString("default", { month: "short" });
       const yearLabel = date.getFullYear();

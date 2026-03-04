@@ -51,10 +51,6 @@ export default function EditTransactionDialog({
             category: transaction.category,
             date: new Date(transaction.date),
             paidByAccountId: transaction.paid_by_account,
-            participantUserIds:
-              transaction.transaction_participants?.map(
-                (p: any) => p.user_id,
-              ) ?? [],
           }}
           onSuccess={() => {
             setOpen(false);

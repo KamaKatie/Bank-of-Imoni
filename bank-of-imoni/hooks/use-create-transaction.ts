@@ -24,6 +24,7 @@ export function useCreateExpense() {
       paidByAccount: string;
       participants: Participant[];
     }) => {
+      const supabase = await createClient();
       const { data: transaction, error } = await supabase
         .from("transactions")
         .insert({

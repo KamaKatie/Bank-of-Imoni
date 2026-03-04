@@ -39,10 +39,13 @@ export function BalanceCard({
   // 2. Use liveBalance if available, otherwise fallback to the static prop
   const finalBalance = accountId && !isLoading ? liveBalance : balance;
 
-  const displayBalance = new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: currency,
-  }).format(finalBalance);
+  const displayBalance =
+    finalBalance !== undefined
+      ? new Intl.NumberFormat("ja-JP", {
+          style: "currency",
+          currency: currency,
+        }).format(finalBalance)
+      : "";
 
   return (
     <Link href={link || ""}>

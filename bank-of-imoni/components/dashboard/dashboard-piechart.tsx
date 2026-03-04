@@ -34,12 +34,12 @@ export default function CurrentMonthExpensesChart() {
 
     transactions
       .filter(
-        (tx) =>
+        (tx: any) =>
           tx.type !== "income" &&
           new Date(tx.date).getMonth() === month &&
           new Date(tx.date).getFullYear() === year,
       )
-      .forEach((tx) => {
+      .forEach((tx: any) => {
         const categoryName = tx.categories?.name ?? "Uncategorized";
         const icon = tx.categories?.icon; // This could be string | null | undefined
 

@@ -35,12 +35,12 @@ export default function UserSpendingChartByCategory() {
     // 1. Filter and Aggregate
     transactions
       .filter(
-        (tx) =>
+        (tx: any) =>
           tx.type !== "income" &&
           new Date(tx.date).getMonth() === month &&
           new Date(tx.date).getFullYear() === year,
       )
-      .forEach((tx) => {
+      .forEach((tx: any) => {
         const categoryName = tx.categories?.name ?? "Uncategorized";
         const icon = tx.categories?.icon;
 
@@ -93,9 +93,7 @@ export default function UserSpendingChartByCategory() {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-center font-medium">
-        Spending by Category
-      </p>
+      <p className="text-center font-medium">Spending by Category</p>
 
       <ChartContainer
         config={chartConfig}

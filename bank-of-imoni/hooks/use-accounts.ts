@@ -35,9 +35,8 @@ export function useAccounts() {
     error,
     refresh,
   } = useSupabaseFetch<Account[]>(fetcher, [], {
-    // always attempt to fetch on mount; cache will be populated after first fetch
     enabled: true,
-    initialData: cachedAccounts ?? null,
+    initialData: cachedAccounts ?? undefined,
   });
 
   useEffect(() => {

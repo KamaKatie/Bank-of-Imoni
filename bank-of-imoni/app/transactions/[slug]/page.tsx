@@ -10,14 +10,15 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { Spinner } from "@/components/ui/spinner";
 import EditTransactionDialog from "@/components/transactions/edit-transaction-dialog";
 import DeleteTransactionDialog from "@/components/transactions/delete-transaction-dialog";
+import { TransactionsWithCategoriesandAccounts } from "../columns";
 
 export default function Page() {
   const params = useParams();
-  const { transactions, transactionParticipants, accounts, users, categories } =
-    useTransactions();
+  const { transactions, accounts, users, categories } = useTransactions();
 
   const transaction = transactions.find(
-    (transaction) => params.slug === transaction.id,
+    (transactions: TransactionsWithCategoriesandAccounts) =>
+      params.slug === transaction.id,
   );
 
   if (!transaction) {
@@ -88,16 +89,6 @@ export default function Page() {
                   height={100}
                   className="rounded-full w-5 h-5"
                 />
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium text-left">Shared:</span>
-              <span className="text-right">
-                {transactionParticipants?.length > 1 ? (
-                  <span className="text-green-600">Yes ✓</span>
-                ) : (
-                  <span>No</span>
-                )}
               </span>
             </div>
           </div>

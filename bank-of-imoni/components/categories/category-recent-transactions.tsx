@@ -29,7 +29,7 @@ export const CategoryTransactionsTable: React.FC<
   });
 
   const categoryTransactions = transactions.filter(
-    (tx) => tx.category === categoryId,
+    (tx: any) => tx.category === categoryId,
   );
 
   if (categoryTransactions.length === 0)
@@ -52,7 +52,7 @@ export const CategoryTransactionsTable: React.FC<
         </TableHeader>
 
         <TableBody>
-          {categoryTransactions.map((tx) => (
+          {categoryTransactions.map((tx: any) => (
             <TableRow key={tx.id}>
               <TableCell>
                 {new Date(tx.date).toLocaleDateString("ja-JP", {

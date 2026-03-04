@@ -34,12 +34,12 @@ export const AccountTransactionsTable: React.FC<
     { id: string; name: string; icon?: string; placeholder_img?: string }
   > = {};
 
-  accounts.forEach((acc) => {
+  accounts.forEach((acc: any) => {
     accountMap[acc.id] = acc;
   });
 
   const accountTransactions = transactions.filter(
-    (tx) => tx.paid_by_account === accountId,
+    (tx: any) => tx.paid_by_account === accountId,
   );
 
   const account = accountMap[accountId];
@@ -57,7 +57,7 @@ export const AccountTransactionsTable: React.FC<
         </TableHeader>
 
         <TableBody>
-          {accountTransactions.map((tx) => (
+          {accountTransactions.map((tx: any) => (
             <TableRow key={tx.id}>
               <TableCell>
                 {new Date(tx.date).toLocaleDateString("ja-JP", {
