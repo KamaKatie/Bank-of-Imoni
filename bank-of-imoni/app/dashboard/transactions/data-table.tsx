@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 15,
+    pageSize: 12,
   });
 
   const router = useRouter();
@@ -145,7 +145,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("description")?.setFilterValue(event.target.value)
             }
-            className="lg:w-80 w-min bg-muted"
+            className="md:w-80 w-32 bg-muted"
           />
           {categories.length > 0 && (
             <Select

@@ -19,8 +19,8 @@ export default function AccountsList() {
   const { accounts } = useAccounts();
 
   return (
-    <div className="gap-10 w-full md:gap-0 md:space-y-4 flex md:flex-col items-center justify-center">
-      <ul>
+    <div className="w-full items-center justify-center">
+      <ul className="grid grid-cols-2 md:grid-cols-1 gap-2">
         {accounts.map((account) => (
           <AccountItem key={account.id || account.name} account={account} />
         ))}
@@ -33,27 +33,28 @@ function AccountItem({ account }: { account: any }) {
   const { balance, isLoading } = useWorkingBalance(account.id);
 
   return (
-    <li className="my-2">
+    <li className="w-full">
       <Item
-        className="rounded-xl drop-shadow-md md:drop-shadow-none hover:border-emerald-700 min-w-full"
+        className="rounded-xl bg-emerald-700 md:bg-muted"
         variant="muted"
         asChild
       >
         <Link
           href={`/dashboard/accounts/${slugify(account.name)}-${account.id}`}
         >
-          <ItemMedia variant="image" className="hidden md:flex">
+          <ItemMedia variant="image">
             <Image
               src={account.icon || account.placeholder_img}
               alt={account.name}
               width={500}
               height={500}
+              className="rounded-full"
             />
           </ItemMedia>
 
           <ItemContent>
             <div className="flex items-center justify-between gap-5">
-              <ItemTitle className="md:text-inherit text-emerald-700">
+              <ItemTitle className="md:text-inherit text-green-100">
                 {account.name}
               </ItemTitle>
 
@@ -62,7 +63,7 @@ function AccountItem({ account }: { account: any }) {
               </Badge>
             </div>
 
-            <ItemDescription className="text-inherit">
+            <ItemDescription className="md:text-inherit text-white">
               {isLoading ? "Loading..." : `¥${balance?.toLocaleString() ?? 0}`}
             </ItemDescription>
           </ItemContent>

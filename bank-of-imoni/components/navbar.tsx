@@ -28,7 +28,7 @@ export default function Navbar() {
   return (
     <nav className="px-6 py-3 flex md:border-b-2 border-muted bg-white drop-shadow md:drop-shadow-none from-green-50 to-teal-50 md:bg-gradient-to-r">
       <Breadcrumb>
-        <BreadcrumbList>
+        <BreadcrumbList className="text-lg">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link href="/dashboard">Home</Link>

@@ -60,7 +60,7 @@ export default function Sidebar() {
       {/* MOBILE: We use a grid with 3 equal columns to force absolute centering of the middle item.
           DESKTOP: Reverts to a standard column flexbox.
       */}
-      <div className="grid grid-cols-3 items-center px-2 h-16 md:flex md:flex-col md:justify-between md:p-3 md:h-full md:w-full relative">
+      <div className="grid grid-cols-3 items-center px-5 py-2 md:flex md:flex-col md:justify-between md:p-3 md:h-full md:w-full relative">
         {/* 1. LEFT SECTION (Mobile: Menu / Desktop: Logo) */}
         <div className="flex justify-start md:w-full">
           <Sheet>
@@ -68,11 +68,11 @@ export default function Sidebar() {
               <Menu size={24} />
             </SheetTrigger>
             <SheetContent
-              side="left"
-              className="w-[280px] border-none bg-emerald-800 shadow-xl text-white justify-between"
+              side="bottom"
+              className="w-full border-none bg-emerald-800 shadow-xl text-white justify-between p-4"
             >
-              <SheetHeader className="pb-0">
-                <SheetTitle className="flex items-center gap-2 text-left">
+              <SheetHeader className="w-full text-xl">
+                <SheetTitle className="flex items-center justify-center gap-2 text-left">
                   <Image
                     src="/imoni_headshot.png"
                     alt="logo"
@@ -82,13 +82,13 @@ export default function Sidebar() {
                   <p className="text-white">Bank of Imoni</p>
                 </SheetTitle>
               </SheetHeader>
-              <div className="flex flex-col">
+              <div className="flex items-center justify-center">
                 {secondaryNav.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-2 mx-2 p-3 rounded-lg transition-colors",
+                      "flex flex-col items-center gap-2 mx-2 p-3 rounded-lg transition-colors",
                       pathname === item.href
                         ? "bg-primary/15 font-bold"
                         : "hover:bg-primary/15 font-medium",
@@ -139,7 +139,7 @@ export default function Sidebar() {
                           : "text-muted-foreground",
                       )}
                     >
-                      <item.icon size={20} strokeWidth={isActive ? 2 : 1.5} />
+                      <item.icon size={30} strokeWidth={isActive ? 2 : 1.5} />
                       <p className="hidden md:block">{item.label}</p>
                     </Link>
                   </NavigationMenuItem>
@@ -179,12 +179,12 @@ export default function Sidebar() {
           </NavigationMenu>
         </div>
 
-        <div className="hidden md:block w-full">
+        <div className="hidden md:block w-full mt-4">
           <SettlementCard />
         </div>
 
         {/* 3. RIGHT SECTION (Auth Button) */}
-        <div className="flex items-center pointer-events-none md:w-full md:mt-auto">
+        <div className="flex md:justify-start justify-end items-center pointer-events-none md:w-full md:mt-auto">
           <div className="pointer-events-auto">
             <Suspense>
               <AuthButton />
