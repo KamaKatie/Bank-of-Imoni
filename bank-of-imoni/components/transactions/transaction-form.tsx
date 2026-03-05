@@ -32,7 +32,7 @@ import { useEffect } from "react";
 const formSchema = z.object({
   id: z.string().optional(),
   amount: z.number().positive(),
-  description: z.string().nonempty(),
+  description: z.string().min(1),
   category: z.string().min(1),
   date: z.date(),
   paidByAccountId: z.string().min(1),
@@ -111,11 +111,20 @@ export function TransactionForm({
         <FormField
           control={form.control}
           name="amount"
-          render={({ field }) => (
+          render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
               <FormLabel>Amount</FormLabel>
               <FormControl>
-                <Input type="number" {...field} />
+                <Input
+                  type="number"
+                  step="1"
+                  {...fieldProps}
+                  value={value === 0 ? "" : value}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    onChange(val === "" ? 0 : parseFloat(val));
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

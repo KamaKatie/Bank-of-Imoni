@@ -16,10 +16,10 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-between h-screen bg-gradient-to-b from-emerald-50 to-white">
       <header className="flex w-full">
-        <nav className="flex w-full items-center justify-between p-6">
-          <div className="flex flex-row items-baseline gap-5">
+        <nav className="flex md:flex-row w-full md:items-center justify-between p-5 md:p-10">
+          <div className="flex flex-col md:flex-row md:items-baseline md:gap-5">
             <h1 className="text-2xl font-semibold">Bank of Imoni</h1>
-            <ul className="flex flex-row gap-5 text-emerald-700">
+            <ul className="flex flex-row md:gap-5 text-emerald-700">
               <li>
                 <Link href="/dashboard">Dashboard</Link>
               </li>
@@ -29,7 +29,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="mx-auto items-center justify-center h-full">
+      <div className="mx-auto items-center justify-center h-full p-5">
         <Tabs defaultValue="overview">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>

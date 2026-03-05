@@ -26,7 +26,7 @@ export default function Navbar() {
   const { getLabel } = useBreadcrumbLabels(cleanSegments);
 
   return (
-    <nav className="px-6 py-3 flex md:border-b-2 border-muted from-green-50 to-teal-50 md:bg-gradient-to-r">
+    <nav className="px-6 py-3 flex md:border-b-2 border-muted bg-white drop-shadow md:drop-shadow-none from-green-50 to-teal-50 md:bg-gradient-to-r">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
