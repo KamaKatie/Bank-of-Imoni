@@ -12,7 +12,9 @@ export default function Layout({
     <Providers>
       <div className="h-full flex flex-col-reverse md:flex-row">
         <aside className="w-full md:w-auto">
-          <Sidebar />
+          <Suspense>
+            <Sidebar />
+          </Suspense>
         </aside>
 
         <div className="bg-muted md:bg-white md:drop-shadow-xl md:rounded-2xl md:m-3 flex-1 flex flex-col overflow-hidden">
