@@ -62,7 +62,7 @@ export const CategoryTransactionsTable: React.FC<
               </TableCell>
 
               <TableCell>
-                <Link href={`/transactions/${tx.id}`}>{tx.description}</Link>
+                <Link href={`/dashboard/transactions/${tx.id}`}>{tx.description}</Link>
               </TableCell>
 
               <TableCell className="text-muted-foreground">
