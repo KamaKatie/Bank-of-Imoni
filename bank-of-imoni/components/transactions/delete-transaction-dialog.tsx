@@ -1,10 +1,17 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { deleteTransaction } from "@/app/transactions/actions/delete-transaction";
+import { deleteTransaction } from "@/app/dashboard/transactions/actions/delete-transaction";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 type Props = {
   id: string;
@@ -30,23 +37,22 @@ export default function DeleteTransactionDialog({ id, onDeleted }: Props) {
 
   return (
     <div>
-      {!open && (
-        <Button
-          variant="outline"
-          className="text-red-600 hover:bg-red-100 hover:text-red-600"
-          onClick={() => setOpen(true)}
-        >
-          Delete
-        </Button>
-      )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="text-red-600 hover:bg-red-100 hover:text-red-600"
+          >
+            Delete
+          </Button>
+        </DialogTrigger>
 
-      {open && (
-        <Alert variant="destructive" className="mt-2">
-          <AlertTitle>
-            Are you sure you want to delete this transaction?
-          </AlertTitle>
-
-          <AlertDescription>This action cannot be undone.</AlertDescription>
+        <DialogContent className="sm:max-w-lg flex-col flex items-center justify-center">
+          <DialogHeader>
+            <DialogTitle className="text-center text-red-600">
+              Are you sure?{" "}
+            </DialogTitle>
+          </DialogHeader>
 
           <div className="col-start-2 mt-3 flex gap-2">
             <Button variant="outline" size="sm" onClick={() => setOpen(false)}>
@@ -62,8 +68,8 @@ export default function DeleteTransactionDialog({ id, onDeleted }: Props) {
               {isPending ? "Deleting..." : "Delete"}
             </Button>
           </div>
-        </Alert>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

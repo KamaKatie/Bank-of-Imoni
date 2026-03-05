@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { updateTransaction } from "@/app/transactions/actions/update-transaction";
-import { createTransaction } from "@/app/transactions/actions/create-transaction";
+import { updateTransaction } from "@/app/dashboard/transactions/actions/update-transaction";
+import { createTransaction } from "@/app/dashboard/transactions/actions/create-transaction";
 import Image from "next/image";
 import {
   Form,

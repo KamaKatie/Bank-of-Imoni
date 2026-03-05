@@ -17,8 +17,8 @@ export default function Page() {
   const { transactions, accounts, users, categories } = useTransactions();
 
   const transaction = transactions.find(
-    (transactions: TransactionsWithCategoriesandAccounts) =>
-      params.slug === transaction.id,
+    (t: TransactionsWithCategoriesandAccounts) =>
+      params.slug === t.id,
   );
 
   if (!transaction) {

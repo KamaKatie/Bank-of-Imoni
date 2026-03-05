@@ -51,6 +51,7 @@ export default function EditTransactionDialog({
             category: transaction.category,
             date: new Date(transaction.date),
             paidByAccountId: transaction.paid_by_account,
+            splitType: transaction.split_type,
           }}
           onSuccess={() => {
             setOpen(false);

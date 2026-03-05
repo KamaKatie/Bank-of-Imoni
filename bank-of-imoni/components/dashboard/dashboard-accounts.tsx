@@ -26,7 +26,7 @@ export default function DashboardAccounts() {
 
         {/*Balance Card */}
         <BalanceCard
-          link="/accounts"
+          link="/dashboard/accounts"
           label="Working Balance"
           balance={workingBalance}
           className="from-green-200 to-emerald-700 text-white hover:scale-105 duration-200"
@@ -55,7 +55,7 @@ function AccountItem({ account }: { account: any }) {
         variant="muted"
         asChild
       >
-        <Link href={`/accounts/${slugify(account.name)}-${account.id}`}>
+        <Link href={`/dashboard/accounts/${slugify(account.name)}-${account.id}`}>
           <ItemMedia variant="image" className="hidden md:flex">
             <Image
               src={account.icon || account.placeholder_img}

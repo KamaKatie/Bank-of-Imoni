@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 17,
+    pageSize: 15,
   });
 
   const router = useRouter();
@@ -236,7 +236,7 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     className="cursor-pointer hover:bg-blue-50 even:bg-slate-50"
-                    onClick={() => router.push(`/transactions/${uuid}`)}
+                    onClick={() => router.push(`/dashboard/transactions/${uuid}`)}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

@@ -56,7 +56,7 @@ export default function Sidebar() {
               <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                 <Link
                   className="flex flex-col md:flex-row items-center gap-2"
-                  href={"/transactions"}
+                  href={"/dashboard/transactions"}
                 >
                   <ReceiptJapaneseYen size={20} />
                   <p className="hidden md:grid">Transactions</p>
@@ -66,7 +66,7 @@ export default function Sidebar() {
               <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                 <Link
                   className="flex flex-col md:flex-row items-center gap-2"
-                  href={"/accounts"}
+                  href={"/dashboard/accounts"}
                 >
                   <Wallet size={20} />
                   <p className="hidden md:grid">Accounts</p>
@@ -80,7 +80,7 @@ export default function Sidebar() {
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/bills"}
+                    href={"/dashboard/bills"}
                   >
                     <Landmark size={20} strokeWidth={1} />
                     <p className="hidden md:grid font-light">Bills</p>
@@ -90,7 +90,7 @@ export default function Sidebar() {
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/budgets"}
+                    href={"/dashboard/budgets"}
                   >
                     <BadgeJapaneseYen size={20} strokeWidth={1} />
                     <p className="hidden md:grid font-light">Budgets</p>
@@ -100,7 +100,7 @@ export default function Sidebar() {
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/categories"}
+                    href={"/dashboard/categories"}
                   >
                     <Archive size={20} strokeWidth={1} />
                     <p className="hidden md:grid font-light">Categories</p>
@@ -110,7 +110,7 @@ export default function Sidebar() {
                 <NavigationMenuItem className={navigationMenuTriggerStyle()}>
                   <Link
                     className="flex flex-col md:flex-row items-center gap-2"
-                    href={"/goals"}
+                    href={"/dashboard/goals"}
                   >
                     <PiggyBank size={20} strokeWidth={1} />
                     <p className="hidden md:grid font-light">Goals</p>

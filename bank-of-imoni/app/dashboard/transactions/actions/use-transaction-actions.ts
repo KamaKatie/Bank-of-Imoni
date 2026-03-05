@@ -1,8 +1,8 @@
 "use client";
 
 import { useTransition } from "react";
-import { deleteTransaction } from "@/app/transactions/actions/delete-transaction";
-import { updateTransaction } from "@/app/transactions/actions/update-transaction";
+import { deleteTransaction } from "@/app/dashboard/transactions/actions/delete-transaction";
+import { updateTransaction } from "@/app/dashboard/transactions/actions/update-transaction";
 import { toast } from "sonner";
 
 export default function useTransactionActions(onSuccess?: () => void) {
