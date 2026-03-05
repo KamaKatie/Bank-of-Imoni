@@ -31,7 +31,7 @@ import { useEffect } from "react";
 
 const formSchema = z.object({
   id: z.string().optional(),
-  amount: z.coerce.number().positive(),
+  amount: z.number().positive(),
   description: z.string().nonempty(),
   category: z.string().min(1),
   date: z.date(),
@@ -59,7 +59,6 @@ type Props = {
 
 export function TransactionForm({
   accounts,
-  users,
   categories,
   initialValues,
   mode,

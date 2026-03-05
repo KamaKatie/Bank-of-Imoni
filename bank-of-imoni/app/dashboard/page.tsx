@@ -2,7 +2,7 @@ import AccountsList from "@/components/accounts-list";
 import { Card } from "@/components/ui/card";
 import SpendingChart from "@/components/dashboard/dashboard-spending-chart";
 import ChartPieDonutText from "@/components/dashboard/dashboard-piechart";
-import { UserRecentTransactions } from "@/components/tables/recent-user-transactions";
+import { UserTransactions } from "@/components/tables/recent-user-transactions";
 export default function Page() {
   return (
     <div className="h-full grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
@@ -20,7 +20,7 @@ export default function Page() {
         {/* Recent transactions */}
         <Card className="rounded-xl flex flex-col items-center justify-center">
           <h3 className="text-center font-semibold p-2">Recent transactions</h3>
-          <UserRecentTransactions />
+          <UserTransactions />
         </Card>
 
         {/* Upcoming bills */}
