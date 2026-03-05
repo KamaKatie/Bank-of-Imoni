@@ -11,14 +11,15 @@ import { Spinner } from "@/components/ui/spinner";
 import EditTransactionDialog from "@/components/transactions/edit-transaction-dialog";
 import DeleteTransactionDialog from "@/components/transactions/delete-transaction-dialog";
 import { TransactionsWithCategoriesandAccounts } from "../columns";
+import { useAccounts } from "@/hooks/use-accounts";
 
 export default function Page() {
   const params = useParams();
-  const { transactions, accounts, users, categories } = useTransactions();
+  const { transactions, users, categories } = useTransactions();
+  const accounts = useAccounts();
 
   const transaction = transactions.find(
-    (t: TransactionsWithCategoriesandAccounts) =>
-      params.slug === t.id,
+    (t: TransactionsWithCategoriesandAccounts) => params.slug === t.id,
   );
 
   if (!transaction) {
@@ -120,7 +121,7 @@ export default function Page() {
         <EditTransactionDialog
           key={transaction.id}
           transaction={transaction}
-          accounts={accounts}
+          accounts={accounts.accounts}
           users={users}
           categories={categories}
           onUpdated={refresh}

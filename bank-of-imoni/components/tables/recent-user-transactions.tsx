@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { useRecentUserTransactions } from "@/hooks/use-recent-user-transactions";
+import { useUserTransactions } from "@/hooks/use-user-transactions";
 import {
   Table,
   TableBody,
@@ -12,14 +12,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface UserRecentTransactionsProps {
+interface RecentTransactionsProps {
   limit?: number;
 }
 
-export const UserRecentTransactions: React.FC<UserRecentTransactionsProps> = ({
+export const UserTransactions: React.FC<RecentTransactionsProps> = ({
   limit = 5,
 }) => {
-  const { accounts, transactions } = useRecentUserTransactions({ limit });
+  const { accounts, transactions } = useUserTransactions({ limit });
 
   const yenFormatter = new Intl.NumberFormat("ja-JP", {
     style: "currency",
@@ -27,7 +27,6 @@ export const UserRecentTransactions: React.FC<UserRecentTransactionsProps> = ({
     minimumFractionDigits: 0,
   });
 
-  // Map account IDs to account objects for easy lookup
   const accountMap: Record<
     string,
     { id: string; name: string; icon?: string }
@@ -49,7 +48,7 @@ export const UserRecentTransactions: React.FC<UserRecentTransactionsProps> = ({
         </TableHeader>
         <TableBody>
           {transactions.map((tx: any) => {
-            const account = accountMap[tx.paid_by_account]; // lookup full account
+            const account = accountMap[tx.paid_by_account];
             return (
               <TableRow key={tx.id}>
                 <TableCell>

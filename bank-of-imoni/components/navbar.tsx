@@ -37,7 +37,7 @@ export default function Navbar() {
 
           {cleanSegments.map((segment, index) => {
             const isLast = index === cleanSegments.length - 1;
-            const href = `/${cleanSegments.slice(0, index + 1).join("/")}`;
+            const href = `/dashboard/${cleanSegments.slice(0, index + 1).join("/")}`;
             const label = getLabel(segment);
 
             return (

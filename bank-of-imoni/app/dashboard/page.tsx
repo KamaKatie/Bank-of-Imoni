@@ -1,14 +1,14 @@
-import Accounts from "@/components/dashboard/dashboard-accounts";
+import AccountsList from "@/components/accounts-list";
 import { Card } from "@/components/ui/card";
 import SpendingChart from "@/components/dashboard/dashboard-spending-chart";
 import ChartPieDonutText from "@/components/dashboard/dashboard-piechart";
-import { UserRecentTransactions } from "@/components/recent-user-transactions";
+import { UserRecentTransactions } from "@/components/tables/recent-user-transactions";
 export default function Page() {
   return (
     <div className="h-full grid grid-cols-1 lg:grid-cols-4 gap-4 p-4">
       {/* Accounts */}
       <div className="lg:row-span-2 flex flex-col items-center justify-center">
-        <Accounts />
+        <AccountsList />
       </div>
       <div className="lg:col-span-3 row-span-2 grid grid-cols-1 lg:grid-cols-2 gap-4 ">
         {/* Cashflow */}

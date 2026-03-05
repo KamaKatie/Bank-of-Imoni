@@ -51,6 +51,7 @@ import {
 import { ButtonGroup } from "@/components/ui/button-group";
 import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import useTransactions from "@/hooks/use-transactions";
+import { useAccounts } from "@/hooks/use-accounts";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -108,7 +109,8 @@ export function DataTable<TData, TValue>({
   const categoryColumn = table.getColumn("category");
   const currentFilter = (categoryColumn?.getFilterValue() as string) || "All";
   const allCategories = ["All", ...category];
-  const { accounts, users, categories, refresh } = useTransactions();
+  const { users, categories, refresh } = useTransactions();
+  const formAccounts = useAccounts();
 
   return (
     <div className="flex flex-col w-full">
@@ -118,7 +120,7 @@ export function DataTable<TData, TValue>({
             type="expense"
             title="Add expense"
             icon={<BanknoteArrowUp />}
-            accounts={accounts}
+            accounts={formAccounts.accounts}
             users={users}
             categories={categories}
             onTransactionCreated={refresh}
@@ -127,7 +129,7 @@ export function DataTable<TData, TValue>({
             type="income"
             title="Add income"
             icon={<BanknoteArrowDown />}
-            accounts={accounts}
+            accounts={formAccounts.accounts}
             users={users}
             categories={categories}
             onTransactionCreated={refresh}
@@ -236,7 +238,9 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     className="cursor-pointer hover:bg-blue-50 even:bg-slate-50"
-                    onClick={() => router.push(`/dashboard/transactions/${uuid}`)}
+                    onClick={() =>
+                      router.push(`/dashboard/transactions/${uuid}`)
+                    }
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { AuthButton } from "@/components/auth-button";
+import { AuthButton } from "@/components/auth/auth-button";
 
 export default function Home() {
   return (
@@ -22,9 +22,6 @@ export default function Home() {
             <ul className="flex flex-row gap-5 text-emerald-700">
               <li>
                 <Link href="/dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <Link href="/about">About</Link>
               </li>
             </ul>
           </div>
@@ -67,7 +64,6 @@ export default function Home() {
           rel="noopener noreferrer"
           className="hover:text-foreground transition-colors"
         >
-          {/* 2. Use the icon here */}
           <Github className="h-5 w-5" />
           <span className="sr-only">GitHub Repository</span>
         </Link>

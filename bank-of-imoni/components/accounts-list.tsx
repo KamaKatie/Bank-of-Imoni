@@ -12,29 +12,14 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "../ui/item";
-import { Badge } from "../ui/badge";
-import { BalanceCard } from "../balance-card";
+} from "./ui/item";
+import { Badge } from "./ui/badge";
 
-export default function DashboardAccounts() {
-  const { accounts, workingBalance } = useAccounts();
+export default function AccountsList() {
+  const { accounts } = useAccounts();
 
   return (
     <div className="gap-10 w-full md:gap-0 md:space-y-4 flex md:flex-col items-center justify-center">
-      <div className="flex flex-col">
-        <h1 className="text-center pb-4 font-semibold text-md">Accounts</h1>
-
-        {/*Balance Card */}
-        <BalanceCard
-          link="/dashboard/accounts"
-          label="Working Balance"
-          balance={workingBalance}
-          className="from-green-200 to-emerald-700 text-white hover:scale-105 duration-200"
-          showDate
-        />
-      </div>
-
-      {/*Accounts */}
       <ul>
         {accounts.map((account) => (
           <AccountItem key={account.id || account.name} account={account} />
@@ -44,7 +29,6 @@ export default function DashboardAccounts() {
   );
 }
 
-// Create a separate component for each account to use the hook
 function AccountItem({ account }: { account: any }) {
   const { balance, isLoading } = useWorkingBalance(account.id);
 
@@ -55,7 +39,9 @@ function AccountItem({ account }: { account: any }) {
         variant="muted"
         asChild
       >
-        <Link href={`/dashboard/accounts/${slugify(account.name)}-${account.id}`}>
+        <Link
+          href={`/dashboard/accounts/${slugify(account.name)}-${account.id}`}
+        >
           <ItemMedia variant="image" className="hidden md:flex">
             <Image
               src={account.icon || account.placeholder_img}

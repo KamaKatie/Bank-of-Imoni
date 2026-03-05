@@ -3,10 +3,9 @@
 import { useSupabaseQuery } from "./use-supabase-query";
 import { useEffect, useState } from "react";
 
-export function useRecentUserTransactions({ limit = 10 } = {}) {
+export function useUserTransactions({ limit = 10 } = {}) {
   const [userId, setUserId] = useState<string | null>(null);
 
-  // 1️⃣ Get the current logged-in user
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await (await import("@/lib/supabase/client"))

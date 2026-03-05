@@ -10,16 +10,17 @@ import {
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useUserTransactions } from "@/hooks/use-user-transactions";
 
 interface Expense {
   category: string;
   amount: number;
   fill: string;
-  icon?: string | null; // or just keep it as optional with null allowed
+  icon?: string | null;
 }
 
 export default function CurrentMonthExpensesChart() {
-  const { transactions } = useTransactions();
+  const { transactions } = useUserTransactions();
 
   const now = React.useMemo(() => new Date(), []);
   const monthName = now.toLocaleString("default", { month: "long" });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, memo } from "react";
-import useTransactions from "@/hooks/use-transactions";
+import { useUserTransactions } from "@/hooks/use-user-transactions";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 
 interface ChartDataItem {
-  date: string; 
+  date: string;
   income: number;
   spending: number;
 }
@@ -61,7 +61,7 @@ export default function SpendingChart() {
   const [timeRange, setTimeRange] = useState<TimeRange>("1y");
   const [filteredData, setFilteredData] = useState<ChartDataItem[]>([]);
 
-  const { transactions } = useTransactions();
+  const { transactions } = useUserTransactions();
 
   const chartConfig = {
     income: {

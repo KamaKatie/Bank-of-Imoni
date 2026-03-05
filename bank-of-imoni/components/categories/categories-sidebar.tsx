@@ -22,7 +22,7 @@ export function CategoriesSidebar() {
         </div>
         <div className="flex flex-col h-full">
           {categories?.map((category) => {
-            const href = `/categories/${slugify(category.name)}`;
+            const href = `/dashboard/categories/${slugify(category.name)}`;
             const isActive = pathname === href;
 
             return (
@@ -36,7 +36,6 @@ export function CategoriesSidebar() {
                   )}
                 >
                   <DynamicIcon
-                    // Casting 'as any' prevents the Lucide union-type error
                     name={category.icon as any}
                     className={cn(
                       "w-8 h-8 rounded-full p-2 transition-colors",

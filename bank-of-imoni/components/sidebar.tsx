@@ -1,4 +1,4 @@
-import { AuthButton } from "@/components/auth-button";
+import { AuthButton } from "@/components/auth/auth-button";
 import { Separator } from "./ui/separator";
 import { Suspense } from "react";
 import Image from "next/image";

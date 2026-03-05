@@ -9,7 +9,6 @@ import { useWorkingBalance } from "@/hooks/use-working-balance";
 
 import { slugify } from "@/lib/utils";
 import AccountsLineChart from "@/components/accounts/accounts-spending-chart";
-import { AccountTransactionsTable } from "@/components/recent-transactions";
 
 export default function AccountPage() {
   const { accounts, loading } = useAccounts();
@@ -67,10 +66,7 @@ export default function AccountPage() {
           </div>
 
           <div className="flex-1">
-            <AccountTransactionsTable
-              accountId={account.id}
-              showImage={false}
-            />
+            placeholder
           </div>
         </div>
       </div>
