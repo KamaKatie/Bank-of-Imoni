@@ -60,7 +60,7 @@ export default function Sidebar() {
       {/* MOBILE: We use a grid with 3 equal columns to force absolute centering of the middle item.
           DESKTOP: Reverts to a standard column flexbox.
       */}
-      <div className="grid grid-cols-3 items-center px-5 py-2 md:flex md:flex-col md:justify-between md:p-3 md:h-full md:w-full relative">
+      <div className="grid grid-cols-3 items-center px-5 py-3 md:flex md:flex-col md:justify-between md:p-3 md:h-full md:w-full relative">
         {/* 1. LEFT SECTION (Mobile: Menu / Desktop: Logo) */}
         <div className="flex justify-start md:w-full">
           <Sheet>
@@ -69,9 +69,9 @@ export default function Sidebar() {
             </SheetTrigger>
             <SheetContent
               side="bottom"
-              className="w-full border-none bg-emerald-800 shadow-xl text-white justify-between p-4"
+              className="w-full border-none bg-emerald-800 shadow-xl justify-between px-5 py-10"
             >
-              <SheetHeader className="w-full text-xl">
+              <SheetHeader className="w-full text-xl p-0">
                 <SheetTitle className="flex items-center justify-center gap-2 text-left">
                   <Image
                     src="/imoni_headshot.png"
@@ -82,16 +82,16 @@ export default function Sidebar() {
                   <p className="text-white">Bank of Imoni</p>
                 </SheetTitle>
               </SheetHeader>
-              <div className="flex items-center justify-center">
+              <div className="grid grid-cols-2 gap-5 items-center justify-center">
                 {secondaryNav.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex flex-col items-center gap-2 mx-2 p-3 rounded-lg transition-colors",
+                      "bg-muted flex flex-col items-center  mx-2 p-3 rounded-lg transition-colors",
                       pathname === item.href
-                        ? "bg-primary/15 font-bold"
-                        : "hover:bg-primary/15 font-medium",
+                        ? "text-emerald-700 font-bold"
+                        : "hover:text-emerald-700 font-medium",
                     )}
                   >
                     <item.icon

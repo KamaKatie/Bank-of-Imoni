@@ -12,8 +12,19 @@ export function CategoriesSidebar() {
   const { categories } = useCategories();
   const pathname = usePathname();
 
+  // Define the base path
+  const isRootPath = pathname === "/dashboard/categories";
+
   return (
-    <aside className="hidden md:flex md:w-64 flex-col border-r h-full bg-background">
+    <aside
+      className={cn(
+        "flex-col border-r h-full bg-background transition-all",
+        // Mobile: Show only if on the root list page. Hide if a category is selected.
+        isRootPath ? "flex w-full" : "hidden",
+        // Desktop: Always show as a sidebar
+        "md:flex md:w-64",
+      )}
+    >
       <ScrollArea className="flex-1 h-full">
         <div className="p-4">
           <Button variant="outline" className="w-full">
@@ -29,24 +40,21 @@ export function CategoriesSidebar() {
               <Link key={category.id} href={href}>
                 <div
                   className={cn(
-                    "flex gap-3 items-center p-2 border-b mx-4 my-1 rounded-xl transition-all h-full hover:bg-accent",
+                    "flex gap-3 items-center p-2 border-b mx-4 my-2 rounded-xl transition-all h-full hover:bg-accent",
                     isActive
-                      ? "bg-muted font-medium shadow-sm"
-                      : "border-transparent text-muted-foreground",
+                      ? "bg-muted text-emerald-700 font-medium shadow-sm"
+                      : "border-transparent",
                   )}
                 >
                   <DynamicIcon
                     name={category.icon as any}
                     className={cn(
                       "w-8 h-8 rounded-full p-2 transition-colors",
-                      isActive
-                        ? "bg-muted-foreground text-primary-foreground"
-                        : "bg-muted",
+                      isActive ? "bg-white text-emerald-700" : "bg-muted",
                     )}
                   />
-                  <div className="truncate text-sm hidden md:block">
-                    {category.name}
-                  </div>
+                  {/* Remove 'hidden md:block' so text is visible on mobile list */}
+                  <div className="truncate text-lg md:text-base">{category.name}</div>
                 </div>
               </Link>
             );

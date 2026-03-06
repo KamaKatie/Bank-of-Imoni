@@ -3,8 +3,8 @@
 import * as React from "react";
 import { Pie, PieChart, Cell, Label } from "recharts";
 import { DynamicIcon } from "lucide-react/dynamic";
+import { useUserTransactions } from "@/hooks/use-user-transactions";
 
-import useTransactions from "@/hooks/use-transactions";
 import {
   ChartContainer,
   ChartTooltip,
@@ -20,8 +20,7 @@ interface Expense {
 }
 
 export default function UserSpendingChartByCategory() {
-  const { transactions } = useTransactions();
-
+  const { transactions } = useUserTransactions();
   const now = React.useMemo(() => new Date(), []);
   const month = now.getMonth();
   const year = now.getFullYear();

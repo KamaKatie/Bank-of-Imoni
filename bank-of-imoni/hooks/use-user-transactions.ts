@@ -34,7 +34,7 @@ export function useUserTransactions({ limit = 10 } = {}) {
 
       const { data: transactions, error: transactionsError } = await supabase
         .from("transactions")
-        .select("*")
+        .select("*, categories(name, icon)")
         .in("paid_by_account", accountIds)
         .order("date", { ascending: false })
         .limit(limit);

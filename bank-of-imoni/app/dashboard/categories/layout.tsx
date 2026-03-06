@@ -12,7 +12,7 @@ export default function CategoriesLayout({ children }: LayoutProps) {
         <CategoriesSidebar />
       </Suspense>
 
-      <main className="flex-1 h-full overflow-y-auto">{children}</main>
+      <main className="flex-1 h-full overflow-y-auto w-full">{children}</main>
     </div>
   );
 }
