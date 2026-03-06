@@ -1,7 +1,8 @@
 "use client";
 
-import UserSpendingChartByCategory from "@/components/accounts/user-spending-chart";
 import AccountsList from "@/components/accounts-list";
+import CashflowChart from "@/components/cashflow-chart";
+import { Card } from "@/components/ui/card";
 
 export default function AccountsPage() {
   return (
@@ -9,8 +10,11 @@ export default function AccountsPage() {
       <div className="md:border-r p-4 flex items-center justify-center md:overflow-y-auto">
         <AccountsList />
       </div>
-      <main className="p-4 flex-1">
-        <UserSpendingChartByCategory />
+      <main className="p-4 flex-1 w-full">
+        <Card className="flex flex-col items-center justify-center w-full p-5">
+          <h2 className="text-lg font-semibold">Cashflow</h2>
+          <CashflowChart />
+        </Card>
       </main>
     </div>
   );

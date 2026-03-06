@@ -20,7 +20,7 @@ export default function AccountsList() {
 
   return (
     <div className="w-full items-center justify-center">
-      <ul className="grid grid-cols-2 md:grid-cols-1 gap-2">
+      <ul className="w-full grid grid-cols-2 md:flex gap-2">
         {accounts.map((account) => (
           <AccountItem key={account.id || account.name} account={account} />
         ))}

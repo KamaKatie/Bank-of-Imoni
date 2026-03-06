@@ -17,7 +17,7 @@ interface RecentTransactionsProps {
 }
 
 export const UserTransactions: React.FC<RecentTransactionsProps> = ({
-  limit = 5,
+  limit = 10,
 }) => {
   const { accounts, transactions } = useUserTransactions({ limit });
 

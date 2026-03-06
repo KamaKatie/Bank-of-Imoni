@@ -62,7 +62,9 @@ export const CategoryTransactionsTable: React.FC<
               </TableCell>
 
               <TableCell>
-                <Link href={`/dashboard/transactions/${tx.id}`}>{tx.description}</Link>
+                <Link href={`/dashboard/transactions/${tx.id}`}>
+                  {tx.description}
+                </Link>
               </TableCell>
 
               <TableCell className="text-muted-foreground">
@@ -72,14 +74,13 @@ export const CategoryTransactionsTable: React.FC<
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  {/* Optional: Add the profile image if it exists */}
                   {tx.payer?.image ? (
                     <div className="relative h-6 w-6 overflow-hidden rounded-full border">
                       <Image
                         src={tx.payer.image}
                         alt={tx.payer.first_name || "User"}
                         fill
-                        className="object-fit"
+                        className="object-cover aspect-square"
                       />
                     </div>
                   ) : (

@@ -176,16 +176,24 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          {profile.image && (
-            <Image
-              src={profile.image}
-              alt={profile.first_name}
-              width={20}
-              height={20}
-              className="rounded-full"
-            />
+          {profile?.image ? (
+            <div className="relative h-6 w-6 overflow-hidden rounded-full border">
+              <Image
+                src={profile.image}
+                alt={profile.first_name || "User"}
+                fill
+                className="object-cover aspect-square"
+              />
+            </div>
+          ) : (
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[10px] font-medium">
+              {profile?.first_name?.[0]}
+            </div>
           )}
-          <span className="hidden md:block">{profile.first_name}</span>
+
+          <span className="hidden md:block font-medium text-foreground">
+            {profile?.first_name}
+          </span>
         </div>
       );
     },

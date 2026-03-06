@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Bank of Imoni",
-    short_name: "BoI",
+    short_name: "Bank of Imoni",
     description: "A financial tracker for Imoni's House",
     start_url: "/dashboard",
     display: "standalone",

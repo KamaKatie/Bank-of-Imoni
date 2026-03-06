@@ -42,9 +42,10 @@ export function AuthButton() {
             <Image
               src={profile?.image || "/avatar-placeholder.png"}
               alt="user icon"
-              width={30}
-              height={30}
-              className="rounded-full contain-size p-1"
+              width={60}
+              height={60}
+              quality={90}
+              className="h-[30px] w-[30px] rounded-full object-cover p-1"
             />
             <span className="hidden lg:block truncate max-w-[120px]">
               {displayName}
@@ -55,11 +56,11 @@ export function AuthButton() {
         <DropdownMenuContent>
           <DropdownMenuItem>
             <UserIcon />
-            <Link href={"/profile"}>Profile</Link>
+            <Link href={"/dashboard/profile"}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <SettingsIcon />
-            <Link href={"/settings"}>Settings</Link>
+            <Link href={"/dashboard/settings"}>Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
