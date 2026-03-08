@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -31,6 +33,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.className} antialiased md:bg-muted h-screen overflow-hidden`}
       >
+        <Analytics />
+        <SpeedInsights />
         {children}
       </body>
     </html>

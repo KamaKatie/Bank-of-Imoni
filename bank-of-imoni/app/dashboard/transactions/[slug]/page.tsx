@@ -36,7 +36,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col h-full items-center justify-center">
-      <div className="drop-shadow-xl max-w-[400px] w-full text-center p-5 bg-white border-2 border-muted">
+      <div className="drop-shadow-xl max-w-[350px] w-full text-center p-5 bg-white border-2 border-muted">
         <h1 className="pb-3 font-bold">BANK OF IMONI</h1>
         <AsciiCat />
         <h1 className="p-3 text-xs">ID: {slugify(transaction.id)}</h1>
@@ -109,7 +109,7 @@ export default function Page() {
             width={1}
             height={50}
             className="w-full py-3"
-            renderer="img"
+            renderer="svg"
           />
           <p>
             Paid: {transaction.accounts?.profiles?.first_name} -{" "}

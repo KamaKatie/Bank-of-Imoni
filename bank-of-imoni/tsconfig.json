@@ -29,7 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "components/balance-card.tsx",
     "components/transactions/transaction-form.tsx"
   ],
   "exclude": ["node_modules"]

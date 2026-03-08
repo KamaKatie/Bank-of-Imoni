@@ -7,8 +7,8 @@ import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
 
-import { slugify } from "@/lib/utils";
 import AccountsLineChart from "@/components/accounts/accounts-spending-chart";
+import { AccountTransactionsTable } from "@/components/accounts/account-transactions-table";
 
 export default function AccountPage() {
   const { accounts, loading } = useAccounts();
@@ -16,7 +16,7 @@ export default function AccountPage() {
   const slugParam = params.slug as string;
 
   const account = accounts.find(
-    (acc) => slugParam === `${slugify(acc.name)}-${acc.id}`,
+    (acc) => slugParam === `${acc.id}`,
   );
 
   const { data: cashflow, loading: cashflowLoading } = useCashflow(account?.id);
@@ -66,7 +66,7 @@ export default function AccountPage() {
           </div>
 
           <div className="flex-1">
-            placeholder
+            <AccountTransactionsTable accountId={account.id} />
           </div>
         </div>
       </div>

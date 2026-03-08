@@ -27,12 +27,17 @@ export default function Page() {
           <Button variant={"outline"}>Edit Category</Button>
         </ButtonGroup>
       </div>
-      <main className="p-6 w-full h-full overflow-auto">
+      <main className="p-4 w-full h-full overflow-auto flex flex-col gap-4">
         <div className="w-full">
           <CategorySpendingChart categoryId={category?.id} />
         </div>
-        <div className="w-full">
-          <CategoryTransactionsTable categoryId={category?.id} />
+        <div className="bg-card rounded-xl border shadow-sm flex flex-col">
+          <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+            Recent Transactions
+          </div>
+          <div className="flex-1">
+            <CategoryTransactionsTable categoryId={category?.id} />
+          </div>
         </div>
       </main>
     </div>

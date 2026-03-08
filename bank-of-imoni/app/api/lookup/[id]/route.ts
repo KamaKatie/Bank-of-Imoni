@@ -18,6 +18,6 @@ export async function GET(
   if (error || !data) {
     return NextResponse.json({ title: "Details" });
   }
-
+ 
   return NextResponse.json({ title: data.description });
 }

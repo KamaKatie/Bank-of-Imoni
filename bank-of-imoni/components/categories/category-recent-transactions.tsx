@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import useTransactions from "@/hooks/use-transactions";
 
 interface CategoryTransactionsTableProps {
@@ -21,16 +22,28 @@ export const CategoryTransactionsTable: React.FC<
   CategoryTransactionsTableProps
 > = ({ categoryId }) => {
   const { transactions } = useTransactions();
-
-  const yenFormatter = new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    minimumFractionDigits: 0,
-  });
-
-  const categoryTransactions = transactions.filter(
-    (tx: any) => tx.category === categoryId,
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+5
+  const yenFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat("ja-JP", {
+        style: "currency",
+        currency: "JPY",
+        minimumFractionDigits: 0,
+      }),
+    []
   );
+
+  const categoryTransactions = useMemo(
+    () => transactions.filter((tx: any) => tx.category === categoryId),
+    [transactions, categoryId]
+  );
+
+  const totalPages = Math.ceil(categoryTransactions.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedTransactions = categoryTransactions.slice(startIndex, endIndex);
 
   if (categoryTransactions.length === 0)
     return (
@@ -52,7 +65,7 @@ export const CategoryTransactionsTable: React.FC<
         </TableHeader>
 
         <TableBody>
-          {categoryTransactions.map((tx: any) => (
+          {paginatedTransactions.map((tx: any) => (
             <TableRow key={tx.id}>
               <TableCell>
                 {new Date(tx.date).toLocaleDateString("ja-JP", {
@@ -99,6 +112,23 @@ export const CategoryTransactionsTable: React.FC<
           ))}
         </TableBody>
       </Table>
+
+      <div className="flex items-center justify-end space-x-2 py-3">
+        <Button
+          size="sm"
+          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </Button>
+        <Button
+          size="sm"
+          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };

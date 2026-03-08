@@ -6,11 +6,9 @@ import { Card } from "@/components/ui/card";
 
 export default function AccountsPage() {
   return (
-    <div className="h-full flex flex-col md:flex-row overflow-hidden">
-      <div className="md:border-r p-4 flex items-center justify-center md:overflow-y-auto">
+    <div className="h-full flex flex-col md:flex overflow-hidden p-4 gap-4">
         <AccountsList />
-      </div>
-      <main className="p-4 flex-1 w-full">
+      <main className="flex-1 w-full">
         <Card className="flex flex-col items-center justify-center w-full p-5">
           <h2 className="text-lg font-semibold">Cashflow</h2>
           <CashflowChart />

@@ -40,7 +40,7 @@ function AccountItem({ account }: { account: any }) {
         asChild
       >
         <Link
-          href={`/dashboard/accounts/${slugify(account.name)}-${account.id}`}
+          href={`/dashboard/accounts/${account.id}`}
         >
           <ItemMedia variant="image">
             <Image
