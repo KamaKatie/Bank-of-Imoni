@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Database } from "@/types/database.types";
+import { Database } from "@/database.types";
 import { DynamicIcon } from "lucide-react/dynamic";
 import Image from "next/image";
 

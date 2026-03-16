@@ -10,7 +10,6 @@ import {
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { Link } from "lucide-react";
 
 interface Expense {
   category: string;

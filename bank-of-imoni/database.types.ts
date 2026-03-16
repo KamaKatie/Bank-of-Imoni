@@ -14,36 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      _view_definition_backups: {
+        Row: {
+          created_at: string
+          view_definition: string | null
+          view_name: string
+          view_owner: string | null
+          view_schema: string
+        }
+        Insert: {
+          created_at?: string
+          view_definition?: string | null
+          view_name: string
+          view_owner?: string | null
+          view_schema: string
+        }
+        Update: {
+          created_at?: string
+          view_definition?: string | null
+          view_name?: string
+          view_owner?: string | null
+          view_schema?: string
+        }
+        Relationships: []
+      }
       accounts: {
         Row: {
           current_balance: number | null
-          icon: string | null
+          icon: string
           id: string
-          name: string | null
+          name: string
           placeholder_img: string
           type: string | null
           updated_at: string | null
-          user: string | null
+          user: string
         }
         Insert: {
           current_balance?: number | null
-          icon?: string | null
+          icon: string
           id?: string
-          name?: string | null
+          name: string
           placeholder_img?: string
           type?: string | null
           updated_at?: string | null
-          user?: string | null
+          user: string
         }
         Update: {
           current_balance?: number | null
-          icon?: string | null
+          icon?: string
           id?: string
-          name?: string | null
+          name?: string
           placeholder_img?: string
           type?: string | null
           updated_at?: string | null
-          user?: string | null
+          user?: string
         }
         Relationships: [
           {
@@ -107,6 +131,7 @@ export type Database = {
           id: string
           name: string | null
           type: Database["public"]["Enums"]["transaction_types"] | null
+          user_id: string | null
         }
         Insert: {
           data_url?: string | null
@@ -114,6 +139,7 @@ export type Database = {
           id?: string
           name?: string | null
           type?: Database["public"]["Enums"]["transaction_types"] | null
+          user_id?: string | null
         }
         Update: {
           data_url?: string | null
@@ -121,32 +147,17 @@ export type Database = {
           id?: string
           name?: string | null
           type?: Database["public"]["Enums"]["transaction_types"] | null
+          user_id?: string | null
         }
-        Relationships: []
-      }
-      exchange_rates: {
-        Row: {
-          currency: string
-          id: number
-          rate: number
-          recorded_at: string
-          recorded_date: string | null
-        }
-        Insert: {
-          currency: string
-          id?: number
-          rate: number
-          recorded_at?: string
-          recorded_date?: string | null
-        }
-        Update: {
-          currency?: string
-          id?: number
-          rate?: number
-          recorded_at?: string
-          recorded_date?: string | null
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "categories_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       goal_contributions: {
         Row: {
@@ -154,18 +165,21 @@ export type Database = {
           goal_id: string
           id: string
           transaction_id: string
+          user_id: string | null
         }
         Insert: {
           amount: number
           goal_id: string
           id?: string
           transaction_id: string
+          user_id?: string | null
         }
         Update: {
           amount?: number
           goal_id?: string
           id?: string
           transaction_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -182,6 +196,13 @@ export type Database = {
             referencedRelation: "transactions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "goal_contributions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       goals: {
@@ -191,8 +212,8 @@ export type Database = {
           current_amount: number | null
           id: string
           name: string
-          owner_user: string | null
           target_amount: number | null
+          user_id: string | null
         }
         Insert: {
           completed?: boolean | null
@@ -200,8 +221,8 @@ export type Database = {
           current_amount?: number | null
           id?: string
           name: string
-          owner_user?: string | null
           target_amount?: number | null
+          user_id?: string | null
         }
         Update: {
           completed?: boolean | null
@@ -209,13 +230,13 @@ export type Database = {
           current_amount?: number | null
           id?: string
           name?: string
-          owner_user?: string | null
           target_amount?: number | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "goals_owner_fkey"
-            columns: ["owner_user"]
+            foreignKeyName: "goals_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -226,20 +247,20 @@ export type Database = {
         Row: {
           first_name: string
           id: string
-          image: string | null
-          last_name: string | null
+          image: string
+          last_name: string
         }
         Insert: {
           first_name: string
           id: string
-          image?: string | null
-          last_name?: string | null
+          image: string
+          last_name: string
         }
         Update: {
           first_name?: string
           id?: string
-          image?: string | null
-          last_name?: string | null
+          image?: string
+          last_name?: string
         }
         Relationships: []
       }
@@ -348,7 +369,23 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      transaction_monthly_stats: {
+        Row: {
+          income: number | null
+          month: string | null
+          spending: number | null
+          user: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       _adjust_pair_balance: {

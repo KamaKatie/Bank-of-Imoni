@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Database } from "@/database.types";
 import {
   Dialog,
   DialogContent,
@@ -12,15 +13,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "./transaction-form";
 
+// Helper types to make the Props definition cleaner
+type Account = Database["public"]["Tables"]["accounts"]["Row"];
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+type Category = Database["public"]["Tables"]["categories"]["Row"];
+
 type Props = {
-  accounts: {
-    id: string;
-    name: string;
-    icon: string;
-    placeholder_img: string;
-  }[];
-  users: { id: string; first_name: string; icon: string }[];
-  categories: { id: string; name: string; icon: string }[];
+  accounts: Account[];
+  users: Profile[];
+  categories: Category[];
+
   onTransactionCreated?: () => void;
   splitType?: "equal" | "full" | "none";
   type?: "expense" | "income" | "transfer";
@@ -33,7 +35,7 @@ export function TransactionDialog({
   users,
   categories,
   onTransactionCreated,
-  type,
+  type = "expense",
   title,
   icon,
 }: Props) {

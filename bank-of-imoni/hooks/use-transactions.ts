@@ -1,21 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { Database } from "@/types/database.types";
-import { QueryData } from "@supabase/supabase-js";
+import { useEffect } from "react";
+import { Database } from "@/database.types";
 import { useSupabaseFetch } from "./use-supabase-fetch";
+import { createClient } from "@/lib/supabase/client";
+import { SupabaseClient } from "@supabase/supabase-js";
 
-type DB = Database["public"]["Tables"];
-
-type Account = DB["accounts"]["Row"] & {
-  profiles: DB["profiles"]["Row"] | null;
-};
-
-type User = DB["profiles"]["Row"];
-
-type Category = DB["categories"]["Row"];
-
-function getTransactionsQuery(client: any) {
+function getTransactionsQuery(client: SupabaseClient<Database>) {
   return client
     .from("transactions")
     .select(
@@ -32,33 +23,22 @@ function getTransactionsQuery(client: any) {
     .order("date", { ascending: false });
 }
 
-type Transaction = DB["transactions"]["Row"] & {
-  categories: DB["categories"]["Row"] | null;
-  accounts: Account | null;
-  payer: DB["profiles"]["Row"] | null; // joined via user_id fkey
-};
-
 export default function useTransactions() {
-  const fetcher = async (supabase: any) => {
-    const [
-      transactionsRes,
-      accountsRes,
-      usersRes,
-      categoriesRes,
-    ] = await Promise.all([
-      getTransactionsQuery(supabase),
-      supabase.from("accounts").select(`*, profiles(*)`),
-      supabase.from("profiles").select(`*`),
-      supabase
-        .from("categories")
-        .select(`*`)
-        .order("name", { ascending: true }),
-    ]);
+  const supabase = createClient<Database>();
+
+  const fetcher = async (client: SupabaseClient<Database>) => {
+    const [transactionsRes, accountsRes, usersRes, categoriesRes] =
+      await Promise.all([
+        getTransactionsQuery(client),
+        client.from("accounts").select(`*, profiles(*)`),
+        client.from("profiles").select(`*`),
+        client
+          .from("categories")
+          .select(`*`)
+          .order("name", { ascending: true }),
+      ]);
 
     if (transactionsRes.error) throw transactionsRes.error;
-    if (accountsRes.error) throw accountsRes.error;
-    if (usersRes.error) throw usersRes.error;
-    if (categoriesRes.error) throw categoriesRes.error;
 
     return {
       transactions: transactionsRes.data ?? [],
@@ -69,6 +49,23 @@ export default function useTransactions() {
   };
 
   const { data, loading, error, refresh } = useSupabaseFetch(fetcher, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "transactions" },
+        () => {
+          refresh();
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase, refresh]);
 
   return {
     transactions: data?.transactions ?? [],

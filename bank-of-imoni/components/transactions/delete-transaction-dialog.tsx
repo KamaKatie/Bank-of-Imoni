@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation"; // 1. Import useRouter
 import { deleteTransaction } from "@/app/dashboard/transactions/actions/delete-transaction";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
@@ -16,19 +16,35 @@ import {
 type Props = {
   id: string;
   onDeleted?: () => void;
+  redirectTo?: string; // Optional prop to specify where to go
 };
 
-export default function DeleteTransactionDialog({ id, onDeleted }: Props) {
+export default function DeleteTransactionDialog({
+  id,
+  onDeleted,
+  redirectTo,
+}: Props) {
   const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
+  const router = useRouter(); // 2. Initialize router
 
   function handleDelete() {
     startTransition(async () => {
       try {
         await deleteTransaction(id);
         toast.success("Transaction deleted");
-        onDeleted?.();
+
+        // 3. Handle Navigation and Cleanup
         setOpen(false);
+        onDeleted?.();
+
+        if (redirectTo) {
+          router.push(redirectTo);
+        } else {
+          // Default: Go back to the dashboard/list or the previous page
+          router.push("/dashboard/transactions");
+          // Alternative: router.back() if you want exactly the previous page
+        }
       } catch {
         toast.error("Failed to delete");
       }
@@ -50,7 +66,7 @@ export default function DeleteTransactionDialog({ id, onDeleted }: Props) {
         <DialogContent className="sm:max-w-lg flex-col flex items-center justify-center">
           <DialogHeader>
             <DialogTitle className="text-center text-red-600">
-              Are you sure?{" "}
+              Are you sure?
             </DialogTitle>
           </DialogHeader>
 

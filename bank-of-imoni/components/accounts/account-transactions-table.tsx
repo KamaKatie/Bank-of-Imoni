@@ -55,7 +55,7 @@ import { TransactionDialog } from "@/components/transactions/transaction-dialog"
 import useTransactions from "@/hooks/use-transactions";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useAccountTransactions } from "@/hooks/use-account-transactions";
-import type { Database } from "@/types/database.types";
+import type { Database } from "@/database.types";
 
 type Tables = Database["public"]["Tables"];
 type TransactionsTable = Tables["transactions"];
@@ -155,7 +155,7 @@ export function AccountTransactionsTable({
 
   return (
     <div className="flex flex-col w-full">
-      <div className="gap-2 flex flex-row items-center justify-between p-3">
+      <div className="gap-2 flex flex-row items-center justify-between p-3 w-full">
         <ButtonGroup className="w-full">
           <TransactionDialog
             type="expense"
@@ -187,7 +187,7 @@ export function AccountTransactionsTable({
                 );
               }}
             >
-              <SelectTrigger className="md:min-w-[200px] bg-muted">
+              <SelectTrigger className="bg-muted">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
@@ -267,7 +267,7 @@ export function AccountTransactionsTable({
         </Table>
       </div>
 
-      <div className="flex items-center md:justify-end justify-center space-x-2 py-3 px-3 shrink-0">
+      <div className="flex items-center justify-end space-x-2 py-3 px-3 shrink-0">
         <Button
           size="sm"
           onClick={() => table.previousPage()}

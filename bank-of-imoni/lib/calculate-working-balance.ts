@@ -1,4 +1,4 @@
-import { Database } from "@/types/database.types";
+import { Database } from "@/database.types";
 
 type Account = Database["public"]["Tables"]["accounts"]["Row"];
 type Transaction = Database["public"]["Tables"]["transactions"]["Row"];

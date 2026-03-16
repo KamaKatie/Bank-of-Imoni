@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Database } from "@/types/database.types";
+import { Database } from "@/database.types";
 import { useSupabaseFetch } from "./use-supabase-fetch";
 
 type Tables = Database["public"]["Tables"];

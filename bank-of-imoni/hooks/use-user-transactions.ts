@@ -3,7 +3,7 @@
 import { useSupabaseQuery } from "./use-supabase-query";
 import { useEffect, useState } from "react";
 
-export function useUserTransactions({ limit = 10 } = {}) {
+export function useUserTransactions({ limit = 999 } = {}) {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {

@@ -2,12 +2,10 @@
 
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import useTransactions from "@/hooks/use-transactions";
 import { Toaster } from "@/components/ui/sonner";
 import { SettlementCard } from "@/components/transactions/settlement-card";
 
 export default function Page() {
-  const { transactions } = useTransactions();
 
   return (
     <>
@@ -16,7 +14,7 @@ export default function Page() {
         <div className="md:hidden block">
           <SettlementCard />
         </div>
-        <DataTable columns={columns} data={transactions} />
+        <DataTable columns={columns}/>
       </div>
     </>
   );

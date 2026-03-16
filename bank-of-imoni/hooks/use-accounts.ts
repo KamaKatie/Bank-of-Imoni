@@ -2,15 +2,9 @@
 
 import { useEffect } from "react";
 import { useSupabaseFetch } from "./use-supabase-fetch";
+import { Database } from "@/database.types";
 
-export type Account = {
-  id: string;
-  name: string;
-  current_balance: number;
-  type: string | null;
-  icon: string;
-  placeholder_img: string;
-};
+export type Account = Database["public"]["Tables"]["accounts"]["Row"];
 
 let cachedAccounts: Account[] | null = null;
 

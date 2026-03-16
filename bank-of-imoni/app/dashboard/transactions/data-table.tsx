@@ -55,20 +55,22 @@ import { useAccounts } from "@/hooks/use-accounts";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  // data: TData[]; // Logic change: We no longer rely on the passed prop
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
 }: DataTableProps<TData, TValue>) {
+  // Logic: Fetch live data and refresh function directly
+  const { transactions, users, categories, refresh } = useTransactions();
+  const formAccounts = useAccounts();
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 12,
@@ -78,7 +80,8 @@ export function DataTable<TData, TValue>({
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const table = useReactTable({
-    data,
+    // Logic: Use transactions from hook as the data source
+    data: transactions as TData[],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -96,21 +99,19 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // Logic: category memo now watches transactions instead of data prop
   const category = React.useMemo(() => {
     const categorySet = new Set<string>();
-    data.forEach((item) => {
-      const categoryName = (item as { categories?: { name?: string } | null })
-        .categories?.name;
+    transactions.forEach((item: any) => {
+      const categoryName = item.categories?.name;
       categorySet.add(categoryName || "Uncategorised");
     });
     return Array.from(categorySet).sort();
-  }, [data]);
+  }, [transactions]);
 
   const categoryColumn = table.getColumn("category");
   const currentFilter = (categoryColumn?.getFilterValue() as string) || "All";
   const allCategories = ["All", ...category];
-  const { users, categories, refresh } = useTransactions();
-  const formAccounts = useAccounts();
 
   return (
     <div className="flex flex-col w-full">
@@ -205,7 +206,6 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      {/* 5. The containerRef and flex-1 allow this div to fill the space */}
       <div
         ref={containerRef}
         className="bg-white flex-1 overflow-hidden rounded-md border shadow-sm md:mx-3"

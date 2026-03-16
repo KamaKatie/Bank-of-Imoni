@@ -92,6 +92,12 @@ export default function Page() {
                 />
               </span>
             </div>
+            <div className="flex justify-between">
+              <span className="font-medium text-left">Shared:</span>
+              <span className="text-right flex gap-2 items-center">
+                {transaction.split_type === "equal" ? "Yes" : "No"}
+              </span>
+            </div>
           </div>
 
           <div className="border-dashed border-y-2 border-slate-400 p-3">

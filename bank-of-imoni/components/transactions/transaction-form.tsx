@@ -6,6 +6,7 @@ import { z } from "zod";
 import { updateTransaction } from "@/app/dashboard/transactions/actions/update-transaction";
 import { createTransaction } from "@/app/dashboard/transactions/actions/create-transaction";
 import Image from "next/image";
+import { Database } from "@/database.types";
 import {
   Form,
   FormField,
@@ -26,16 +27,19 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { DynamicIcon } from "lucide-react/dynamic";
-
 import { useEffect } from "react";
+
+type Account = Database["public"]["Tables"]["accounts"]["Row"];
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+type Category = Database["public"]["Tables"]["categories"]["Row"];
 
 const formSchema = z.object({
   id: z.string().optional(),
-  amount: z.number().positive(),
-  description: z.string().min(1),
-  category: z.string().min(1),
+  amount: z.number().positive("Amount must be greater than 0"),
+  description: z.string().min(1, "Description is required"),
+  category: z.string().min(1, "Category is required"),
   date: z.date(),
-  paidByAccountId: z.string().min(1),
+  paidByAccountId: z.string().min(1, "Please select an account"),
   splitType: z.enum(["equal", "full", "none"]),
   type: z.string().min(1),
 });
@@ -43,14 +47,9 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 type Props = {
-  accounts: {
-    id: string;
-    name: string;
-    icon: string;
-    placeholder_img: string;
-  }[];
-  users: { id: string; first_name: string; icon: string }[];
-  categories: { id: string; name: string; icon: string }[];
+  accounts: Account[];
+  users: Profile[];
+  categories: Category[];
   initialValues?: Partial<FormValues>;
   mode?: "create" | "edit";
   type?: "expense" | "income" | "transfer";
@@ -90,14 +89,12 @@ export function TransactionForm({
           ...values,
           id: initialValues?.id,
         });
-
         toast.success("Transaction updated");
       } else {
         await createTransaction(values);
         toast.success("Transaction created");
         form.reset();
       }
-
       onSuccess?.();
     } catch {
       toast.error("Something went wrong");

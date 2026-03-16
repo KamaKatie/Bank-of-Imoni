@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
-
 import AccountsLineChart from "@/components/accounts/accounts-spending-chart";
 import { AccountTransactionsTable } from "@/components/accounts/account-transactions-table";
 
@@ -15,11 +14,9 @@ export default function AccountPage() {
   const params = useParams();
   const slugParam = params.slug as string;
 
-  const account = accounts.find(
-    (acc) => slugParam === `${acc.id}`,
-  );
+  const account = accounts.find((acc) => slugParam === `${acc.id}`);
 
-  const { data: cashflow, loading: cashflowLoading } = useCashflow(account?.id);
+  const { data: cashflow } = useCashflow(account?.id);
 
   const { balance: workingBalance, isLoading: balanceLoading } =
     useWorkingBalance(account?.id);
@@ -28,7 +25,7 @@ export default function AccountPage() {
   if (!account) return <div className="p-4">Account not found</div>;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {/* Header */}
       <div className=" border-b px-8 py-4 flex items-center justify-between">
         <span className="flex items-center gap-3">
@@ -46,21 +43,20 @@ export default function AccountPage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-4 grid grid-cols-1 xl:grid-cols-3 gap-4">
-        {/* Chart */}
-        <div className="xl:col-span-2 bg-card rounded-xl border shadow-sm flex flex-col">
+      <div className="flex-1 p-4 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+      
+        {/* Charts */}
+        <div className="bg-card rounded-xl border shadow-sm flex flex-col">
           <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">
             Cashflow
           </div>
-          {!cashflowLoading && (
-            <div className="flex-1 min-h-[300px]">
-              <AccountsLineChart data={cashflow} accountName={account.name} />
-            </div>
-          )}
+          <div className="flex-1">
+            <AccountsLineChart data={cashflow} accountName={account.name} />
+          </div>
         </div>
 
         {/* Transactions */}
-        <div className="bg-card rounded-xl border shadow-sm flex flex-col">
+        <div className="bg-card rounded-xl border shadow-sm flex flex-col w-full">
           <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">
             Recent Transactions
           </div>
