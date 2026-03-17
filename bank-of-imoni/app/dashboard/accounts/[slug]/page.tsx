@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-
+import LoadingPage from "@/components/loading-page";
 import { useParams } from "next/navigation";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useCashflow } from "@/hooks/use-cashflow";
@@ -21,8 +21,18 @@ export default function AccountPage() {
   const { balance: workingBalance, isLoading: balanceLoading } =
     useWorkingBalance(account?.id);
 
-  if (loading || balanceLoading) return <div className="p-4">Loading...</div>;
-  if (!account) return <div className="p-4">Account not found</div>;
+  if (loading || balanceLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingPage />
+      </div>
+    );
+  if (!account)
+    return (
+      <div className="p-4 text-red-600 flex h-full items-center justify-center text-lg">
+        Account not found
+      </div>
+    );
 
   return (
     <div className="flex flex-col h-full w-full">
@@ -44,7 +54,6 @@ export default function AccountPage() {
 
       {/* Content */}
       <div className="flex-1 p-4 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-      
         {/* Charts */}
         <div className="bg-card rounded-xl border shadow-sm flex flex-col">
           <div className="px-6 py-4 border-b font-semibold text-sm uppercase tracking-wide text-muted-foreground">

@@ -93,8 +93,6 @@ export default function UserSpendingChartByCategory() {
   return (
     <div className="flex flex-col items-center w-full mx-auto">
       <div className="w-full">
-        <p className="text-center font-medium">Spending by Category</p>
-
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square w-60"

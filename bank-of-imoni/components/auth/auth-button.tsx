@@ -32,7 +32,7 @@ export function AuthButton() {
     );
   }
 
-  const displayName = profile?.first_name || user.email?.split("@")[0];
+  const displayName = profile?.first_name || "User";
 
   return (
     <div className="flex items-center gap-4">
@@ -41,7 +41,7 @@ export function AuthButton() {
           <button className="flex bg-white text-black items-center rounded-full border-2 lg:px-2 gap-2">
             <Image
               src={profile?.image || "/avatar-placeholder.png"}
-              alt="user icon"
+              alt="Icon"
               width={60}
               height={60}
               quality={90}

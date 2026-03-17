@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useUserTransactions } from "@/hooks/use-user-transactions";
 import {
   Table,
@@ -57,7 +58,11 @@ export const UserTransactions: React.FC<RecentTransactionsProps> = ({
                     day: "numeric",
                   })}
                 </TableCell>
-                <TableCell>{tx.description}</TableCell>
+                <TableCell>
+                  <Link href={`/dashboard/transactions/${tx.id}`}>
+                    {tx.description}
+                  </Link>
+                </TableCell>
                 <TableCell
                   className={
                     tx.type === "expense"

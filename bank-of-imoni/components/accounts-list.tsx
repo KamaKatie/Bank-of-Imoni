@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAccounts } from "@/hooks/use-accounts";
-import { slugify } from "@/lib/utils";
 import { useWorkingBalance } from "@/hooks/use-working-balance";
 
 import {
@@ -54,7 +53,7 @@ function AccountItem({ account }: { account: any }) {
 
           <ItemContent>
             <div className="flex items-center justify-between gap-5">
-              <ItemTitle className="md:text-inherit text-green-100">
+              <ItemTitle className="md:text-inherit text-green-100 text-xs">
                 {account.name}
               </ItemTitle>
 
@@ -63,7 +62,7 @@ function AccountItem({ account }: { account: any }) {
               </Badge>
             </div>
 
-            <ItemDescription className="md:text-inherit text-white">
+            <ItemDescription className="md:text-inherit text-white text-lg md:text-base font-semibold">
               {isLoading ? "Loading..." : `¥${balance?.toLocaleString() ?? 0}`}
             </ItemDescription>
           </ItemContent>
