@@ -38,10 +38,8 @@ function AccountItem({ account }: { account: any }) {
         variant="muted"
         asChild
       >
-        <Link
-          href={`/dashboard/accounts/${account.id}`}
-        >
-          <ItemMedia variant="image">
+        <Link href={`/dashboard/accounts/${account.id}`}>
+          <ItemMedia variant="image" className="h-6 w-6">
             <Image
               src={account.icon || account.placeholder_img}
               alt={account.name}

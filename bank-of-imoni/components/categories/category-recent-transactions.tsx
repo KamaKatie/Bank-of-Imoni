@@ -24,7 +24,7 @@ export const CategoryTransactionsTable: React.FC<
   const { transactions } = useTransactions();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
-5
+  5;
   const yenFormatter = useMemo(
     () =>
       new Intl.NumberFormat("ja-JP", {
@@ -32,18 +32,21 @@ export const CategoryTransactionsTable: React.FC<
         currency: "JPY",
         minimumFractionDigits: 0,
       }),
-    []
+    [],
   );
 
   const categoryTransactions = useMemo(
     () => transactions.filter((tx: any) => tx.category === categoryId),
-    [transactions, categoryId]
+    [transactions, categoryId],
   );
 
   const totalPages = Math.ceil(categoryTransactions.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedTransactions = categoryTransactions.slice(startIndex, endIndex);
+  const paginatedTransactions = categoryTransactions.slice(
+    startIndex,
+    endIndex,
+  );
 
   if (categoryTransactions.length === 0)
     return (
@@ -54,7 +57,7 @@ export const CategoryTransactionsTable: React.FC<
 
   return (
     <div className="w-full overflow-auto p-4">
-      <Table>
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow>
             <TableHead>When</TableHead>
@@ -116,14 +119,16 @@ export const CategoryTransactionsTable: React.FC<
       <div className="flex items-center justify-end space-x-2 py-3">
         <Button
           size="sm"
-          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
         >
           Previous
         </Button>
         <Button
           size="sm"
-          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+          }
           disabled={currentPage === totalPages}
         >
           Next

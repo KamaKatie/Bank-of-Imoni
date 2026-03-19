@@ -213,7 +213,7 @@ export function AccountTransactionsTable({
         ref={containerRef}
         className="bg-white flex-1 overflow-hidden md:mx-3"
       >
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

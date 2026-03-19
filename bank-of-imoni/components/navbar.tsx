@@ -28,13 +28,12 @@ export default function Navbar() {
   return (
     <nav className="px-6 py-3 flex md:border-b-2 border-muted bg-white drop-shadow md:drop-shadow-none from-green-50 to-teal-50 md:bg-gradient-to-r">
       <Breadcrumb>
-        <BreadcrumbList className="text-lg">
+        <BreadcrumbList className="text-lg flex-nowrap overflow-x-auto whitespace-nowrap scrollbar-hide pb-1">
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
               <Link href="/dashboard">Home</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
-
           {cleanSegments.map((segment, index) => {
             const isLast = index === cleanSegments.length - 1;
             const href = `/dashboard/${cleanSegments.slice(0, index + 1).join("/")}`;

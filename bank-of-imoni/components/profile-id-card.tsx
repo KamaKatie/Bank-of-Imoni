@@ -127,7 +127,7 @@ export default function ProfileIdCard() {
                 Net Worth
               </p>
               <p className="text-xl font-bold text-emerald-600">
-                ${profile.totalBalance.toLocaleString()}
+                {profile.totalBalance.toLocaleString()}
               </p>
             </div>
             <div>
