@@ -48,6 +48,7 @@ export default function Home() {
                   alt="Bank of Imoni"
                   width={800}
                   height={800}
+                  loading="eager"
                 />
               </CardContent>
             </Card>

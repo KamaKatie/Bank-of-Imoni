@@ -44,7 +44,8 @@ export function AuthButton() {
               alt="Icon"
               width={60}
               height={60}
-              quality={90}
+              quality={75}
+              sizes="6px"
               className="h-[30px] w-[30px] rounded-full object-cover p-1"
             />
             <span className="hidden lg:block truncate max-w-[120px]">

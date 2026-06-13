@@ -78,6 +78,7 @@ export default function Sidebar() {
                     alt="logo"
                     width={24}
                     height={24}
+                    loading="eager"
                   />
                   <p className="text-white">Bank of Imoni</p>
                 </SheetTitle>

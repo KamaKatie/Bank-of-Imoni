@@ -181,6 +181,7 @@ export const columns: ColumnDef<TransactionsWithCategoriesandAccounts>[] = [
               <Image
                 src={profile.image}
                 alt={profile.first_name || "User"}
+                sizes="6px"
                 fill
                 className="object-cover aspect-square"
               />
